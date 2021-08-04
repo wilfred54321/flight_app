@@ -2,6 +2,7 @@
 __pycache__/
 *.py[cod]
 *$py.class
+flight_app_venv
 
 # C extensions
 *.so
