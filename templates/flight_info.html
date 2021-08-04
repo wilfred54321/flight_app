@@ -1,0 +1,45 @@
+{%extends 'base.html'%}
+
+{%block title%}
+Flight Information
+{%endblock%}
+
+
+{%block heading%}
+Information for Flight {{flight.code}}
+{%endblock%}
+
+
+{%block body%}
+<h2>Flight Details</h2>
+<ul>
+    <li>Origin: {{flight.origin}}</li>
+    <li>Destination: {{flight.destination}}</li>
+    <li>Duration: {{flight.duration}} minutes</li>
+    <li>Seat Capacity: {{flight.capacity}}</li>
+    
+</ul>
+
+<h2>Passengers</h2>
+    <ul>
+        {%for passenger in passengers%}
+            <li>First Name: {{passenger.firstname}}</li>
+            <li>Last Name: {{passenger.lastname}}</li>
+            <li>Gender: {{passenger.gender}}</li>
+
+        {%else%}
+            <li>No Passengers</li>
+        {%endfor%}
+    </ul>
+
+
+<h2>Pilot</h2>
+    <ul>
+            <li>First Name: {{pilot.firstname}}</li>
+            <li>Last Name: {{pilot.lastname}}</li> 
+            
+        
+
+    </ul>
+
+{%endblock%}

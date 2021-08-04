@@ -1,11 +1,42 @@
 {% extends "base.html" %}
 
 {%block title%}
-Test Application
+Flights
 {%endblock%}
 
 
  {%block heading%}
-    {{greeting}}
+    List of Flights
+
+    {%endblock%}
+
+
+{%block body%}
+
+<table class="table table-striped">
+  <thead>
+   <tr>
+         <th>Code</th>
+         <th>Origin</th>
+         <th>Destination</th>
+         <th>Capacity</th>
+         <th>Duration (mins)</th>
+   </tr>
+  
+  <thead>
+  <tbody>
+  {%for flight in flights%}
+  <tr>
+      <td>{{flight.code}}</td> 
+      <td>{{flight.origin}}</td>
+      <td>{{flight.destination}}</td>
+      <td>{{flight.capacity}}</td>
+      <td>{{flight.duration}}</td>
+    </tr>
+   {%endfor%} 
+  </tbody>
+</table>
+
+<a class="btn btn-primary" href="#" role="button">Book a Flight</a>
 
     {%endblock%}

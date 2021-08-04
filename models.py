@@ -10,8 +10,8 @@ class Flight(db.Model):
     destination = db.Column(db.String,nullable = False)
     capacity = db.Column(db.Integer,nullable = False)
     duration = db.Column(db.Integer,nullable = False)
-    # passengers= db.relationship("Passenger", backref = "flights", lazy = True)
-    # pilots= db.relationship("Pilot", backref = "flights", lazy = True)
+    passengers= db.relationship("Passenger", backref = "flights", lazy = True)
+    pilots= db.relationship("Pilot", backref = "flights", lazy = True)
     
 
 
@@ -29,7 +29,7 @@ class Passenger(db.Model):
 class Pilot(db.Model):
     __tablename__ = "pilots"
     id = db.Column(db.Integer, primary_key = True)
-    firstname = db.Column(db.Integer, nullable = False)
-    lastname = db.Column(db.Integer,nullable = False)
+    firstname = db.Column(db.String, nullable = False)
+    lastname = db.Column(db.String,nullable = False)
     id_number = db.Column(db.Integer,db.ForeignKey("flights.id"),nullable = False)
   
