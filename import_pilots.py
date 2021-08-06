@@ -12,7 +12,7 @@ db.init_app(app)
 def main():
     with open('pilots.csv') as file:
         pilots = csv.reader(file)
-        print(type(pilots))
+        
         for firstname,lastname,id_number in pilots:
             pilot = Pilot(firstname = firstname, 
             lastname = lastname, id_number = id_number)

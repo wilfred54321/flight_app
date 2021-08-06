@@ -27,7 +27,8 @@ Flights
   <tbody>
   {%for flight in flights%}
   <tr>
-      <td>{{flight.code}}</td> 
+  <td><a href = "{{url_for('html_info',flight_id = flight.id)}}">{{flight.code}}</a></td>
+      
       <td>{{flight.origin}}</td>
       <td>{{flight.destination}}</td>
       <td>{{flight.capacity}}</td>
