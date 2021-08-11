@@ -15,13 +15,22 @@ class Flight(db.Model):
     
 
 
+    def add_passenger(self,firstname,lastname,gender):
+            p=Passenger(firstname = firstname,lastname = lastname,gender =gender, flight_id=self.id)
+            db.session.add(p)
+            db.session.commit()
+
+    # def open_seats(self):
+    #     return self.capacity - len(self.passengers)
+
+
 
 class Passenger(db.Model):
     __tablename__ = "passengers"
     id = db.Column(db.Integer, primary_key = True)
     firstname = db.Column(db.String, nullable = False)
     lastname = db.Column(db.String, nullable = False)
-    Gender = db.Column(db.String, nullable = False)
+    gender = db.Column(db.String, nullable = False)
     flight_id = db.Column(db.Integer, db.ForeignKey("flights.id"), nullable = False)
 
 

@@ -1,0 +1,61 @@
+{%extends 'base.html'%}
+<style>
+    form {
+        margin-left: 150px;
+        margin-right: 150px;
+    }
+</style>
+
+{%block title%}
+Booking
+{%endblock%}
+
+{%block heading%}
+Book a Flight
+{%endblock%}
+
+<!-- <form class="form-group" method="post">
+    <input type="text" name="firstname" placeholder="Enter first name">
+    <input type="text" name="lastname" placeholder="Enter first name">
+    <input type="radio" name="gender">
+
+
+</form> -->
+
+
+
+
+{%block body%}
+<form action="{{url_for('book')}}" method="post">
+
+    <div class="form-group">
+        <label for="exampleFormControlInput1" class="form-label">Choose your Flight</label>
+        <select class="form-select form-select-sm" name="flight_id">
+            {%for flight in flights%}
+            <option value={{flight.id}}>Flight {{flight.code}} from {{flight.origin}} to {{flight.destination}}
+            </option>
+            {%endfor%}
+        </select>
+    </div>
+
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">First Name</label>
+        <input type="text" class="form-control" name="firstname" placeholder="Enter first name">
+    </div>
+
+    <div class="mb-3">
+        <label for="exampleFormControlInput1" class="form-label">Last Name</label>
+        <input type="text" class="form-control" name="lastname" placeholder="Enter last name">
+    </div>
+
+    <div class="mb-3">
+        <input type="radio" id="male" name="gender" value="Male">
+        <label for="male">Male</label><br>
+    </div>
+    <div>
+        <input type="radio" id="she" name="gender" value="Female">
+        <label for="female">Female</label><br>
+    </div>
+    <button class="btn btn-primary" type="submit">Book Flight</button>
+</form>
+{%endblock%}
