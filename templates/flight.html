@@ -17,38 +17,40 @@ Information for Flight {{flight.code}}
     <li>Destination: {{flight.destination}}</li>
     <li>Duration: {{flight.duration}} minutes</li>
     <li>Seat Capacity: {{flight.capacity}}</li>
+    <li>Open Seats: {{open_seats}}</li>
 
 </ul>
 
 <h2>Passengers</h2>
 
-
-<table class="table table-striped">
-    <thead>
-        <tr>
-            <th>First Name</th>
-            <th>Last Name</th>
-            <th>Gender</th>
-        </tr>
-
+<div class="index_table">
+    <table class="table table-striped">
         <thead>
-        <tbody>
-            {%for passenger in passengers%}
             <tr>
-
-                <td>{{passenger.firstname}}</td>
-                <td>{{passenger.lastname}}</td>
-                <td>{{passenger.gender}}</td>
-
-
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Gender</th>
             </tr>
-            {%else%}
-            No Passengers
-            {%endfor%}
 
-        </tbody>
+            <thead>
+            <tbody>
+                {%for passenger in passengers%}
+                <tr>
 
-</table>
+                    <td>{{passenger.firstname}}</td>
+                    <td>{{passenger.lastname}}</td>
+                    <td>{{passenger.gender}}</td>
+
+
+                </tr>
+                {%else%}
+                No Passengers
+                {%endfor%}
+
+            </tbody>
+
+    </table>
+</div>
 
 
 

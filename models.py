@@ -16,12 +16,15 @@ class Flight(db.Model):
 
 
     def add_passenger(self,firstname,lastname,gender):
-            p=Passenger(firstname = firstname,lastname = lastname,gender =gender, flight_id=self.id)
-            db.session.add(p)
-            db.session.commit()
+        if not self.open_seats:
+            return False
+        p=Passenger(firstname = firstname,lastname = lastname,gender =gender, flight_id=self.id)
+        db.session.add(p)
+        db.session.commit()
+        return True
 
-    # def open_seats(self):
-    #     return self.capacity - len(self.passengers)
+    def open_seats(self):
+        return self.capacity - len(self.passengers)
 
 
 
