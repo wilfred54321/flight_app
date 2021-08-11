@@ -13,10 +13,16 @@ db.init_app(app)
 @app.route("/")
 def index():
     """Diplay a list of Flights"""
-
+    
     flights = Flight.query.all()
     return render_template("index.html",flights=flights)
 
+@app.route("/book-flight")
+def book_flight():
+    """Diplay a list of Flights"""
+    
+    flights = Flight.query.all()
+    return render_template("book.html",flights=flights)
 
 
 @app.route("/flights/<int:flight_id>")
@@ -27,15 +33,19 @@ def flight(flight_id):
         return render_template("error.html", message = "No such flight is available")
 
     passengers = flight.passengers
+    open_seats = flight.open_seats()
     pilot = flight.pilots
 
-    return render_template ("flight.html",flight = flight, passengers = passengers,pilot = pilot)
+    return render_template ("flight.html",flight = flight, passengers = passengers,pilot = pilot,open_seats = open_seats)
 
     
 
-@app.route("/book", methods = ["GET","POST"])
+@app.route("/book",methods = ["GET","POST"])
 def book():
     """Book a flight"""
+    flights = Flight.query.all()
+    render_template("book.html",flights = flights)
+
     firstname = request.form.get("firstname")
     lastname = request.form.get("lastname")
     gender = request.form.get("gender")
@@ -55,9 +65,11 @@ def book():
     # passenger = Passenger(firstname,lastname,gender,flight_id)
     # db.session.add(passenger)
     # db.session.commit()
-    flight.add_passenger(firstname,lastname,gender)
-    return render_template("success.html", message = "You have successfully booked your flight")
-   
+    if flight.open_seats():
+        flight.add_passenger(firstname,lastname,gender)
+        return render_template("success.html", message = "You have successfully booked your flight")
+    else:
+        return render_template("error.html", message = "No more seats available on this flight")
  
 
     

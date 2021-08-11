@@ -1,11 +1,23 @@
 {% extends "base.html" %}
 
+
 {%block title%}
 Flights
 {%endblock%}
 
 
  {%block heading%}
+
+ <nav class="navbar navbar-light bg-light">
+  <div class="container-fluid">
+    <a class="navbar-brand">Flight_App</a>
+    <form class="d-flex">
+      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
+      <button class="btn btn-outline-success" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+
     List of Flights
 
     {%endblock%}
@@ -13,31 +25,38 @@ Flights
 
 {%block body%}
 
-<table class="table table-striped">
-  <thead>
-   <tr>
-         <th>Code</th>
-         <th>Origin</th>
-         <th>Destination</th>
-         <th>Capacity</th>
-         <th>Duration (mins)</th>
-   </tr>
-  
-  <thead>
-  <tbody>
-  {%for flight in flights%}
-  <tr>
-  <td><a href = "{{url_for('flight',flight_id=flight.id)}}">{{flight.code}}</a></td>
-      
-      <td>{{flight.origin}}</td>
-      <td>{{flight.destination}}</td>
-      <td>{{flight.capacity}}</td>
-      <td>{{flight.duration}}</td>
-    </tr>
-   {%endfor%} 
-  </tbody>
-</table>
 
-<a class="btn btn-primary" href="#" role="button">Book a Flight</a>
+
+<div class = index_table>
+  <table  class="table table-striped">
+    <thead>
+    <tr>
+          <th>Code</th>
+          <th>Origin</th>
+          <th>Destination</th>
+          <th>Capacity</th>
+          <th>Open Seats</th>
+          <th>Duration (mins)</th>
+    </tr>
+    
+    <thead>
+    <tbody>
+    {%for flight in flights%}
+    <tr>
+    <td><a href = "{{url_for('flight',flight_id=flight.id)}}">{{flight.code}}</a></td>
+        
+        <td>{{flight.origin}}</td>
+        <td>{{flight.destination}}</td>
+        <td>{{flight.capacity}}</td>
+        <td>{{flight.open_seats()}}</td>
+        <td>{{flight.duration}}</td>
+      </tr>
+    {%endfor%} 
+    </tbody>
+  </table>
+</div>
+
+
+<a class="btn btn-primary" href="{{url_for('book_flight')}}" role="button">Book a Flight</a>
 
     {%endblock%}
