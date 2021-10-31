@@ -1,17 +1,23 @@
 {%extends 'base.html'%}
-<style>
-    form {
-        margin-left: 150px;
-        margin-right: 150px;
-    }
-</style>
 
 {%block title%}
 Booking
 {%endblock%}
 
 {%block heading%}
-Book a Flight
+<p>
+    <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#bookFlight" role="button" aria-expanded="false"
+        aria-controls="bookFlight">
+        Book Flight
+    </a>
+
+    <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#manageBooking" role="button"
+        aria-expanded="false" aria-controls="manageBooking">
+        Manage My Booking
+    </a>
+</p>
+
+
 {%endblock%}
 
 <!-- <form class="form-group" method="post">
@@ -23,39 +29,108 @@ Book a Flight
 </form> -->
 
 
-
-
 {%block body%}
-<form action="{{url_for('book')}}" method="post">
+<div class="container book_flight_form">
+    <div class="row">
+        <div class="col-5  border p-4 m-2">
+            <!-- BOOK A FLIGHT -->
+            <div>
 
-    <div class="form-group">
-        <label for="exampleFormControlInput1" class="form-label">Choose your Flight</label>
-        <select class="form-select form-select-sm" name="flight_id">
-            {%for flight in flights%}
-            <option value={{flight.id}}>Flight {{flight.code}} from {{flight.origin}} to {{flight.destination}}
-            </option>
-            {%endfor%}
-        </select>
+                <div class="collapse" id="bookFlight">
+                    <div class="card card-body mt-3">
+                        <p class="display-6">Book a Flight</p>
+                        <form action="{{url_for('book')}}" method="post">
+
+                            <div class=" ml-0 mr-0 mt-3">
+                                <div class="input-group mt-3 mb-3">
+                                    <select class="form-select" name="flight_origin">
+                                        <option selected> From</option>
+                                        {%for flight in flights%}
+                                        <option value={{flight.origin}}>{{flight.origin}}</option>
+                                        {%endfor%}
+                                    </select>
+                                    <span class="input-group-text"><i class="fas fa-plane"></i></span>
+                                    <select class="form-select" name="flight_destination">
+                                        <option selected> To</option>
+                                        {%for flight in flights%}
+
+                                        <option value={{flight.destination}}>
+                                            {{flight.destination}}
+                                        </option>
+
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                            </div>
+
+
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label pt-2">First Name</label>
+                                <input type="text" class="form-control form-control" name="firstname"
+                                    placeholder="Enter first name">
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="exampleFormControlInput1" class="form-label  pt-2">Last Name</label>
+                                <input type="text" class="form-control form-control" name="lastname"
+                                    placeholder="Enter last name">
+                            </div>
+
+                            <div class="">
+                                <input type="radio" id="male" name="gender" value="Male">
+                                <label for="male">Male</label><br>
+                            </div>
+                            <div class="mb-3">
+                                <input type="radio" id="she" name="gender" value="Female">
+                                <label for="female">Female</label><br>
+                            </div>
+                            <button class="btn btn-primary" type="submit">Book Flight</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <!-- MANAGE BOOKING -->
+            <div class="collapse" id="manageBooking">
+                <div class="card card-body mt-3">
+                    <p class="display-6">Manage Booking</p>
+                    <form action="{{url_for('manage_booking')}}" method="post">
+
+
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label pt-2">Last Name</label>
+                            <input type="text" class="form-control form-control" name="lastname"
+                                placeholder="enter your last name">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label  pt-2">Booking Reference</label>
+                            <input type="text" class="form-control form-control" name="booking_reference"
+                                placeholder="enter your booking reference">
+                        </div>
+
+
+                        <button class="btn btn-primary" type="submit">Manage Boooking</button>
+                    </form>
+                </div>
+            </div>
+
+
+        </div>
+        <div class="col border m-2">
+            {%if passenger%}
+            <p> Lastname: {{passenger.lastname}}</p>
+            <p>Booking Reference: {{passenger.booking_reference}}</p>
+
+            {%else%}
+            {%endif%}
+        </div>
+
     </div>
 
-    <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">First Name</label>
-        <input type="text" class="form-control" name="firstname" placeholder="Enter first name">
-    </div>
 
-    <div class="mb-3">
-        <label for="exampleFormControlInput1" class="form-label">Last Name</label>
-        <input type="text" class="form-control" name="lastname" placeholder="Enter last name">
-    </div>
+</div>
 
-    <div class="mb-3">
-        <input type="radio" id="male" name="gender" value="Male">
-        <label for="male">Male</label><br>
-    </div>
-    <div>
-        <input type="radio" id="she" name="gender" value="Female">
-        <label for="female">Female</label><br>
-    </div>
-    <button class="btn btn-primary" type="submit">Book Flight</button>
-</form>
+
+
 {%endblock%}

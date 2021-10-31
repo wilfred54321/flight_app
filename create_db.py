@@ -1,4 +1,5 @@
 from flask_imports import *
+from app import app,db
 def main():
     db.create_all()
    

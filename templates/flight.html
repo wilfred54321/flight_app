@@ -17,7 +17,7 @@ Information for Flight {{flight.code}}
     <li>Destination: {{flight.destination}}</li>
     <li>Duration: {{flight.duration}} minutes</li>
     <li>Seat Capacity: {{flight.capacity}}</li>
-    <li>Open Seats: {{open_seats}}</li>
+    <li>Open Seats: {{flight.open_seats()}}</li>
 
 </ul>
 
@@ -27,19 +27,24 @@ Information for Flight {{flight.code}}
     <table class="table table-striped">
         <thead>
             <tr>
+                <th>Booking Reference</th>
                 <th>First Name</th>
                 <th>Last Name</th>
                 <th>Gender</th>
+                <th>Booking Date</th>
+                <th>Booking Time</th>
             </tr>
 
             <thead>
             <tbody>
-                {%for passenger in passengers%}
+                {%for passenger in flight.passengers%}
                 <tr>
-
+                    <td>{{passenger.booking_reference}}</td>
                     <td>{{passenger.firstname}}</td>
                     <td>{{passenger.lastname}}</td>
                     <td>{{passenger.gender}}</td>
+                    <td>{{passenger.timestamp.strftime('%Y-%m-%d') }}</td>
+                    <td>{{passenger.timestamp.strftime('%H: %M' ) }}</td>
 
 
                 </tr>
@@ -52,18 +57,5 @@ Information for Flight {{flight.code}}
     </table>
 </div>
 
-
-
-
-
-<!-- 
-<h2>Pilot</h2>
-    <ul>
-            <li>First Name: {{pilot.firstname}}</li>
-            <li>Last Name: {{pilot.lastname}}</li> 
-            
-        
-
-    </ul> -->
 
 {%endblock%}

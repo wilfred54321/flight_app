@@ -16,7 +16,7 @@ class Flight():
         return self.capacity - len(self.passengers)
 
 
-flight = Flight(5)
+flight = Flight(3)
 passengers = ["Wilfred","ThankGod","Godwin","Frankin"]
 
 for passenger in passengers:

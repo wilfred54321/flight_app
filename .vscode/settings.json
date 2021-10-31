@@ -11,5 +11,6 @@
     "python.testing.unittestEnabled": false,
     "python.testing.nosetestArgs": [
         "flight_app_venv"
-    ]
+    ],
+    "python.formatting.provider": "black"
 }

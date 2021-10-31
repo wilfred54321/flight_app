@@ -6,57 +6,161 @@ Flights
 {%endblock%}
 
 
- {%block heading%}
+{%block heading%}
+<a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#all_flights_list" role="button"
+  aria-expanded="false" aria-controls="all_flights_list">
+  Show All Flights
+</a>
 
- <nav class="navbar navbar-light bg-light">
-  <div class="container-fluid">
-    <a class="navbar-brand">Flight_App</a>
-    <form class="d-flex">
-      <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-      <button class="btn btn-outline-success" type="submit">Search</button>
-    </form>
+<a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#upload_flight_data" role="button"
+  aria-expanded="false" aria-controls="upload_flight_data">
+  Upload Flight Data
+</a>
+
+<a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#delay_flight" role="button" aria-expanded="false"
+  aria-controls="delay_flight">
+  Delay Flight
+</a>
+
+
+<p>
+
+  {%endblock%}
+
+
+  {%block body%}
+
+<div>
+
+
+  <!-- SHOW ALL FLIGHT -->
+
+  <div class="collapse" id="all_flights_list">
+    <div class="card card-body mt-3">
+      <p class="display-6"> Show All Flights</p>
+      <div class=index_table>
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Code</th>
+              <th>Origin</th>
+              <th>Destination</th>
+              <th>Capacity</th>
+              <th>Open Seats</th>
+              <th>Departure Time</th>
+              <th>Arrival Time</th>
+              <th>Duration (mins)</th>
+            </tr>
+
+            <thead>
+            <tbody>
+              {%for flight in flights%}
+              <tr>
+                <td><a href="{{url_for('flight',flight_id=flight.id)}}">{{flight.code}}</a></td>
+
+                <td>{{flight.origin}}</td>
+                <td>{{flight.destination}}</td>
+                <td>{{flight.capacity}}</td>
+                <td>{{flight.open_seats()}}</td>
+                <td>{{flight.departure_time.strftime('%b %d|%H:%M')}}</td>
+                <td>{{flight.arrival_time.strftime('%b %d|%H:%M')}}</td>
+                <td>{{((flight.arrival_time-flight.departure_time).total_seconds())//60}}</td>
+              </tr>
+              {%endfor%}
+            </tbody>
+        </table>
+      </div>
+    </div>
   </div>
-</nav>
+  <!-- UPLOAD FLIGHT DATA -->
 
-    List of Flights
+  <div class="collapse" id="upload_flight_data">
+    <div class="card card-body mt-3">
+      <p class="display-6">Upload Flight Data</p>
+      <div class="input-group mb-3">
+        <form class="form-group d-flex" action="{{url_for('upload_flight')}}" method='post'>
 
-    {%endblock%}
+          <input type="file" class="form-control " name="file_name">
+          <!-- <label class="input-group-text" for="inputGroupFile02">Upload</label> -->
+          <button type="submit" class="btn btn-info m-0 ml-4">Upload</button>
+
+        </form>
+      </div>
+
+    </div>
+  </div>
 
 
-{%block body%}
+
+  <!-- DELAY FLIGHT -->
+
+  <div class="row">
+    <div class="col-sm-5">
+
+      <div class="collapse" id="delay_flight">
+        <div class="d-flex card card-body mt-3">
+          <p class="display-6">Delay Flight</p>
+          <form action="{{url_for('delay_flight')}}" method="post">
+
+            <div class=" ml-0 mr-0 mt-3">
+              <div class="input-group mt-3 mb-3">
+                <select class="form-select" name="flight_origin">
+                  <option selected> From</option>
+                  {%for flight in flights%}
+                  <option value={{flight.origin}}>{{flight.origin}}</option>
+                  {%endfor%}
+                </select>
+                <span class="input-group-text"><i class="fas fa-plane"></i></span>
+                <select class="form-select" name="flight_destination">
+                  <option selected> To</option>
+                  {%for flight in flights%}
+
+                  <option value={{flight.destination}}>
+                    {{flight.destination}}
+                  </option>
+
+                  {%endfor%}
+                </select>
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="exampleFormControlInput1" class="form-label  pt-2">Flight Code</label>
+              <input type="text" class="form-control form-control" name="flight_code"
+                placeholder="enter the flight code you wish to delay">
+            </div>
+
+
+            <div class="input-group mb-3">
+              <label class=" d-flex justify-content-center input-group-text" for="inputGroupSelect01">Delay by</label>
+              <select class="form-select" id="inputGroupSelect01" name="delay_amount">
+                <!-- <option selected>Choose delay duration...</option> -->
+                <option value="10"> 10 Minutes</option>
+                <option value="20">20 Minutes</option>
+                <option value="30">30 Minutes</option>
+              </select>
+            </div>
+            <button class="btn btn-primary" type="submit">Delay Flight</button>
+          </form>
+        </div>
+      </div>
 
 
 
-<div class = index_table>
-  <table  class="table table-striped">
-    <thead>
-    <tr>
-          <th>Code</th>
-          <th>Origin</th>
-          <th>Destination</th>
-          <th>Capacity</th>
-          <th>Open Seats</th>
-          <th>Duration (mins)</th>
-    </tr>
-    
-    <thead>
-    <tbody>
-    {%for flight in flights%}
-    <tr>
-    <td><a href = "{{url_for('flight',flight_id=flight.id)}}">{{flight.code}}</a></td>
-        
-        <td>{{flight.origin}}</td>
-        <td>{{flight.destination}}</td>
-        <td>{{flight.capacity}}</td>
-        <td>{{flight.open_seats()}}</td>
-        <td>{{flight.duration}}</td>
-      </tr>
-    {%endfor%} 
-    </tbody>
-  </table>
+    </div>
+
+
+
+
+
+
+  </div>
 </div>
 
 
-<a class="btn btn-primary" href="{{url_for('book_flight')}}" role="button">Book a Flight</a>
+</div>
 
-    {%endblock%}
+
+</div>
+
+{%endblock%}
