@@ -6,3 +6,10 @@ The users can be rescheduled and added to join another flight
 
 delay flight. - done
 send a mail to users informing them that their flight was cancelled and advise them of their new schedule
+
+
+create account for pilots
+create account for users/agents
+
+An agent with admin rights is able to assign pilot to a flight
+regular agent is able to assign passengers to a flight

@@ -1,8 +1,8 @@
 from enum import unique
 from flask_sqlalchemy import SQLAlchemy
-import string
-import random
-from datetime import datetime, timedelta
+from flight_app.utils import generate_booking_reference
+from datetime import timedelta, datetime
+
 
 db = SQLAlchemy()
 
@@ -43,20 +43,6 @@ class Flight(db.Model):
         delay_amount = timedelta(minutes=amount)
         return self.arrival_time + delay_amount
 
-    # def delete_flight(self):
-    #     db.session.delete(self.id)
-    #     db.session.commit()
-
-    # db.session.add(new_arrival_time)
-    # db.session.commit()
-
-
-def generate_booking_reference():
-    ref_data_set = string.ascii_uppercase
-    selection = random.choices(ref_data_set, k=5)
-    booking_reference = "".join(map(str, selection))
-    return booking_reference
-
 
 class Passenger(db.Model):
     __tablename__ = "passengers"
@@ -69,26 +55,6 @@ class Passenger(db.Model):
         db.String, nullable=False, default=generate_booking_reference
     )
     flight_id = db.Column(db.Integer, db.ForeignKey("flights.id"), nullable=False)
-
-
-def add_flight(code, origin, destination, capacity, departure_time, arrival_time):
-    return Flight(
-        code=code,
-        origin=origin,
-        destination=destination,
-        capacity=capacity,
-        departure_time=departure_time,
-        arrival_time=arrival_time,
-    )
-
-
-def is_valid_flight_time(departure_time, arrival_time):
-    if (
-        departure_time >= datetime.now() + timedelta(hours=2)
-        and arrival_time > departure_time
-    ):
-        return True
-    return False
 
 
 # class Pilot(db.Model):

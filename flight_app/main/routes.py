@@ -1,31 +1,26 @@
-# import logging
+from flask import Blueprint
+
+
 from logging import DEBUG
 import os
 from pathlib import Path
 import csv
 from flask import Flask, render_template, request, flash, redirect, url_for
-from models import (
+from flight_app.models import (
     Flight,
     Passenger,
-    is_valid_flight_time,
-    add_flight,
     db,
     datetime,
 )
 
+main = Blueprint("main", __name__)
 
-app = Flask(__name__)
-app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("FLIGHTAPP_DB_URL")
-app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-app.config["TEMPLATES_AUTO_RELOAD"] = True
-app.config["SECRET_KEY"] = "dfe56e985611aa6f"
-db.init_app(app)
 
 # logging.basicConfig(filename="logfile.log", level=logging.DEBUG)
 # HELPER FUNCTIONS
 
 
-@app.route("/")
+@main.route("/")
 def index():
     """Display a list of Flights"""
 
@@ -33,7 +28,7 @@ def index():
     return render_template("index.html", flights=flights, title="Index")
 
 
-@app.route("/book-flight")
+@main.route("/book-flight")
 def book_flight():
     """Diplay a list of Flights"""
 
@@ -41,7 +36,7 @@ def book_flight():
     return render_template("book.html", flights=flights, title="Booking")
 
 
-@app.route("/flights/<int:flight_id>")
+@main.route("/flights/<int:flight_id>")
 def flight(flight_id):
     try:
         flight = Flight.query.get_or_404(flight_id)
@@ -50,7 +45,7 @@ def flight(flight_id):
     return render_template("flight.html", flight=flight)
 
 
-@app.route("/book", methods=["GET", "POST"])
+@main.route("/book", methods=["GET", "POST"])
 def book():
     """Book a flight"""
     if request.method != "POST":
@@ -89,7 +84,7 @@ def book():
             )
 
 
-@app.route("/manage-booking   ", methods=["GET", "POST"])
+@main.route("/manage-booking   ", methods=["GET", "POST"])
 def manage_booking():
     """Manage an already booked flight"""
     if request.method == "POST":
@@ -108,7 +103,7 @@ def manage_booking():
     return render_template("book.html")
 
 
-@app.route("/upload-flight", methods=["GET", "POST"])
+@main.route("/upload-flight", methods=["GET", "POST"])
 def upload_flight():
 
     if request.method == "POST":
@@ -135,7 +130,7 @@ def upload_flight():
         return render_template("index.html")
 
 
-@app.route("/schedule_flight", methods=["GET", "POST"])
+@main.route("/schedule_flight", methods=["GET", "POST"])
 def schedule_flight():
 
     if request.method == "POST":
@@ -194,7 +189,7 @@ def format_datetime(form_input):
     return datetime.strptime(str_datetime_data, "%Y-%m-%d%H:%M")
 
 
-@app.route("/flight/delay", methods=["GET", "POST"])
+@main.route("/flight/delay", methods=["GET", "POST"])
 def delay_flight():
     if request.method == "POST":
         # get the flight origin,destination and code
@@ -231,7 +226,7 @@ def delay_flight():
         return render_template("book-flight.html")
 
 
-@app.route("/flight/<int:flight_id>/delete", methods=["GET"])
+@main.route("/flight/<int:flight_id>/delete", methods=["GET"])
 def delete_flight(flight_id):
 
     flight = Flight.query.get_or_404(flight_id)
@@ -244,7 +239,7 @@ def delete_flight(flight_id):
     return render_template("error.html", message="Flight does not exist")
 
 
-@app.route("/passenger/<int:flight_id>/<int:passenger_id>", methods=["GET"])
+@main.route("/passenger/<int:flight_id>/<int:passenger_id>", methods=["GET"])
 def delete_passenger(passenger_id, flight_id):
     flight = Flight.query.get_or_404(flight_id)
     passenger = Passenger.query.get(passenger_id)
@@ -254,7 +249,3 @@ def delete_passenger(passenger_id, flight_id):
     flight {flight.code} from {flight.origin} to {flight.destination}"""
     flash(message, "success")
     return redirect(url_for("flight", flight_id=flight_id))
-
-
-if __name__ == "__main__":
-    app.run(host="localhost", port=1234, debug=1)
