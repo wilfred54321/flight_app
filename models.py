@@ -19,7 +19,9 @@ class Flight(db.Model):
     # duration = db.Column(db.Integer, nullable=False)
     # departure = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
     # arrival = db.Column(db.Datetime, nullable=False, default=datetime.utcnow())
-    passengers = db.relationship("Passenger", backref="flights", lazy=True)
+    passengers = db.relationship(
+        "Passenger", backref="flights ", cascade="all, delete", lazy=True
+    )
     # pilots= db.relationship("Pilot", backref = "flights", lazy = True)
 
     def add_passenger(self, firstname, lastname, gender, flight_id):
@@ -29,9 +31,9 @@ class Flight(db.Model):
         passenger = Passenger(
             firstname=firstname, lastname=lastname, gender=gender, flight_id=self.id
         )
-
         db.session.add(passenger)
         db.session.commit()
+        return passenger.booking_reference
         # return True
 
     def open_seats(self):
@@ -40,6 +42,13 @@ class Flight(db.Model):
     def delay_flight(self, amount):
         delay_amount = timedelta(minutes=amount)
         return self.arrival_time + delay_amount
+
+    # def delete_flight(self):
+    #     db.session.delete(self.id)
+    #     db.session.commit()
+
+    # db.session.add(new_arrival_time)
+    # db.session.commit()
 
 
 def generate_booking_reference():
@@ -60,6 +69,26 @@ class Passenger(db.Model):
         db.String, nullable=False, default=generate_booking_reference
     )
     flight_id = db.Column(db.Integer, db.ForeignKey("flights.id"), nullable=False)
+
+
+def add_flight(code, origin, destination, capacity, departure_time, arrival_time):
+    return Flight(
+        code=code,
+        origin=origin,
+        destination=destination,
+        capacity=capacity,
+        departure_time=departure_time,
+        arrival_time=arrival_time,
+    )
+
+
+def is_valid_flight_time(departure_time, arrival_time):
+    if (
+        departure_time >= datetime.now() + timedelta(hours=2)
+        and arrival_time > departure_time
+    ):
+        return True
+    return False
 
 
 # class Pilot(db.Model):

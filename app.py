@@ -3,8 +3,15 @@ from logging import DEBUG
 import os
 from pathlib import Path
 import csv
-from flask import Flask, render_template, request, flash
-from models import *
+from flask import Flask, render_template, request, flash, redirect, url_for
+from models import (
+    Flight,
+    Passenger,
+    is_valid_flight_time,
+    add_flight,
+    db,
+    datetime,
+)
 
 
 app = Flask(__name__)
@@ -15,14 +22,15 @@ app.config["SECRET_KEY"] = "dfe56e985611aa6f"
 db.init_app(app)
 
 # logging.basicConfig(filename="logfile.log", level=logging.DEBUG)
+# HELPER FUNCTIONS
 
 
 @app.route("/")
 def index():
-    """Diplay a list of Flights"""
+    """Display a list of Flights"""
 
     flights = Flight.query.all()
-    return render_template("index.html", flights=flights)
+    return render_template("index.html", flights=flights, title="Index")
 
 
 @app.route("/book-flight")
@@ -30,21 +38,15 @@ def book_flight():
     """Diplay a list of Flights"""
 
     flights = Flight.query.all()
-    return render_template("book.html", flights=flights)
+    return render_template("book.html", flights=flights, title="Booking")
 
 
 @app.route("/flights/<int:flight_id>")
 def flight(flight_id):
-
     try:
         flight = Flight.query.get_or_404(flight_id)
     except ValueError:
         return render_template("error.html", message="No such flight is available")
-
-    # passengers = flight.passengers
-    # open_seats = flight.open_seats()
-    # pilot = flight.pilots
-
     return render_template("flight.html", flight=flight)
 
 
@@ -52,19 +54,12 @@ def flight(flight_id):
 def book():
     """Book a flight"""
     if request.method != "POST":
-
         flights = Flight.query.all()
         render_template("book.html", flights=flights)
     else:
-
         firstname = (request.form.get("firstname")).capitalize()
         lastname = (request.form.get("lastname")).capitalize()
         gender = request.form.get("gender")
-
-        # try:
-        #     flight_id = int(request.form.get("flight_id"))
-        # except ValueError:
-        #     return render_template("error.html", message ="Invalid flight id")
         flight_origin = request.form.get("flight_origin")
         flight_destination = request.form.get("flight_destination")
         try:
@@ -73,25 +68,21 @@ def book():
             ).first()
         except:
             return render_template("error.html", message="Flight is invalid")
-
         # Make sure the flight exists
-        # flight = Flight.query.get(flight_id)
         if flight is None:
             return render_template(
                 "error.html",
                 message="Ooops!. It appears there is no flight for the routes you selected.",
             )
-
         # Add Passenger if there are open seats and the flight is not null
-
         if flight.open_seats():
-
-            flight.add_passenger(firstname, lastname, gender, flight.id)
-
-            return render_template(
-                "success.html", message="You have successfully booked your flight"
+            booking_reference = flight.add_passenger(
+                firstname, lastname, gender, flight.id
             )
-
+            return render_template(
+                "success.html",
+                message=f"You have successfully booked your flight. Your reference id is {booking_reference}",
+            )
         else:
             return render_template(
                 "error.html", message="No more seats available on this flight"
@@ -135,54 +126,135 @@ def upload_flight():
                 departure_time,
                 arrival_time,
             ) in flight_data:
-                flight = Flight(
-                    code=code,
-                    origin=origin,
-                    destination=destination,
-                    capacity=capacity,
-                    departure_time=departure_time,
-                    arrival_time=arrival_time,
+                flight = add_flight(
+                    code, origin, destination, capacity, departure_time, arrival_time
                 )
                 db.session.add(flight)
         db.session.commit()
         # return f"<h1>flight {code} from {origin} to {destination} added successfully!</h1>"
-
         return render_template("index.html")
 
-    # if request.method == "POST":
-    #     # get the flight origin,destination and code
-    #     flight_origin = request.form.get("flight_origin")
-    #     flight_destination = request.form.get("flight_destination")
-    #     flight_code = request.form.get("flight_code").upper()
-    #     delay_amount = int(request.form.get("delay_amount"))
-    #     return f"<h1>{delay_amount}</h1>"
-    # Query the database for the given flight
-    # flight = Flight.query.filter_by(
-    #     origin=flight_origin,
-    #     destination=flight_destination,
-    #     code=flight_code,
-    # ).first()
-    # if not flight:
-    #     message = "No such flight exist. Please, ensure you enter the correct flight origin,destination and flight code!"
-    #     return render_template("error.html", message=message)
-    # else:
-    #     # delay light by delay amount
-    #     flight.delay_flight(delay_amount)
-    #     # db.session.add(flight)
-    #     # db.session.commit()
-    #     return f"<h1>Return value: {flight.delay_flight(delay_amount)},Flight Duration: {((flight.arrival_time - flight.departure_time).total_seconds())//60}</h1>"
 
-    # else:
-    #     return "<p>GET method is not acceptable. please use the post method to post your data!</p>"
+@app.route("/schedule_flight", methods=["GET", "POST"])
+def schedule_flight():
+
+    if request.method == "POST":
+        flight_code = request.form.get("flight_code").upper()
+        flight_origin = (request.form.get("flight_origin")).capitalize()
+        flight_destination = (request.form.get("flight_destination")).capitalize()
+        flight_departure_time = request.form.get("departure_time")
+        flight_arrival_time = request.form.get("arrival_time")
+        flight_capacity = request.form.get("flight_capacity")
+
+        departure_time = format_datetime(flight_departure_time)
+        arrival_time = format_datetime(flight_arrival_time)
+
+        if is_valid_flight_time(departure_time, arrival_time):
+
+            flight = add_flight(
+                flight_code,
+                flight_origin,
+                flight_destination,
+                flight_capacity,
+                flight_departure_time,
+                flight_arrival_time,
+            )
+
+            db.session.add(flight)
+            db.session.commit()
+
+            message = f"""flight_code: {flight_code} from {flight_origin} to {flight_destination}\n
+            departure time: {departure_time},\n arrival time: {arrival_time},\nflight capacity: {flight_capacity} was
+            added successfully!"""
+
+            # logging.DEBUG(message)
+            return render_template("success.html", message=message)
+
+        return render_template(
+            "error.html",
+            message="Please ensure the arrival time is valid and departure time is at least two hours from the current time!",
+        )
+
+        # dl = departure_time.split("T")
+        # dt = "".join(map(str, dl))
+        # new_date = datetime.strptime(dt, "%Y-%m-%d%H:%M")
+        # print(dt)
+        # new_date = departure_time.strftime('%B %d, %Y')
+
+        # new_date = format_datetime(departure_time)
+        # return f"<h1>{new_date}</h1>"
+
+    return redirect(url_for("index"))
+
+
+# function to format datetime for writing to database
+def format_datetime(form_input):
+    datetime_data = form_input.split("T")
+    str_datetime_data = "".join(map(str, datetime_data))
+    return datetime.strptime(str_datetime_data, "%Y-%m-%d%H:%M")
 
 
 @app.route("/flight/delay", methods=["GET", "POST"])
 def delay_flight():
     if request.method == "POST":
-        return "<h1>Hello!</h1>"
+        # get the flight origin,destination and code
+        flight_origin = request.form.get("flight_origin")
+        flight_destination = request.form.get("flight_destination")
+        flight_code = request.form.get("flight_code").upper()
+        delay_amount = int(request.form.get("delay_amount"))
+        # return f"<h1>{(flight_code)}</h1>"
+        # Query the database for the given flight
+        flight = Flight.query.filter_by(
+            origin=flight_origin,
+            destination=flight_destination,
+            code=flight_code,
+        ).first()
+        if not flight:
+            message = "No such flight exist. Please, ensure you enter the correct flight origin,destination and flight code!"
+            return render_template("error.html", message=message)
+        else:
+            # delay light by delay amount
+            new_arrival_time = flight.delay_flight(delay_amount)
+            flight.arrival_time = new_arrival_time
+            db.session.commit()
+            message = "Flight {} from {} to {} has been delayed by {}minutes. New Arrival Time is {}".format(
+                flight.code,
+                flight.origin,
+                flight.destination,
+                delay_amount,
+                flight.arrival_time,
+            )
+            return render_template("success.html", message=message)
+            # return f"<h1>Original arival time:{flight.arrival_time},\n New Arrival Time: {flight.delay_flight(delay_amount)}\n Flight Duration: {((flight.arrival_time - flight.departure_time).total_seconds())//60}</h1>"
+
     else:
-        return "<h1>Request method is GET</h1>"
+        return render_template("book-flight.html")
+
+
+@app.route("/flight/<int:flight_id>/delete", methods=["GET"])
+def delete_flight(flight_id):
+
+    flight = Flight.query.get_or_404(flight_id)
+    if flight:
+        db.session.delete(flight)
+        db.session.commit()
+        message = f"Flight {flight.code} deleted successfully!"
+        flash(message, "success")
+        return redirect(url_for("index"))
+    return render_template("error.html", message="Flight does not exist")
+
+
+@app.route("/passenger/<int:flight_id>/<int:passenger_id>", methods=["GET"])
+def delete_passenger(passenger_id, flight_id):
+    flight = Flight.query.get_or_404(flight_id)
+    passenger = Passenger.query.get(passenger_id)
+    db.session.delete(passenger)
+    db.session.commit()
+    message = f"""Passenger \'{passenger.firstname} {passenger.lastname}\' was successfully deleted from 
+    flight {flight.code} from {flight.origin} to {flight.destination}"""
+    flash(message, "success")
+    return redirect(url_for("flight", flight_id=flight_id))
 
 
 if __name__ == "__main__":
-    app.run(debug=1)
+    app.run(host="localhost", port=1234, debug=1)

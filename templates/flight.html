@@ -1,12 +1,12 @@
 {%extends 'base.html'%}
 
 {%block title%}
-Flight Information
+
 {%endblock%}
 
 
 {%block heading%}
-Information for Flight {{flight.code}}
+<p class="display-6">Information for Flight {{flight.code}}</p>
 {%endblock%}
 
 
@@ -24,7 +24,7 @@ Information for Flight {{flight.code}}
 <h2>Passengers</h2>
 
 <div class="index_table">
-    <table class="table table-striped">
+    <table class="table table-striped table-hover table-bordered">
         <thead>
             <tr>
                 <th>Booking Reference</th>
@@ -33,6 +33,8 @@ Information for Flight {{flight.code}}
                 <th>Gender</th>
                 <th>Booking Date</th>
                 <th>Booking Time</th>
+                <th>Action</th>
+
             </tr>
 
             <thead>
@@ -45,6 +47,17 @@ Information for Flight {{flight.code}}
                     <td>{{passenger.gender}}</td>
                     <td>{{passenger.timestamp.strftime('%Y-%m-%d') }}</td>
                     <td>{{passenger.timestamp.strftime('%H: %M' ) }}</td>
+
+                    <th>
+                        <a href="#" class="btn btn-secondary btn-sm">
+                            <i class="far fa-edit"></i></i> Edit
+                        </a>
+                        <a href="{{url_for('delete_passenger', flight_id = flight.id, passenger_id = passenger.id)}}"
+                            class="btn btn-danger btn-sm">
+                            <i class="far fa-trash-alt"></i></i> Delete
+                        </a>
+
+                    </th>
 
 
                 </tr>

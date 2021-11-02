@@ -1,0 +1,8 @@
+cancel flight. - pending
+
+When a flight is cancelled, the users are added to the cancelled flight list.
+The users can be rescheduled and added to join another flight
+
+
+delay flight. - done
+send a mail to users informing them that their flight was cancelled and advise them of their new schedule
