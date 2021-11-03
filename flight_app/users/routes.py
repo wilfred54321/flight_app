@@ -39,15 +39,34 @@ def register_pilot():
         flash(f"Pilot {firstname}, {lastname} was registered successfully!", "success")
         return redirect(url_for("main.index"))
 
-        # context = {
-        #     "firstname": firstname,
-        #     "lastname": lastname,
-        #     "email": email,
-        #     "gender": gender,
-        #     "category": category,
-        #     "level": level,
-        # }
-
-        # return f"<h1>Firstname is {context['firstname']}</h1>"
-        # return render_template("test.html", **context)
     return render_template("index.html", title="Index")
+
+
+@users.route("/schedule_pilot", methods=["GET", "POST"])
+def schedule_pilot():
+    return render_template("create_pilot.html")
+
+
+@users.route("/pilot/status/<int:pilot_id>/<string:action>", methods=["GET", "POST"])
+def change_status(pilot_id, action):
+    pilot = Pilot.query.get(pilot_id)
+    # get pilot
+
+    if action == "enable":
+        pilot.enable()
+        return redirect(request.referrer)
+    pilot.disable()
+    return redirect(request.referrer)
+
+
+@users.route("/delete-pilot/<int:pilot_id>)", methods=["GET"])
+def delete_pilot(pilot_id):
+    pilot = Pilot.query.get_or_404(pilot_id)
+    if pilot.is_available:
+        message = "Sorry, You must first disable pilot before you can delete!"
+        flash(message, "info")
+        return redirect(request.referrer)
+    db.session.delete(pilot)
+    db.session.commit()
+    flash(f"Pilot {pilot.firstname}, {pilot.lastname} deleted successfully!", "success")
+    return redirect(request.referrer)

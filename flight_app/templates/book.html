@@ -6,12 +6,12 @@ Booking
 
 {%block heading%}
 <p>
-    <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#bookFlight" role="button" aria-expanded="false"
-        aria-controls="bookFlight">
+    <a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#bookFlight" role="button"
+        aria-expanded="false" aria-controls="bookFlight">
         Book Flight
     </a>
 
-    <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#manageBooking" role="button"
+    <a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#manageBooking" role="button"
         aria-expanded="false" aria-controls="manageBooking">
         Manage My Booking
     </a>
@@ -20,34 +20,27 @@ Booking
 
 {%endblock%}
 
-<!-- <form class="form-group" method="post">
-    <input type="text" name="firstname" placeholder="Enter first name">
-    <input type="text" name="lastname" placeholder="Enter first name">
-    <input type="radio" name="gender">
-
-
-</form> -->
-
 
 {%block body%}
 
-<div class="container book_flight_form">
+<div class="container special-font">
     <div class="row">
-        <div class="col-5  border p-4 m-2">
+        <div class="col">
             <!-- BOOK A FLIGHT -->
             {%if flight%}
             <div>
 
                 <div class="collapse" id="bookFlight">
                     <div class="card card-body mt-3">
-                        <p class="display-6">Book a Flight</p>
+                        <p class="display-6">Book Flight</p>
+                        <h5 class="text-muted">Add Passenger to Flight {{flight.code}}</h5>
+
+
                         <form action="{{url_for('main.book')}}" method="post">
 
                             <div class=" ml-0 mr-0 mt-3">
                                 <div class="input-group mt-3 mb-3">
                                     <select class="form-select" name="flight_origin">
-
-
                                         <option selected value={{flight.origin}}>{{flight.origin}}</option>
 
                                     </select>
@@ -65,19 +58,29 @@ Booking
                                 </div>
                             </div>
 
-
-                            <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label pt-2"><i
-                                        class="fas fa-user"></i>First Name</label>
-                                <input type="text" class="form-control form-control" name="firstname"
-                                    placeholder="Enter first name">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="far fa-user"></i></span>
+                                        <input type="text" class="form-control" name="firstname"
+                                            placeholder="First Name e.g John">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="far fa-user"></i></span>
+                                        <input type="text" class="form-control" name="lastname"
+                                            placeholder="Last Name e.g Doe">
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label  pt-2">Last Name</label>
-                                <input type="text" class="form-control form-control" name="lastname"
-                                    placeholder="Enter last name">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                <input type="email" class="form-control" name="lastname"
+                                    placeholder="e.g name@example.com">
                             </div>
+
 
                             <div class="row">
 
@@ -93,7 +96,8 @@ Booking
 
                             </div>
 
-                            <button class="btn btn-primary" type="submit">Book Flight</button>
+                            <button class="btn btn-primary mt-3" type="submit"><i class="far fa-calendar-plus"></i> Book
+                                Flight</button>
                         </form>
                     </div>
                 </div>
@@ -129,20 +133,29 @@ Booking
                                     </select>
                                 </div>
                             </div>
-
-
-                            <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label pt-2"><i
-                                        class="fas fa-user"></i>First Name</label>
-                                <input type="text" class="form-control form-control" name="firstname"
-                                    placeholder="Enter first name">
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="far fa-user"></i></span>
+                                        <input type="text" class="form-control" name="firstname"
+                                            placeholder="First Name e.g John">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="far fa-user"></i></span>
+                                        <input type="text" class="form-control" name="lastname"
+                                            placeholder="Last Name e.g Doe">
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label  pt-2">Last Name</label>
-                                <input type="text" class="form-control form-control" name="lastname"
-                                    placeholder="Enter last name">
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                <input type="email" class="form-control" name="lastname"
+                                    placeholder="e.g name@example.com">
                             </div>
+
 
                             <div class="row">
 
@@ -158,18 +171,20 @@ Booking
 
                             </div>
 
-                            <button class="btn btn-primary" type="submit">Book Flight</button>
+                            <button class="btn btn-primary mt-3" type="submit"><i class="far fa-calendar-plus"></i>  Book
+                                Flight</button>
+
+
                         </form>
                     </div>
                 </div>
             </div>
             {%endif%}
 
-
-
-
-
+        </div>
+        <div class="col">
             <!-- MANAGE BOOKING -->
+
             <div class="collapse" id="manageBooking">
                 <div class="card card-body mt-3">
                     <p class="display-6">Manage Booking</p>
@@ -193,24 +208,21 @@ Booking
                         <button class="btn btn-primary" type="submit">Manage Boooking</button>
                     </form>
                 </div>
+
             </div>
 
 
-        </div>
-        <div class="col border m-2">
-            {%if passenger%}
-            <p> Lastname: {{passenger.lastname}}</p>
-            <p>Booking Reference: {{passenger.booking_reference}}</p>
+            <div class="">
+                {%if passenger%}
+                <p> Lastname: {{passenger.lastname}}</p>
+                <p>Booking Reference: {{passenger.booking_reference}}</p>
 
-            {%else%}
-            {%endif%}
+                {%else%}
+                {%endif%}
+            </div>
         </div>
-
     </div>
 
 
-</div>
 
-
-
-{%endblock%}
+    {%endblock%}

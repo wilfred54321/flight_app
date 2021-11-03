@@ -17,8 +17,7 @@
   <i class="fas fa-users"></i> Show All Pilots
 </a>
 
-<a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#schedule_flight" role="button" aria-expanded="false"
-  aria-controls="schedule_flight">
+<a class="btn btn-outline-primary" href="{{url_for('flight.schedule_flight')}}" role="button">
   <i class="far fa-calendar-alt"></i> Schedule Flight
 </a>
 
@@ -124,19 +123,39 @@
                 <td>{{pilot.category}}</td>
                 <td>{{pilot.level}}</td>
                 <td>{{pilot.date_created.strftime('%b %d, %Y')}}</td>
+
                 <td>
-                  {%if pilot.status() %}
-                  <span class="badge rounded-pill bg-success "> {{pilot.status()}}</span>
+                  {%if pilot.is_available%}
+                  <a href="{{url_for('users.change_status', pilot_id = pilot.id, action ='disable')}}">
+                    <span class="badge rounded-pill bg-success ">{{pilot.status()}}</span>
+                  </a>
+
                   {%else%}
-                  <span class="badge rounded-pill bg-danger"> {{pilot.status()}}</span>
+
+                  <a href="{{url_for('users.change_status', pilot_id = pilot.id, action = 'enable')}}">
+                    <span class="badge rounded-pill bg-danger"> {{pilot.status()}}</span>
+                  </a>
                   {%endif%}
                 </td>
 
                 <td>
+                  {%if pilot.is_available%}
+                  <a href="{{url_for('users.change_status', pilot_id = pilot.id, action ='disable')}}"
+                    class="btn btn-danger btn-sm">
+                    <i class=""></i></i>Disable
+                  </a>
+                  {%else%}
+                  <a href="{{url_for('users.change_status', pilot_id = pilot.id, action = 'enable')}}"
+                    class="btn btn-success btn-sm">
+                    <i class=""></i></i>Enable
+                  </a>
+                  {%endif%}
+
+
                   <a href="#" class="btn btn-secondary btn-sm">
                     <i class="far fa-edit"></i></i> Edit
                   </a>
-                  <a href="#" class="btn btn-danger btn-sm">
+                  <a href="{{url_for('users.delete_pilot', pilot_id = pilot.id)}}" class="btn btn-danger btn-sm">
                     <i class="far fa-trash-alt"></i></i> Delete
                   </a>
                 </td>
@@ -156,260 +175,143 @@
 
 
 
-  <!-- UPLOAD FLIGHT DATA -->
+
+
+
+  <!-- DELAY FLIGHT -->
+
   <div class="row">
-    <div class="collapse" id="schedule_flight">
-      <div class="card card-body mt-3">
-        <div class="row">
-          <p class="lead">How do you want to Schedule flight? You can either upload flight data from a csv file or
-            enter
-            the flight
-            data in the
-            Schedule Flight form below</p>
-          <hr>
+    <div class="col-sm-6">
 
-        </div>
-        <p class="display-6"> <i class="fas fa-upload"></i> Upload Flight Data</p>
+      <div class="collapse" id="delay_flight">
+        <div class="d-flex card card-body mt-3">
+          <p class="display-6"><i class="far fa-calendar-times"></i> Delay Flight</p>
+          <form action="{{url_for('main.delay_flight')}}" method="post">
 
-        <form class="form-group" action="{{url_for('main.upload_flight')}}" method='post'>
-          <div class="row">
-            <div class="col-4">
-              <input type="file" class="input-group form-control " name="file_name">
-            </div>
-            <div class="col">
-              <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i> Upload</button>
-
-            </div>
-            <!-- <label class="input-group-text" for="inputGroupFile02">Upload</label> -->
-
-          </div>
-        </form>
-
-
-      </div>
-    </div>
-
-    <!-- SCHEDULE FLIGHT DATA -->
-    {%if flight%}
-    <div class="row">
-
-      <div class="col-sm-8">
-        <div class="collapse" id="schedule_flight">
-          <div class="d-flex card card-body mt-3">
-            <p class="display-6"> <i class="far fa-calendar-alt"></i> Schedule Flight</p>
-            <form action="{{url_for('main.schedule_flight')}}" method="post">
-
-              <div class=" ml-0 mr-0 mt-3">
-
-                <div class="input-group mt-3 mb-3">
-
-                  <input class="input-group form-control" value="{{flight.origin}}" name="flight_origin"
-                    placeholder="From" />
-
-
-                  <span class="input-group-text"><i class="fas fa-plane"></i></span>
-
-                  <input class="input-group form-control" value="{{flight.destination}}" name="flight_destination"
-                    placeholder="To" />
-
-
-                </div>
-              </div>
-
-
-
-
-              <!-- FLIGHT DATETIMEPICKER -->
-              <div class="row mb-3">
-                <div class="col">
-                  <label for="departure-date" class="pb-2">Departure Date</label>
-                  <input type='datetime-local' class='input-group form-control' value="{{flight.departure_time}}"
-                    name='departure_time'>
-
-                </div>
-
-                <div class="col">
-                  <label for="arrival-date" class="pb-2">Arrival Date</label>
-                  <input type='datetime-local' value="{{flight.arrival_time}}" class='input-group form-control'
-                    name='arrival_time'>
-
-                </div>
-              </div>
-
-              <!-- FLIGHT CAPACITY -->
-              <div class="input-group mb-3">
-                <label class=" d-flex justify-content-center input-group-text" for="inputGroupSelect01">Capacity
-                </label>
-                <select class="form-select" id="inputGroupSelect01" value="{{flight.capacity}}" name="flight_capacity">
-                  <!-- <option selected>Choose delay duration...</option> -->
-                  <option value="5"> 5 Passengers</option>
-                  <option value="7">7 Passengers</option>
-                  <option value="10">10 Passengers</option>
+            <div class=" ml-0 mr-0 mt-3">
+              <div class="input-group mt-3 mb-3">
+                <select class="form-select" name="flight_origin">
+                  <option selected> From</option>
+                  {%for flight in flights%}
+                  <option value={{flight.origin}}>{{flight.origin}}</option>
+                  {%endfor%}
                 </select>
-                <!-- FLIGHT CODE -->
+                <span class="input-group-text"><i class="fas fa-plane"></i></span>
+                <select class="form-select" name="flight_destination">
+                  <option selected> To</option>
+                  {%for flight in flights%}
 
-                <input class="input-group form-control" name="flight_code" value="{{flight.code}}"
-                  placeholder="flight code e.g XXR384">
-                <span class="input-group-text "><i class="fas fa-plane"></i></span>
+                  <option value={{flight.destination}}>
+                    {{flight.destination}}
+                  </option>
 
-
+                  {%endfor%}
+                </select>
               </div>
-              <button class="btn btn-primary" type="submit"><i class="far fa-calendar-alt"></i> Schedule
-                Flight</button>
-            </form>
-          </div>
-        </div>
-
-
-
-      </div>
-      {%endif%}
-
-
-
-
-
-
-    </div>
-
-
-
-    <!-- DELAY FLIGHT -->
-
-    <div class="row">
-      <div class="col-sm-6">
-
-        <div class="collapse" id="delay_flight">
-          <div class="d-flex card card-body mt-3">
-            <p class="display-6"><i class="far fa-calendar-times"></i> Delay Flight</p>
-            <form action="{{url_for('main.delay_flight')}}" method="post">
-
-              <div class=" ml-0 mr-0 mt-3">
-                <div class="input-group mt-3 mb-3">
-                  <select class="form-select" name="flight_origin">
-                    <option selected> From</option>
-                    {%for flight in flights%}
-                    <option value={{flight.origin}}>{{flight.origin}}</option>
-                    {%endfor%}
-                  </select>
-                  <span class="input-group-text"><i class="fas fa-plane"></i></span>
-                  <select class="form-select" name="flight_destination">
-                    <option selected> To</option>
-                    {%for flight in flights%}
-
-                    <option value={{flight.destination}}>
-                      {{flight.destination}}
-                    </option>
-
-                    {%endfor%}
-                  </select>
-                </div>
-              </div>
-              <div class="row mt-4 mb-4">
-                <div class="col">
-                  <div class="">
-                    <!-- <label for="exampleFormControlInput1" class="form-label">Flight Code</label> -->
-                    <input type="text" class="form-control form-control" name="flight_code"
-                      placeholder="Enter Flight Code">
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="input-group">
-                    <label class="input-group-text" for="inputGroupSelect01">Delay
-                      by</label>
-                    <input style="text-align:center" type='number' class='form-control' name="delay_amount"
-                      placeholder="Delay Amount">
-                  </div>
-                </div>
-              </div>
-              <button class="btn btn-primary" type="submit"><i class="far fa-calendar-times"></i> Delay
-                Flight</button>
-            </form>
-          </div>
-        </div>
-
-
-
-      </div>
-
-    </div>
-
-    <!-- REGISTER PILOT -->
-    <div clas="col-8">
-
-      <div class="collapse" id="register_pilot">
-        <div class="card card-body mt-3">
-          <p class="display-6"><i class="far fa-plus-square"></i> Add Pilot</p>
-          <form action="{{url_for('users.register_pilot')}}" method="post">
-
-            <div class="mb-3">
-              <div class="row">
-
-                <div class="col form-floating">
-                  <input type="text" class="form-control" id="floating" name="firstname" placeholder="John"
-                    value="John">
-                  <label for="floatingInputValue">First Name</label>
-                </div>
-
-                <div class="col form-floating">
-                  <input type="text" class="form-control" id="floating" name="lastname" placeholder="Doe" value="Doe">
-                  <label for="floatingInputValue">Last Name</label>
-                </div>
-
-                <div class="col form-floating">
-                  <input type="email" class="form-control" name="email" id="floating" placeholder="name@example.com"
-                    value="test@example.com">
-                  <label for="floatingInputValue">Email</label>
-                  <!-- <span class="input-group-text "><i class="fas fa-plane"></i></span> -->
-                </div>
-              </div>
-
-
             </div>
-            <div class="row">
-              <div class="col-6">
-                <div class="row">
-                  <div class="col">
-                    <input type="radio" id="male" name="gender" value="Male">
-                    <label for="male">Male</label>
-                  </div>
-                  <div class="col">
-                    <input type="radio" id="she" name="gender" value="Female">
-                    <label for="female">Female</label><br>
-                  </div>
-                  <div class="col">
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" name="category" type="checkbox" id="inlineCheckbox1"
-                        value="local">
-                      <label class="form-check-label" for="pilotType">Local</label>
-                    </div>
-                  </div>
-                  <div class="col">
-                    <div class="form-check form-check-inline">
-                      <input class="form-check-input" name="category" type="checkbox" id="inlineCheckbox1"
-                        value="International">
-                      <label class="form-check-label" for="pilotType">International</label>
-                    </div>
-                  </div>
-                  <br>
-                </div>
-              </div>
-
-
+            <div class="row mt-4 mb-4">
               <div class="col">
-                <div class="input-group mb-3">
-                  <label class=" d-flex justify-content-center input-group-text" for="inputGroupSelect01">Level</label>
-                  </label>
-                  <select class="form-select" id="inputGroupSelect01" name="pilot_level">
-                    <!-- <option selected>Choose delay duration...</option> -->
-                    <option value="1">1</option>
-                    <option value="2">2</option>
-                    <option value="3">3</option>
-                  </select>
+                <div class="">
+                  <!-- <label for="exampleFormControlInput1" class="form-label">Flight Code</label> -->
+                  <input type="text" class="form-control form-control" name="flight_code"
+                    placeholder="Enter Flight Code">
+                </div>
+              </div>
+              <div class="col">
+                <div class="input-group">
+                  <label class="input-group-text" for="inputGroupSelect01">Delay
+                    by</label>
+                  <input style="text-align:center" type='number' class='form-control' name="delay_amount"
+                    placeholder="Delay Amount">
                 </div>
               </div>
             </div>
-            <!-- <div class="mb-3">
+            <button class="btn btn-primary" type="submit"><i class="far fa-calendar-times"></i> Delay
+              Flight</button>
+          </form>
+        </div>
+      </div>
+
+
+
+    </div>
+
+  </div>
+
+  <!-- REGISTER PILOT -->
+  <div clas="col-8">
+
+    <div class="collapse" id="register_pilot">
+      <div class="card card-body mt-3">
+        <p class="display-6"><i class="far fa-plus-square"></i> Add Pilot</p>
+        <form action="{{url_for('users.register_pilot')}}" method="post">
+
+          <div class="mb-3">
+            <div class="row">
+
+              <div class="col form-floating">
+                <input type="text" class="form-control" id="floating" name="firstname" placeholder="John" value="John">
+                <label for="floatingInputValue">First Name</label>
+              </div>
+
+              <div class="col form-floating">
+                <input type="text" class="form-control" id="floating" name="lastname" placeholder="Doe" value="Doe">
+                <label for="floatingInputValue">Last Name</label>
+              </div>
+
+              <div class="col form-floating">
+                <input type="email" class="form-control" name="email" id="floating" placeholder="name@example.com"
+                  value="test@example.com">
+                <label for="floatingInputValue">Email</label>
+                <!-- <span class="input-group-text "><i class="fas fa-plane"></i></span> -->
+              </div>
+            </div>
+
+
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="row">
+                <div class="col">
+                  <input type="radio" id="male" name="gender" value="Male">
+                  <label for="male">Male</label>
+                </div>
+                <div class="col">
+                  <input type="radio" id="she" name="gender" value="Female">
+                  <label for="female">Female</label><br>
+                </div>
+                <div class="col">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" name="category" type="checkbox" id="inlineCheckbox1" value="local">
+                    <label class="form-check-label" for="pilotType">Local</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" name="category" type="checkbox" id="inlineCheckbox1"
+                      value="International">
+                    <label class="form-check-label" for="pilotType">International</label>
+                  </div>
+                </div>
+                <br>
+              </div>
+            </div>
+
+
+            <div class="col">
+              <div class="input-group mb-3">
+                <label class=" d-flex justify-content-center input-group-text" for="inputGroupSelect01">Level</label>
+                </label>
+                <select class="form-select" id="inputGroupSelect01" name="pilot_level">
+                  <!-- <option selected>Choose delay duration...</option> -->
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="mb-3">
              
             </div>
 
@@ -425,18 +327,18 @@
 
 
 
-            <!-- FLIGHT CODE -->
+          <!-- FLIGHT CODE -->
 
 
 
-            <button class=" btn btn-primary" type="submit"><i class="far fa-plus-square"></i> Add Pilot</button>
+          <button class=" btn btn-primary" type="submit"><i class="far fa-plus-square"></i> Add Pilot</button>
 
-        </div>
       </div>
-
-      </form>
     </div>
+
+    </form>
   </div>
+</div>
 </div>
 </div>
 

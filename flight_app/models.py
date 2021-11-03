@@ -82,5 +82,15 @@ class Pilot(db.Model):
 
     def status(self):
         if self.is_available == False:
-            return "Unavailable"
-        return "Available"
+            return "unavailable"
+        return "available"
+
+    def enable(self):
+        self.is_available = True
+        db.session.commit()
+        return self.is_available
+
+    def disable(self):
+        self.is_available = False
+        db.session.commit()
+        return self.is_available
