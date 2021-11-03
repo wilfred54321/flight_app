@@ -68,9 +68,10 @@ class Passenger(db.Model):
     flight_id = db.Column(db.Integer, db.ForeignKey("flights.id"), nullable=False)
 
 
-# class Pilot(db.Model):
-#     __tablename__ = "pilots"
-#     id = db.Column(db.Integer, primary_key = True)
-#     firstname = db.Column(db.String, nullable = False)
-#     lastname = db.Column(db.String,nullable = False)
-#     flight_id = db.Column(db.Integer,db.ForeignKey("flights.id"),nullable = False)
+class Pilot(db.Model):
+    __tablename__ = "pilots"
+    id = db.Column(db.Integer, primary_key=True)
+    firstname = db.Column(db.String, nullable=False)
+    lastname = db.Column(db.String, nullable=False)
+    level = db.Column(db.String, nullable=False)
+    status = db.Column(db.Integer, nullable=False)
