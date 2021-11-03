@@ -28,7 +28,7 @@
 
 <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#register_pilot" role="button" aria-expanded="false"
   aria-controls="register_pilot">
-  <i class="far fa-calendar-times"></i> Register Pilot
+  <i class="fas fa-user-plus"></i> Register Pilot
 </a>
 
 
@@ -141,21 +141,22 @@
                 <td>
                   {%if pilot.is_available%}
                   <a href="{{url_for('users.change_status', pilot_id = pilot.id, action ='disable')}}"
-                    class="btn btn-danger btn-sm">
+                    class="btn btn-outline-danger btn-sm">
                     <i class=""></i></i>Disable
                   </a>
                   {%else%}
                   <a href="{{url_for('users.change_status', pilot_id = pilot.id, action = 'enable')}}"
-                    class="btn btn-success btn-sm">
+                    class="btn btn-outline-success btn-sm">
                     <i class=""></i></i>Enable
                   </a>
                   {%endif%}
 
 
-                  <a href="#" class="btn btn-secondary btn-sm">
+                  <a href="#" class="btn btn-outline-secondary btn-sm">
                     <i class="far fa-edit"></i></i> Edit
                   </a>
-                  <a href="{{url_for('users.delete_pilot', pilot_id = pilot.id)}}" class="btn btn-danger btn-sm">
+                  <a href="{{url_for('users.delete_pilot', pilot_id = pilot.id)}}"
+                    class="btn btn-outline-danger btn-sm">
                     <i class="far fa-trash-alt"></i></i> Delete
                   </a>
                 </td>
@@ -243,7 +244,7 @@
 
     <div class="collapse" id="register_pilot">
       <div class="card card-body mt-3">
-        <p class="display-6"><i class="far fa-plus-square"></i> Add Pilot</p>
+        <p class="display-6"><i class="fas fa-user-plus"></i> Add Pilot</p>
         <form action="{{url_for('users.register_pilot')}}" method="post">
 
           <div class="mb-3">
@@ -331,7 +332,7 @@
 
 
 
-          <button class=" btn btn-primary" type="submit"><i class="far fa-plus-square"></i> Add Pilot</button>
+          <button class=" btn btn-primary" type="submit"><i class="fas fa-user-plus"></i> Add Pilot</button>
 
       </div>
     </div>
