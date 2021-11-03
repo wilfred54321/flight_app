@@ -12,6 +12,11 @@
   <i class="fas fa-plane"></i> Show All Flights
 </a>
 
+<a class="btn btn-outline-primary" data-bs-toggle="collapse" href="{{url_for('all_pilots}}" role="button"
+  aria-expanded="false" aria-controls="all_pilots_list">
+  <i class="fas fa-users"></i> Show All Pilots
+</a>
+
 <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#schedule_flight" role="button" aria-expanded="false"
   aria-controls="schedule_flight">
   <i class="far fa-calendar-alt"></i> Schedule Flight
@@ -22,7 +27,7 @@
   <i class="far fa-calendar-times"></i> Delay Flight
 </a>
 
-<a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#delay_flight" role="button" aria-expanded="false"
+<a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#register_pilot" role="button" aria-expanded="false"
   aria-controls="register_pilot">
   <i class="far fa-calendar-times"></i> Register Pilot
 </a>
@@ -38,11 +43,11 @@
   <!-- SHOW ALL FLIGHT -->
   <div class="collapse" id="all_flights_list">
     <div class="card card-body mt-3">
-      <p class="display-6"> Show All Flights</p>
+      <p class="display-6"> <i class="fas fa-plane"></i> Show All Flights</p>
       <div class=index_table>
         <table class="table table-striped table-hover table-bordered">
           <thead>
-            <tr style='text-align: center;'>
+            <tr style="text-align: center;">
               <th style='width:5%;' class="">Code</th>
               <th style='width:5%;'>Origin</th>
               <th style='width:5%;'>Destination</th>
@@ -82,6 +87,62 @@
       </div>
     </div>
   </div>
+
+  <!-- SHOW ALL PILOTS -->
+  <div class="collapse" id="all_pilots_list">
+    <div class="card card-body mt-3">
+      <p class="display-6"><i class="fas fa-users"></i> Show All Pilots</p>
+      <div class=index_table>
+        <table class="table table-striped table-hover table-bordered">
+          <thead>
+            <tr style='text-align: center;'>
+              <th style='width:5%;' class="">First Name</th>
+              <th style='width:5%;'>Last Name</th>
+              <th style='width:5%;'>Email</th>
+              <th style='width:5%;'>Gender</th>
+              <th style='width:5%;'>Category</th>
+              <th style='width:5%;'>Level</th>
+              <th style='width:5%;'>Date Registered</th>
+              <th style='width:5%;'>Status</th>
+              <th style='width:10%;'>Action</th>
+            </tr>
+
+            <thead>
+            <tbody>
+              {%for pilot in pilots%}
+              <tr style='text-align: center;'>
+                <td class=""><a href="#">{{pilot.id}}</a></td>
+
+                <td>{{pilot.firstname}}</td>
+                <td>{{pilot.lastname}}</td>
+                <td>{{pilot.email}}</td>
+                <td>{{pilot.gender}}</td>
+                <td>{{pilot.category}}</td>
+                <td>{{pilot.level}}</td>
+                <td>{{pilot.date_created.strftime('%b %d|%H:%M')}}</td>
+                <td>{{pilot.is_active}}</td>
+
+                <td>
+                  <a href="{{url_for('main.edit_flight', flight_id = flight.id)}}" class="btn btn-secondary btn-sm">
+                    <i class="far fa-edit"></i></i> Edit
+                  </a>
+                  <a href="{{url_for('main.delete_flight',flight_id = flight.id)}}" class="btn btn-danger btn-sm">
+                    <i class="far fa-trash-alt"></i></i> Delete
+                  </a>
+                </td>
+              </tr>
+              {%endfor%}
+            </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
   <!-- UPLOAD FLIGHT DATA -->
   <div class="row">
     <div class="collapse" id="schedule_flight">
@@ -102,7 +163,7 @@
               <input type="file" class="input-group form-control " name="file_name">
             </div>
             <div class="col">
-              <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i>  Upload</button>
+              <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i> Upload</button>
 
             </div>
             <!-- <label class="input-group-text" for="inputGroupFile02">Upload</label> -->
@@ -115,27 +176,29 @@
     </div>
 
     <!-- SCHEDULE FLIGHT DATA -->
-{%if flight%}
+    {%if flight%}
     <div class="row">
 
       <div class="col-sm-8">
         <div class="collapse" id="schedule_flight">
           <div class="d-flex card card-body mt-3">
-            <p class="display-6"> <i class="far fa-calendar-alt"></i>  Schedule Flight</p>
+            <p class="display-6"> <i class="far fa-calendar-alt"></i> Schedule Flight</p>
             <form action="{{url_for('main.schedule_flight')}}" method="post">
 
               <div class=" ml-0 mr-0 mt-3">
 
                 <div class="input-group mt-3 mb-3">
 
-                  <input class="input-group form-control" value = "{{flight.origin}}" name="flight_origin" placeholder="From"/>
+                  <input class="input-group form-control" value="{{flight.origin}}" name="flight_origin"
+                    placeholder="From" />
 
-                  
+
                   <span class="input-group-text"><i class="fas fa-plane"></i></span>
 
-                  <input class="input-group form-control" value = "{{flight.destination}}" name="flight_destination" placeholder="To"/>
+                  <input class="input-group form-control" value="{{flight.destination}}" name="flight_destination"
+                    placeholder="To" />
 
-                  
+
                 </div>
               </div>
 
@@ -146,13 +209,15 @@
               <div class="row mb-3">
                 <div class="col">
                   <label for="departure-date" class="pb-2">Departure Date</label>
-                  <input type='datetime-local' class='input-group form-control' value = "{{flight.departure_time}}" name='departure_time'>
+                  <input type='datetime-local' class='input-group form-control' value="{{flight.departure_time}}"
+                    name='departure_time'>
 
                 </div>
 
                 <div class="col">
                   <label for="arrival-date" class="pb-2">Arrival Date</label>
-                  <input type='datetime-local' value = "{{flight.arrival_time}}" class='input-group form-control' name='arrival_time'>
+                  <input type='datetime-local' value="{{flight.arrival_time}}" class='input-group form-control'
+                    name='arrival_time'>
 
                 </div>
               </div>
@@ -161,7 +226,7 @@
               <div class="input-group mb-3">
                 <label class=" d-flex justify-content-center input-group-text" for="inputGroupSelect01">Capacity
                 </label>
-                <select class="form-select" id="inputGroupSelect01"  value = "{{flight.capacity}}" name="flight_capacity">
+                <select class="form-select" id="inputGroupSelect01" value="{{flight.capacity}}" name="flight_capacity">
                   <!-- <option selected>Choose delay duration...</option> -->
                   <option value="5"> 5 Passengers</option>
                   <option value="7">7 Passengers</option>
@@ -169,12 +234,13 @@
                 </select>
                 <!-- FLIGHT CODE -->
 
-                <input class="input-group form-control" name="flight_code" value = "{{flight.code}}" placeholder="flight code e.g XXR384">
+                <input class="input-group form-control" name="flight_code" value="{{flight.code}}"
+                  placeholder="flight code e.g XXR384">
                 <span class="input-group-text "><i class="fas fa-plane"></i></span>
 
 
               </div>
-              <button class="btn btn-primary" type="submit"><i class="far fa-calendar-alt"></i>  Schedule Flight</button>
+              <button class="btn btn-primary" type="submit"><i class="far fa-calendar-alt"></i> Schedule Flight</button>
             </form>
           </div>
         </div>
@@ -182,7 +248,7 @@
 
 
       </div>
-{%endif%}
+      {%endif%}
 
 
 
@@ -250,91 +316,117 @@
 
       </div>
 
-
-
-
-
-      <!-- REGISTER PILOT  -->
-      <div class="row">
-
-        <div class="col-sm-8">
-          <div class="collapse" id="register_pilot">
-            <div class="d-flex card card-body mt-3">
-              <p class="display-6"> <i class="far fa-calendar-alt"></i> Register Pilot</p>
-              <form action="{{url_for('users.register_pilot')}}" method="post">
-
-                <div class=" ml-0 mr-0 mt-3">
-
-                  <div class="input-group mt-3 mb-3">
-
-                    <input class="input-group form-control" name="firstname" placeholder="First Name">
-
-                    </input>
-                    <span class="input-group-text"><i class="fas fa-user"></i></span>
-
-                    <input class="input-group form-control" name="lastname" placeholder="Last Name">
-
-                    </input>
-                  </div>
-                </div>
-
-
-
-
-                <!-- FLIGHT DATETIMEPICKER -->
-                <!-- <div class="row mb-3">
-                <div class="col">
-                  <label for="departure-date" class="pb-2">Departure Date</label>
-                  <input type='datetime-local' class='input-group form-control' name='departure_time'>
-
-                </div>
-
-                <div class="col">
-                  <label for="arrival-date" class="pb-2">Arrival Date</label>
-                  <input type='datetime-local' class='input-group form-control' name='arrival_time'>
-
-                </div>
-              </div> -->
-
-                <!-- FLIGHT CAPACITY -->
-                <!-- <div class="input-group mb-3">
-                <label class=" d-flex justify-content-center input-group-text" for="inputGroupSelect01">Capacity
-                </label>
-                <select class="form-select" id="inputGroupSelect01" name="flight_capacity">
-                  <!-- <option selected>Choose delay duration...</option> -->
-                <!-- <option value="5"> 5 Passengers</option>
-                  <option value="7">7 Passengers</option>
-                  <option value="10">10 Passengers</option>
-                </select> -->
-                <!-- FLIGHT CODE -->
-
-                <input class="input-group form-control" name="flight_code" placeholder="flight code e.g XXR384">
-                <span class="input-group-text "><i class="fas fa-plane"></i></span>
-
-
-            </div> -->
-            <button class="btn btn-primary" type="submit">Register</button>
-            </form>
-          </div>
-        </div>
-
-
-
-      </div>
-
-
-
-
-
-
-
     </div>
 
+    <!-- REGISTER PILOT -->
+    <div clas="col-8">
+
+      <div class="collapse" id="register_pilot">
+        <div class="card card-body mt-3">
+          <p class="display-6"><i class="far fa-plus-square"></i> Add Pilot</p>
+          <form action="{{url_for('users.register_pilot')}}" method="post">
+
+            <div class="mb-3">
+              <div class="row">
+
+                <div class="col form-floating">
+                  <input type="text" class="form-control" id="floating" name="firstname" placeholder="John"
+                    value="John">
+                  <label for="floatingInputValue">First Name</label>
+                </div>
+
+                <div class="col form-floating">
+                  <input type="text" class="form-control" id="floating" name="lastname" placeholder="Doe" value="Doe">
+                  <label for="floatingInputValue">Last Name</label>
+                </div>
+
+                <div class="col form-floating">
+                  <input type="email" class="form-control" name="email" id="floating" placeholder="name@example.com"
+                    value="test@example.com">
+                  <label for="floatingInputValue">Email</label>
+                  <!-- <span class="input-group-text "><i class="fas fa-plane"></i></span> -->
+                </div>
+              </div>
+
+
+            </div>
+            <div class="row">
+              <div class="col-6">
+                <div class="row">
+                  <div class="col">
+                    <input type="radio" id="male" name="gender" value="Male">
+                    <label for="male">Male</label>
+                  </div>
+                  <div class="col">
+                    <input type="radio" id="she" name="gender" value="Female">
+                    <label for="female">Female</label><br>
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" name="category" type="checkbox" id="inlineCheckbox1"
+                        value="local">
+                      <label class="form-check-label" for="pilotType">Local</label>
+                    </div>
+                  </div>
+                  <div class="col">
+                    <div class="form-check form-check-inline">
+                      <input class="form-check-input" name="category" type="checkbox" id="inlineCheckbox1"
+                        value="International">
+                      <label class="form-check-label" for="pilotType">International</label>
+                    </div>
+                  </div>
+                  <br>
+                </div>
+              </div>
+
+
+              <div class="col">
+                <div class="input-group mb-3">
+                  <label class=" d-flex justify-content-center input-group-text" for="inputGroupSelect01">Level</label>
+                  </label>
+                  <select class="form-select" id="inputGroupSelect01" name="pilot_level">
+                    <!-- <option selected>Choose delay duration...</option> -->
+                    <option value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="mb-3">
+             
+            </div>
+
+
+            <div class="input-group mb-3">
+              <label class=" d-flex justify-content-center input-group-text" for="inputGroupSelect01">Type</label>
+              </label> -->
 
 
 
 
+
+
+
+
+            <!-- FLIGHT CODE -->
+
+
+
+            <button class=" btn btn-primary" type="submit"><i class="far fa-plus-square"></i> Add Pilot</button>
+
+        </div>
+      </div>
+
+      </form>
+    </div>
   </div>
+</div>
+</div>
+
+
+
+</div>
 </div>
 
 

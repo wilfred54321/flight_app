@@ -71,7 +71,14 @@ class Passenger(db.Model):
 class Pilot(db.Model):
     __tablename__ = "pilots"
     id = db.Column(db.Integer, primary_key=True)
-    firstname = db.Column(db.String, nullable=False)
-    lastname = db.Column(db.String, nullable=False)
-    level = db.Column(db.String, nullable=False)
-    status = db.Column(db.Integer, nullable=False)
+    firstname = db.Column(db.String(50), nullable=False)
+    lastname = db.Column(db.String(50), nullable=False)
+    email = db.Column(db.String(50), nullable=False)
+    gender = db.Column(db.String(20), nullable=False)
+    category = db.Column(db.String(30), nullable=False)
+    level = db.Column(db.Integer, nullable=False)
+    date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
+    is_active = db.Column(db.Boolean, nullable=False, default=False)
+
+   
+     

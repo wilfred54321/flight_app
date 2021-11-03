@@ -65,7 +65,8 @@ Booking
 
 
                             <div class="mb-3">
-                                <label for="exampleFormControlInput1" class="form-label pt-2"><i class="fas fa-user"></i>First Name</label>
+                                <label for="exampleFormControlInput1" class="form-label pt-2"><i
+                                        class="fas fa-user"></i>First Name</label>
                                 <input type="text" class="form-control form-control" name="firstname"
                                     placeholder="Enter first name">
                             </div>
@@ -76,14 +77,20 @@ Booking
                                     placeholder="Enter last name">
                             </div>
 
-                            <div class="">
-                                <input type="radio" id="male" name="gender" value="Male">
-                                <label for="male">Male</label><br>
+                            <div class="row">
+
+                                <div class="col-3">
+                                    <input type="radio" id="male" name="gender" value="Male">
+                                    <label for="male">Male</label>
+                                </div>
+
+                                <div class="col-3">
+                                    <input type="radio" id="she" name="gender" value="Female">
+                                    <label for="female">Female</label><br>
+                                </div>
+
                             </div>
-                            <div class="mb-3">
-                                <input type="radio" id="she" name="gender" value="Female">
-                                <label for="female">Female</label><br>
-                            </div>
+
                             <button class="btn btn-primary" type="submit">Book Flight</button>
                         </form>
                     </div>
