@@ -1,7 +1,6 @@
 import string
 import random
 from datetime import datetime, timedelta
-from flight_app.models import Passenger, Flight
 
 
 def generate_booking_reference():
@@ -18,14 +17,3 @@ def is_valid_flight_time(departure_time, arrival_time):
     ):
         return True
     return False
-
-
-def add_flight(code, origin, destination, capacity, departure_time, arrival_time):
-    return Flight(
-        code=code,
-        origin=origin,
-        destination=destination,
-        capacity=capacity,
-        departure_time=departure_time,
-        arrival_time=arrival_time,
-    )

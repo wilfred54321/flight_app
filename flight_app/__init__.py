@@ -1,6 +1,6 @@
 from flask import Flask
-from .utils import db
-from .main.routes import main
+import os
+from flight_app.models import db
 
 
 def create_app():
@@ -11,6 +11,11 @@ def create_app():
     app.config["SECRET_KEY"] = "dfe56e985611aa6f"
 
     db.init_app(app)
+
+    from .main.routes import main
+    from .users.routes import users
+
     app.register_blueprint(main)
+    app.register_blueprint(users)
 
     return app

@@ -53,7 +53,7 @@
             <tbody>
               {%for flight in flights%}
               <tr style='text-align: center;'>
-                <td class=""><a href="{{url_for('flight',flight_id=flight.id)}}">{{flight.code}}</a></td>
+                <td class=""><a href="{{url_for('main.flight',flight_id=flight.id)}}">{{flight.code}}</a></td>
 
                 <td>{{flight.origin}}</td>
                 <td>{{flight.destination}}</td>
@@ -63,10 +63,10 @@
                 <td>{{flight.arrival_time.strftime('%b %d|%H:%M')}}</td>
                 <td>{{((flight.arrival_time-flight.departure_time).total_seconds())//60}}</td>
                 <td>
-                  <a href="" class="btn btn-secondary btn-sm">
+                  <a href="{{url_for('main.edit_flight', flight_id = flight.id)}}" class="btn btn-secondary btn-sm">
                     <i class="far fa-edit"></i></i> Edit
                   </a>
-                  <a href="{{url_for('delete_flight',flight_id = flight.id)}}" class="btn btn-danger btn-sm">
+                  <a href="{{url_for('main.delete_flight',flight_id = flight.id)}}" class="btn btn-danger btn-sm">
                     <i class="far fa-trash-alt"></i></i> Delete
                   </a>
                 </td>
@@ -91,13 +91,13 @@
         </div>
         <p class="display-6"> <i class="fas fa-upload"></i> Upload Flight Data</p>
 
-        <form class="form-group" action="{{url_for('upload_flight')}}" method='post'>
+        <form class="form-group" action="{{url_for('main.upload_flight')}}" method='post'>
           <div class="row">
             <div class="col-4">
               <input type="file" class="input-group form-control " name="file_name">
             </div>
             <div class="col">
-              <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i>Upload</button>
+              <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i>  Upload</button>
 
             </div>
             <!-- <label class="input-group-text" for="inputGroupFile02">Upload</label> -->
@@ -110,27 +110,27 @@
     </div>
 
     <!-- SCHEDULE FLIGHT DATA -->
-
+{%if flight%}
     <div class="row">
 
       <div class="col-sm-8">
         <div class="collapse" id="schedule_flight">
           <div class="d-flex card card-body mt-3">
-            <p class="display-6"> <i class="far fa-calendar-alt"></i> Schedule Flight</p>
-            <form action="{{url_for('schedule_flight')}}" method="post">
+            <p class="display-6"> <i class="far fa-calendar-alt"></i>  Schedule Flight</p>
+            <form action="{{url_for('main.schedule_flight')}}" method="post">
 
               <div class=" ml-0 mr-0 mt-3">
 
                 <div class="input-group mt-3 mb-3">
 
-                  <input class="input-group form-control" name="flight_origin" placeholder="From">
+                  <input class="input-group form-control" value = "{{flight.origin}}" name="flight_origin" placeholder="From"/>
 
-                  </input>
+                  
                   <span class="input-group-text"><i class="fas fa-plane"></i></span>
 
-                  <input class="input-group form-control" name="flight_destination" placeholder="To">
+                  <input class="input-group form-control" value = "{{flight.destination}}" name="flight_destination" placeholder="To"/>
 
-                  </input>
+                  
                 </div>
               </div>
 
@@ -141,13 +141,13 @@
               <div class="row mb-3">
                 <div class="col">
                   <label for="departure-date" class="pb-2">Departure Date</label>
-                  <input type='datetime-local' class='input-group form-control' name='departure_time'>
+                  <input type='datetime-local' class='input-group form-control' value = "{{flight.departure_time}}" name='departure_time'>
 
                 </div>
 
                 <div class="col">
                   <label for="arrival-date" class="pb-2">Arrival Date</label>
-                  <input type='datetime-local' class='input-group form-control' name='arrival_time'>
+                  <input type='datetime-local' value = "{{flight.arrival_time}}" class='input-group form-control' name='arrival_time'>
 
                 </div>
               </div>
@@ -156,7 +156,7 @@
               <div class="input-group mb-3">
                 <label class=" d-flex justify-content-center input-group-text" for="inputGroupSelect01">Capacity
                 </label>
-                <select class="form-select" id="inputGroupSelect01" name="flight_capacity">
+                <select class="form-select" id="inputGroupSelect01"  value = "{{flight.capacity}}" name="flight_capacity">
                   <!-- <option selected>Choose delay duration...</option> -->
                   <option value="5"> 5 Passengers</option>
                   <option value="7">7 Passengers</option>
@@ -164,12 +164,12 @@
                 </select>
                 <!-- FLIGHT CODE -->
 
-                <input class="input-group form-control" name="flight_code" placeholder="flight code e.g XXR384">
+                <input class="input-group form-control" name="flight_code" value = "{{flight.code}}" placeholder="flight code e.g XXR384">
                 <span class="input-group-text "><i class="fas fa-plane"></i></span>
 
 
               </div>
-              <button class="btn btn-primary" type="submit">Schedule Flight</button>
+              <button class="btn btn-primary" type="submit"><i class="far fa-calendar-alt"></i>  Schedule Flight</button>
             </form>
           </div>
         </div>
@@ -177,7 +177,7 @@
 
 
       </div>
-
+{%endif%}
 
 
 
@@ -196,7 +196,7 @@
         <div class="collapse" id="delay_flight">
           <div class="d-flex card card-body mt-3">
             <p class="display-6"><i class="far fa-calendar-times"></i> Delay Flight</p>
-            <form action="{{url_for('delay_flight')}}" method="post">
+            <form action="{{url_for('main.delay_flight')}}" method="post">
 
               <div class=" ml-0 mr-0 mt-3">
                 <div class="input-group mt-3 mb-3">

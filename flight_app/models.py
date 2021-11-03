@@ -1,6 +1,6 @@
 from enum import unique
 from flask_sqlalchemy import SQLAlchemy
-from flight_app.utils import generate_booking_reference
+from .utils import generate_booking_reference
 from datetime import timedelta, datetime
 
 
@@ -42,6 +42,17 @@ class Flight(db.Model):
     def delay_flight(self, amount):
         delay_amount = timedelta(minutes=amount)
         return self.arrival_time + delay_amount
+
+
+def add_flight(code, origin, destination, capacity, departure_time, arrival_time):
+    return Flight(
+        code=code,
+        origin=origin,
+        destination=destination,
+        capacity=capacity,
+        departure_time=departure_time,
+        arrival_time=arrival_time,
+    )
 
 
 class Passenger(db.Model):

@@ -12,6 +12,8 @@ from flight_app.models import (
     db,
     datetime,
 )
+from flight_app.utils import is_valid_flight_time
+from flight_app.models import add_flight
 
 main = Blueprint("main", __name__)
 
@@ -179,7 +181,7 @@ def schedule_flight():
         # new_date = format_datetime(departure_time)
         # return f"<h1>{new_date}</h1>"
 
-    return redirect(url_for("index"))
+    return redirect(url_for("main.index"))
 
 
 # function to format datetime for writing to database
@@ -235,8 +237,14 @@ def delete_flight(flight_id):
         db.session.commit()
         message = f"Flight {flight.code} deleted successfully!"
         flash(message, "success")
-        return redirect(url_for("index"))
+        return redirect(url_for("main.index"))
     return render_template("error.html", message="Flight does not exist")
+
+
+@main.route("/flight/<int:flight_id>/edit", methods=["GET", "POST"])
+def edit_flight(flight_id):
+    flight = Flight.query.get_or_404(flight_id)
+    return render_template("index.html", flight=flight)
 
 
 @main.route("/passenger/<int:flight_id>/<int:passenger_id>", methods=["GET"])
@@ -248,4 +256,4 @@ def delete_passenger(passenger_id, flight_id):
     message = f"""Passenger \'{passenger.firstname} {passenger.lastname}\' was successfully deleted from 
     flight {flight.code} from {flight.origin} to {flight.destination}"""
     flash(message, "success")
-    return redirect(url_for("flight", flight_id=flight_id))
+    return redirect(url_for("main.flight", flight_id=flight_id))
