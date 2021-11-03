@@ -12,8 +12,8 @@
   <i class="fas fa-plane"></i> Show All Flights
 </a>
 
-<a class="btn btn-outline-primary" data-bs-toggle="collapse" href="{{url_for('all_pilots}}" role="button"
-  aria-expanded="false" aria-controls="all_pilots_list">
+<a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#all_pilots_list" role="button" aria-expanded="false"
+  aria-controls="all_pilots_list">
   <i class="fas fa-users"></i> Show All Pilots
 </a>
 
@@ -48,6 +48,7 @@
         <table class="table table-striped table-hover table-bordered">
           <thead>
             <tr style="text-align: center;">
+              <th style='width:3%;' class="">#</th>
               <th style='width:5%;' class="">Code</th>
               <th style='width:5%;'>Origin</th>
               <th style='width:5%;'>Destination</th>
@@ -59,59 +60,62 @@
               <th style='width:10%;'>Action</th>
             </tr>
 
-            <thead>
-            <tbody>
-              {%for flight in flights%}
-              <tr style='text-align: center;'>
-                <td class=""><a href="{{url_for('main.flight',flight_id=flight.id)}}">{{flight.code}}</a></td>
+          </thead>
+          <tbody>
+            {%for flight in flights%}
+            <tr style='text-align: center;'>
+              <td>{{loop.index}}</td>
+              <td class="" style="font-weight:bold;"><a
+                  href="{{url_for('main.flight',flight_id=flight.id)}}">{{flight.code}}</a></td>
 
-                <td>{{flight.origin}}</td>
-                <td>{{flight.destination}}</td>
-                <td>{{flight.capacity}}</td>
-                <td>{{flight.open_seats()}}</td>
-                <td>{{flight.departure_time.strftime('%b %d|%H:%M')}}</td>
-                <td>{{flight.arrival_time.strftime('%b %d|%H:%M')}}</td>
-                <td>{{((flight.arrival_time-flight.departure_time).total_seconds())//60}}</td>
-                <td>
-                  <a href="{{url_for('main.edit_flight', flight_id = flight.id)}}" class="btn btn-secondary btn-sm">
-                    <i class="far fa-edit"></i></i> Edit
-                  </a>
-                  <a href="{{url_for('main.delete_flight',flight_id = flight.id)}}" class="btn btn-danger btn-sm">
-                    <i class="far fa-trash-alt"></i></i> Delete
-                  </a>
-                </td>
-              </tr>
-              {%endfor%}
-            </tbody>
+              <td>{{flight.origin}}</td>
+              <td>{{flight.destination}}</td>
+              <td>{{flight.capacity}}</td>
+              <td>{{flight.open_seats()}}</td>
+              <td>{{flight.departure_time.strftime('%b %d|%H:%M')}}</td>
+              <td>{{flight.arrival_time.strftime('%b %d|%H:%M')}}</td>
+              <td>{{((flight.arrival_time-flight.departure_time).total_seconds())//60}}</td>
+              <td>
+                <a href="{{url_for('main.edit_flight', flight_id = flight.id)}}" class="btn btn-secondary btn-sm">
+                  <i class="far fa-edit"></i></i> Edit
+                </a>
+                <a href="{{url_for('main.delete_flight',flight_id = flight.id)}}" class="btn btn-danger btn-sm">
+                  <i class="far fa-trash-alt"></i></i> Delete
+                </a>
+              </td>
+            </tr>
+            {%endfor%}
+          </tbody>
         </table>
       </div>
     </div>
   </div>
 
   <!-- SHOW ALL PILOTS -->
-  <div class="collapse" id="all_pilots_list">
+  <div class="" id="all_pilots_list">
     <div class="card card-body mt-3">
       <p class="display-6"><i class="fas fa-users"></i> Show All Pilots</p>
       <div class=index_table>
         <table class="table table-striped table-hover table-bordered">
           <thead>
             <tr style='text-align: center;'>
+              <th style='width:3%;' class="">#</th>
               <th style='width:5%;' class="">First Name</th>
               <th style='width:5%;'>Last Name</th>
               <th style='width:5%;'>Email</th>
-              <th style='width:5%;'>Gender</th>
+              <th style='width:3%;'>Gender</th>
               <th style='width:5%;'>Category</th>
               <th style='width:5%;'>Level</th>
               <th style='width:5%;'>Date Registered</th>
               <th style='width:5%;'>Status</th>
-              <th style='width:10%;'>Action</th>
+              <th style='width:13%;'>Action</th>
             </tr>
 
             <thead>
             <tbody>
               {%for pilot in pilots%}
               <tr style='text-align: center;'>
-                <td class=""><a href="#">{{pilot.id}}</a></td>
+                <td class="">{{loop.index}}</td>
 
                 <td>{{pilot.firstname}}</td>
                 <td>{{pilot.lastname}}</td>
@@ -119,14 +123,20 @@
                 <td>{{pilot.gender}}</td>
                 <td>{{pilot.category}}</td>
                 <td>{{pilot.level}}</td>
-                <td>{{pilot.date_created.strftime('%b %d|%H:%M')}}</td>
-                <td>{{pilot.is_active}}</td>
+                <td>{{pilot.date_created.strftime('%b %d, %Y')}}</td>
+                <td>
+                  {%if pilot.status() %}
+                  <span class="badge rounded-pill bg-success "> {{pilot.status()}}</span>
+                  {%else%}
+                  <span class="badge rounded-pill bg-danger"> {{pilot.status()}}</span>
+                  {%endif%}
+                </td>
 
                 <td>
-                  <a href="{{url_for('main.edit_flight', flight_id = flight.id)}}" class="btn btn-secondary btn-sm">
+                  <a href="#" class="btn btn-secondary btn-sm">
                     <i class="far fa-edit"></i></i> Edit
                   </a>
-                  <a href="{{url_for('main.delete_flight',flight_id = flight.id)}}" class="btn btn-danger btn-sm">
+                  <a href="#" class="btn btn-danger btn-sm">
                     <i class="far fa-trash-alt"></i></i> Delete
                   </a>
                 </td>
@@ -137,6 +147,9 @@
       </div>
     </div>
   </div>
+
+
+
 
 
 
@@ -148,7 +161,8 @@
     <div class="collapse" id="schedule_flight">
       <div class="card card-body mt-3">
         <div class="row">
-          <p class="lead">How do you want to Schedule flight? You can either upload flight data from a csv file or enter
+          <p class="lead">How do you want to Schedule flight? You can either upload flight data from a csv file or
+            enter
             the flight
             data in the
             Schedule Flight form below</p>
@@ -240,7 +254,8 @@
 
 
               </div>
-              <button class="btn btn-primary" type="submit"><i class="far fa-calendar-alt"></i> Schedule Flight</button>
+              <button class="btn btn-primary" type="submit"><i class="far fa-calendar-alt"></i> Schedule
+                Flight</button>
             </form>
           </div>
         </div>
@@ -307,7 +322,8 @@
                   </div>
                 </div>
               </div>
-              <button class="btn btn-primary" type="submit"><i class="far fa-calendar-times"></i> Delay Flight</button>
+              <button class="btn btn-primary" type="submit"><i class="far fa-calendar-times"></i> Delay
+                Flight</button>
             </form>
           </div>
         </div>

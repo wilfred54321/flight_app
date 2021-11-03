@@ -78,7 +78,9 @@ class Pilot(db.Model):
     category = db.Column(db.String(30), nullable=False)
     level = db.Column(db.Integer, nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
-    is_active = db.Column(db.Boolean, nullable=False, default=False)
+    is_available = db.Column(db.Boolean, nullable=False, default=True)
 
-   
-     
+    def status(self):
+        if self.is_available == False:
+            return "Unavailable"
+        return "Available"

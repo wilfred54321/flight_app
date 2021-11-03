@@ -6,12 +6,7 @@ import os
 from pathlib import Path
 import csv
 from flask import Flask, render_template, request, flash, redirect, url_for
-from flight_app.models import (
-    Flight,
-    Passenger,
-    db,
-    datetime,
-)
+from flight_app.models import Flight, Passenger, db, datetime, Pilot
 from flight_app.utils import is_valid_flight_time
 from flight_app.models import add_flight
 
@@ -24,10 +19,10 @@ main = Blueprint("main", __name__)
 
 @main.route("/")
 def index():
-    """Display a list of Flights"""
-
+    """Display a list of Flights and Pilots"""
+    pilots = Pilot.query.all()
     flights = Flight.query.all()
-    return render_template("index.html", flights=flights, title="Index")
+    return render_template("index.html", pilots=pilots, flights=flights, title="Index")
 
 
 @main.route("/book-flight")

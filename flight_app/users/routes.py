@@ -9,9 +9,10 @@ users = Blueprint("users", __name__)
 
 @users.route("/all-pilots", methods=["POST", "GET"])
 def all_pilots():
-    pilots = Pilot.query.all()
-    return pilots
-    # return render_template("index.html", pilots=pilots)
+    # pilots = Pilot.query.all()
+    # # return pilots
+    # return render_template("index.html", pilots=pilots, title="Index")
+    pass
 
 
 @users.route("/register-pilot", methods=["GET", "POST"])
