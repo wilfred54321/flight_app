@@ -1,23 +1,34 @@
 body {
-    margin:auto;
-    width:70%;
+  margin: auto;
+  width: 70%;
 }
-.xx-small{
-    font-size: xx-small;
-    
+.xx-small {
+  font-size: xx-small;
 }
-.x-small{
-    font-size: x-small;
-}
-
-
-
-.button-width{
-    width:auto;
+.x-small {
+  font-size: x-small;
 }
 
-.special-font{font-family: Salesforce Sans,-apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica,helvetica neue,ubuntu,roboto,noto,segoe ui,arial,sans-serif;}
+.button-width {
+  width: auto;
+}
 
-.text-center{
-    text-align:center
+.special-font {
+  font-family: Salesforce Sans, -apple-system, BlinkMacSystemFont, avenir next,
+    avenir, helvetica, helvetica neue, ubuntu, roboto, noto, segoe ui, arial,
+    sans-serif;
+}
+
+.text-center {
+  text-align: center;
+}
+.green {
+  color: green;
+}
+.none {
+  text-decoration: none;
+  color: #004d40;
+}
+.red {
+  color: red;
 }

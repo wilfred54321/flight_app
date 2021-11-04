@@ -8,8 +8,7 @@ from sqlalchemy import desc
 import csv
 from flask import Flask, render_template, request, flash, redirect, url_for
 from flight_app.models import Flight, Passenger, db, datetime, Pilot
-from flight_app.utils import is_valid_flight_time
-from flight_app.models import add_flight
+
 
 main = Blueprint("main", __name__)
 
