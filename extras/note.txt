@@ -13,3 +13,6 @@ create account for users/agents
 
 An agent with admin rights is able to assign pilot to a flight
 regular agent is able to assign passengers to a flight
+
+
+After 24 hours, automatically delete passengers data from the database after 5 hours of flight completion.

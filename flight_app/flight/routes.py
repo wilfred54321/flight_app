@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, redirect, url_for
+from flask import Blueprint, render_template, request, redirect, url_for, flash
 import csv
 from flight_app.models import Flight
 from flight_app.models import db, add_flight
@@ -40,8 +40,39 @@ def upload_flight():
         return render_template("index.html")
 
 
+import os
+
+
+@flight.route("/register-new-flight", methods=["GET", "POST"])
+def register_new_flight():
+    if request.method == "POST":
+        flight_code = request.form.get("flight_code").upper()
+        flight_capacity = request.form.get("flight_capacity")
+        flight_model = request.form.get("flight_model")
+        category = request.form.get("flight_category")
+        date_of_first_flight = request.form.get("first_flight_date")
+
+    # check to ensure that the flight does not already exist in the database
+    flight = Flight.query.filter_by(code=flight_code).first()
+    if flight:
+        message = "Sorry, A flight with thesame code already exist."
+        flash(message, "danger")
+        return redirect(url_for(request.referrer))
+
+    # Add flight to database
+    flight = Flight.add_new_flight(
+        flight_code, flight_model, flight_capacity, category, date_of_first_flight
+    )
+    message = f"Flight {flight_code} with a capacity of {flight_capacity} was added successfully!"
+    flash(message, "success")
+    return redirect("main.index")
+
+
 @flight.route("/schedule_flight", methods=["GET", "POST"])
 def schedule_flight():
+    """This function schedules an already registered flight by assigning it an origin, destination,
+    capacity,departure datetime, arrival datetime. Once the flight is schedule, passengers are able to
+    book the flight. It becomes unaviable for schedule once it is scheduled."""
 
     if request.method == "POST":
         flight_code = request.form.get("flight_code").upper()
