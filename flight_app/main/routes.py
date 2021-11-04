@@ -21,7 +21,7 @@ main = Blueprint("main", __name__)
 @main.route("/")
 def index():
     """Display a list of Flights and Pilots"""
-    pilots = Pilot.query.order_by(desc(Pilot.firstname)).limit(3).all()
+    pilots = Pilot.query.order_by(desc(Pilot.firstname)).all()
     flights = Flight.query.all()
     return render_template("index.html", pilots=pilots, flights=flights, title="Index")
 

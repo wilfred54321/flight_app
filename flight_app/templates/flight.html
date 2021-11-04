@@ -37,7 +37,7 @@
     </tr>
 </div>
 <div class="index_table">
-    <table class="table table-striped table-hover table-bordered">
+    <table class=" text-center table table-striped table-hover table-bordered">
 
         <thead>
             <tr>
@@ -75,9 +75,13 @@
 <h2>Passengers</h2>
 
 <div class="index_table">
-    <table class="table table-striped table-hover table-bordered">
+    <table class=" text-center table table-striped table-hover table-bordered">
         <thead>
             <tr>
+                <th>#</th>
+                <th><input class="all form-check-input" name="all" type="checkbox" id="input1" aria-label="..."> All
+                </th>
+
                 <th>Booking Reference</th>
                 <th>First Name</th>
                 <th>Last Name</th>
@@ -92,6 +96,14 @@
             <tbody>
                 {%for passenger in flight.passengers%}
                 <tr>
+
+                    <td>{{loop.index}}</td>
+                    <td>
+                        <input class="item form-check-input" name="checkbox" type="checkbox" id="input1"
+                            value="{{passenger.id}}" aria-label="...">
+
+                    </td>
+
                     <td>{{passenger.booking_reference}}</td>
                     <td>{{passenger.firstname}}</td>
                     <td>{{passenger.lastname}}</td>
@@ -120,6 +132,10 @@
 
     </table>
 </div>
-
+<script>
+    $(':checkbox.all').change(function () {
+        $(':checkbox.item').prop('checked', this.checked);
+    });
+</script>
 
 {%endblock%}

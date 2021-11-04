@@ -22,7 +22,9 @@ def register_pilot():
         lastname = request.form.get("lastname").capitalize()
         email = request.form.get("email").lower()
         gender = request.form.get("gender")
-        category = request.form.getlist("category")
+        cat = request.form.getlist("category")
+        category = [x for x in cat]
+
         level = request.form.get("pilot_level")
 
         pilot = Pilot(

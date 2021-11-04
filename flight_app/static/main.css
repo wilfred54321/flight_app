@@ -17,3 +17,7 @@ body {
 }
 
 .special-font{font-family: Salesforce Sans,-apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica,helvetica neue,ubuntu,roboto,noto,segoe ui,arial,sans-serif;}
+
+.text-center{
+    text-align:center
+}
