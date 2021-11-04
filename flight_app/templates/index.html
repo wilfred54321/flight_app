@@ -127,13 +127,13 @@
                 <td>
                   {%if pilot.is_available%}
                   <a href="{{url_for('users.change_status', pilot_id = pilot.id, action ='disable')}}">
-                    <span class="badge rounded-pill bg-success ">{{pilot.status()}}</span>
+                    <span class="x-small badge rounded-pill bg-success ">{{pilot.status()}}</span>
                   </a>
 
                   {%else%}
 
                   <a href="{{url_for('users.change_status', pilot_id = pilot.id, action = 'enable')}}">
-                    <span class="badge rounded-pill bg-danger"> {{pilot.status()}}</span>
+                    <span class="x-small badge rounded-pill bg-danger"> {{pilot.status()}}</span>
                   </a>
                   {%endif%}
                 </td>

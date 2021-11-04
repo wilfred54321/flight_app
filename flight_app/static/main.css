@@ -2,12 +2,18 @@ body {
     margin:auto;
     width:70%;
 }
-.index_table{
+.xx-small{
+    font-size: xx-small;
     
 }
+.x-small{
+    font-size: x-small;
+}
+
 
 
 .button-width{
     width:auto;
 }
+
 .special-font{font-family: Salesforce Sans,-apple-system,BlinkMacSystemFont,avenir next,avenir,helvetica,helvetica neue,ubuntu,roboto,noto,segoe ui,arial,sans-serif;}
