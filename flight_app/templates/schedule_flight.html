@@ -1,199 +1,225 @@
-{%extends 'base.html'%}
+{%extends 'base.html'%} {%block heading%}
 
+<a
+  class="btn btn-outline-primary"
+  data-bs-toggle="collapse"
+  href="#upload_flight_data"
+  role="button"
+  aria-expanded="false"
+  aria-controls="schedule_flight"
+>
+  <i class="far fa-calendar-alt"></i> Upload Flight Data
+</a>
 
-{%block heading%}
-
-<!-- <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#schedule_flight" role="button" aria-expanded="false"
-  aria-controls="schedule_flight">
-  <i class="far fa-calendar-alt"></i> Schedule Flight
-</a> -->
-
-{%endblock%}
-
-{%block body%}
+{%endblock%} {%block body%}
 
 <!-- UPLOAD FLIGHT DATA -->
 <div class="row">
-    <!-- <div class="collapse" id="schedule_flight"> -->
-
+  <div class="collapse" id="upload_flight_data">
     <div class="row">
-        <p class="lead">How do you want to Schedule flight? You can either upload flight data from a csv file or
-            enter
-            the flight
-            data in the
-            Schedule Flight form below</p>
-        <hr>
-
+      <p class="lead">
+        How do you want to Schedule flight? You can either upload flight data
+        from a csv file or enter the flight data in the Schedule Flight form
+        below
+      </p>
+      <hr />
     </div>
 
     <div class="card card-body mt-3 mb-4">
+      <p class="display-6"><i class="fas fa-upload"></i> Upload Flight Data</p>
 
-        <p class="display-6"> <i class="fas fa-upload"></i> Upload Flight Data</p>
-
-        <form class="form-group" action="{{url_for('flight.upload_flight')}}" method='post'>
-            <div class="row">
-                <div class="col-4">
-                    <input type="file" class="input-group form-control " name="file_name">
-                </div>
-                <div class="col">
-                    <button type="submit" class="btn btn-primary"><i class="fas fa-upload"></i> Upload</button>
-
-                </div>
-                <!-- <label class="input-group-text" for="inputGroupFile02">Upload</label> -->
-
-            </div>
-        </form>
-
+      <form
+        class="form-group"
+        action="{{url_for('flight.upload_flight')}}"
+        method="post"
+      >
+        <div class="row">
+          <div class="col-4">
+            <input
+              type="file"
+              class="input-group form-control"
+              name="file_name"
+            />
+          </div>
+          <div class="col">
+            <button type="submit" class="btn btn-primary">
+              <i class="fas fa-upload"></i> Upload
+            </button>
+          </div>
+          <!-- <label class="input-group-text" for="inputGroupFile02">Upload</label> -->
+        </div>
+      </form>
     </div>
-</div>
+  </div>
 
+  <!-- SCHEDULE FLIGHT DATA -->
 
-
-
-<!-- SCHEDULE FLIGHT DATA -->
-
-
-
-{%if flight%}
-<div class="card card-body mt-3 mb-4">
-
+  {%if flight%}
+  <div class="card card-body mt-3 mb-4">
     <div class="col-sm-8">
+      <p class="display-6">
+        <i class="far fa-calendar-alt"></i> Schedule Flight
+      </p>
+      <form
+        action="{{url_for('flight.process_flight_schedule',flight_id = flight.id)}}"
+        method="post"
+      >
+        <div class="ml-0 mr-0 mt-3">
+          <div class="input-group mt-3 mb-3">
+            <input
+              class="input-group form-control"
+              value="{{flight.origin}}"
+              name="flight_origin"
+              placeholder="From"
+            />
 
-        <p class="display-6"> <i class="far fa-calendar-alt"></i> Schedule Flight</p>
-        <form action="{{url_for('flight.schedule_flight')}}" method="post">
+            <span class="input-group-text"><i class="fas fa-plane"></i></span>
 
-            <div class=" ml-0 mr-0 mt-3">
+            <input
+              class="input-group form-control"
+              value="{{flight.destination}}"
+              name="flight_destination"
+              placeholder="To"
+            />
+          </div>
+        </div>
 
-                <div class="input-group mt-3 mb-3">
+        <!-- FLIGHT DATETIMEPICKER -->
+        <div class="row mb-3">
+          <div class="col">
+            <label for="departure-date" class="pb-2">Departure Date</label>
+            <input
+              type="datetime-local"
+              class="input-group form-control"
+              value="{{flight.departure_time}}"
+              name="departure_time"
+            />
+          </div>
 
-                    <input class="input-group form-control" value="{{flight.origin}}" name="flight_origin"
-                        placeholder="From" />
+          <div class="col">
+            <label for="arrival-date" class="pb-2">Arrival Date</label>
+            <input
+              type="datetime-local"
+              value="{{flight.arrival_time}}"
+              class="input-group form-control"
+              name="arrival_time"
+            />
+          </div>
+        </div>
 
+        <!-- FLIGHT CAPACITY -->
+        <div class="input-group mb-3">
+          <label
+            class="d-flex justify-content-center input-group-text"
+            for="inputGroupSelect01"
+            >Capacity
+          </label>
+          <select
+            class="form-select"
+            id="inputGroupSelect01"
+            value="{{flight.capacity}}"
+            name="flight_capacity"
+          >
+            <!-- <option selected>Choose delay duration...</option> -->
+            <option value="5">5 Passengers</option>
+            <option value="7">7 Passengers</option>
+            <option value="10">10 Passengers</option>
+          </select>
+          <!-- FLIGHT CODE -->
 
-                    <span class="input-group-text"><i class="fas fa-plane"></i></span>
-
-                    <input class="input-group form-control" value="{{flight.destination}}" name="flight_destination"
-                        placeholder="To" />
-
-
-                </div>
-            </div>
-
-
-
-
-            <!-- FLIGHT DATETIMEPICKER -->
-            <div class="row mb-3">
-                <div class="col">
-                    <label for="departure-date" class="pb-2">Departure Date</label>
-                    <input type='datetime-local' class='input-group form-control' value="{{flight.departure_time}}"
-                        name='departure_time'>
-
-                </div>
-
-                <div class="col">
-                    <label for="arrival-date" class="pb-2">Arrival Date</label>
-                    <input type='datetime-local' value="{{flight.arrival_time}}" class='input-group form-control'
-                        name='arrival_time'>
-
-                </div>
-            </div>
-
-            <!-- FLIGHT CAPACITY -->
-            <div class="input-group mb-3">
-                <label class=" d-flex justify-content-center input-group-text" for="inputGroupSelect01">Capacity
-                </label>
-                <select class="form-select" id="inputGroupSelect01" value="{{flight.capacity}}" name="flight_capacity">
-                    <!-- <option selected>Choose delay duration...</option> -->
-                    <option value="5"> 5 Passengers</option>
-                    <option value="7">7 Passengers</option>
-                    <option value="10">10 Passengers</option>
-                </select>
-                <!-- FLIGHT CODE -->
-
-                <input class="input-group form-control" name="flight_code" value="{{flight.code}}"
-                    placeholder="flight code e.g XXR384">
-                <span class="input-group-text "><i class="fas fa-plane"></i></span>
-
-
-            </div>
-            <button class="btn btn-primary" type="submit"><i class="far fa-calendar-alt"></i> Schedule
-                Flight</button>
-        </form>
-
-
+          <input
+            class="input-group form-control"
+            name="flight_code"
+            value="{{flight.code}}"
+            placeholder="flight code e.g XXR384"
+          />
+          <span class="input-group-text"><i class="fas fa-plane"></i></span>
+        </div>
+        <button class="btn btn-primary" type="submit">
+          <i class="far fa-calendar-alt"></i> Schedule Flight
+        </button>
+      </form>
     </div>
+  </div>
+  {%else%}
 
-</div>
-{%else%}
-
-<div class="row card card-body mt-3 mb-4">
-
+  <div class="row card card-body mt-3 mb-4">
     <div class="col-sm-8">
+      <p class="display-6">
+        <i class="far fa-calendar-alt"></i> Schedule Flight
+      </p>
+      <form action="{{url_for('flight.schedule_flight')}}" method="post">
+        <div class="ml-0 mr-0 mt-3">
+          <div class="input-group mt-3 mb-3">
+            <input
+              class="input-group form-control"
+              name="flight_origin"
+              placeholder="From"
+            />
 
-        <p class="display-6"> <i class="far fa-calendar-alt"></i> Schedule Flight</p>
-        <form action="{{url_for('flight.schedule_flight')}}" method="post">
+            <span class="input-group-text"><i class="fas fa-plane"></i></span>
 
-            <div class=" ml-0 mr-0 mt-3">
+            <input
+              class="input-group form-control"
+              name="flight_destination"
+              placeholder="To"
+            />
+          </div>
+        </div>
 
-                <div class="input-group mt-3 mb-3">
+        <!-- FLIGHT DATETIMEPICKER -->
+        <div class="row mb-3">
+          <div class="col">
+            <label for="departure-date" class="pb-2">Departure Date</label>
+            <input
+              type="datetime-local"
+              class="input-group form-control"
+              name="departure_time"
+            />
+          </div>
 
-                    <input class="input-group form-control" name="flight_origin" placeholder="From" />
+          <div class="col">
+            <label for="arrival-date" class="pb-2">Arrival Date</label>
+            <input
+              type="datetime-local"
+              class="input-group form-control"
+              name="arrival_time"
+            />
+          </div>
+        </div>
 
+        <!-- FLIGHT CAPACITY -->
+        <div class="input-group mb-3">
+          <label
+            class="d-flex justify-content-center input-group-text"
+            for="inputGroupSelect01"
+            >Capacity
+          </label>
+          <select
+            class="form-select"
+            id="inputGroupSelect01"
+            name="flight_capacity"
+          >
+            <!-- <option selected>Choose delay duration...</option> -->
+            <option value="5">5 Passengers</option>
+            <option value="7">7 Passengers</option>
+            <option value="10">10 Passengers</option>
+          </select>
+          <!-- FLIGHT CODE -->
 
-                    <span class="input-group-text"><i class="fas fa-plane"></i></span>
-
-                    <input class="input-group form-control" name="flight_destination" placeholder="To" />
-
-
-                </div>
-            </div>
-
-
-
-
-            <!-- FLIGHT DATETIMEPICKER -->
-            <div class="row mb-3">
-                <div class="col">
-                    <label for="departure-date" class="pb-2">Departure Date</label>
-                    <input type='datetime-local' class='input-group form-control' name='departure_time'>
-
-                </div>
-
-                <div class="col">
-                    <label for="arrival-date" class="pb-2">Arrival Date</label>
-                    <input type='datetime-local' class='input-group form-control' name='arrival_time'>
-
-                </div>
-            </div>
-
-            <!-- FLIGHT CAPACITY -->
-            <div class="input-group mb-3">
-                <label class=" d-flex justify-content-center input-group-text" for="inputGroupSelect01">Capacity
-                </label>
-                <select class="form-select" id="inputGroupSelect01" name="flight_capacity">
-                    <!-- <option selected>Choose delay duration...</option> -->
-                    <option value="5"> 5 Passengers</option>
-                    <option value="7">7 Passengers</option>
-                    <option value="10">10 Passengers</option>
-                </select>
-                <!-- FLIGHT CODE -->
-
-                <input class="input-group form-control" name="flight_code" placeholder="flight code e.g XXR384">
-                <span class="input-group-text "><i class="fas fa-plane"></i></span>
-
-
-            </div>
-            <button class="btn btn-primary" type="submit"><i class="far fa-calendar-alt"></i> Schedule
-                Flight</button>
-        </form>
-
-
+          <input
+            class="input-group form-control"
+            name="flight_code"
+            placeholder="flight code e.g XXR384"
+          />
+          <span class="input-group-text"><i class="fas fa-plane"></i></span>
+        </div>
+        <button class="btn btn-primary" type="submit">
+          <i class="far fa-calendar-alt"></i> Schedule Flight
+        </button>
+      </form>
     </div>
+  </div>
 
+  {%endif%} {%endblock%}
 </div>
-
-
-{%endif%}
-
-{%endblock%}

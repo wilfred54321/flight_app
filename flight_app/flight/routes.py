@@ -1,8 +1,11 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 import csv
-from flight_app.models import Flight
-from flight_app.models import db
-from flight_app.utils import format_datetime,is_invalid_date_of_first_flight, datetime
+
+
+
+from models import db,Flight
+
+from utils import format_datetime,is_invalid_date_of_first_flight, is_valid_flight_time
 
 flight = Blueprint("flight", __name__)
 
@@ -96,49 +99,61 @@ def change_status(flight_id, action):
     return redirect(request.referrer)
 
 
-# @flight.route("/schedule_flight", methods=["GET", "POST"])
-# def schedule_flight():
-#     """This function schedules an already registered flight by assigning it an origin, destination,
-#     capacity,departure datetime, arrival datetime. Once the flight is schedule, passengers are able to
-#     book the flight. It becomes unaviable for schedule once it is scheduled."""
+@flight.route("/schedule_flight/<int:flight_id>", methods=["GET", "POST"])
+def schedule_flight(flight_id):
+    
+    """This function schedules an already registered flight by assigning it an origin, destination,
+    capacity,departure datetime, arrival datetime. Once the flight is schedule, passengers are able to
+    book the flight. It becomes unaviable for schedule once it is scheduled."""
 
-#     if request.method == "POST":
-#         flight_code = request.form.get("flight_code").upper()
-#         flight_origin = (request.form.get("flight_origin")).capitalize()
-#         flight_destination = (request.form.get("flight_destination")).capitalize()
-#         flight_departure_time = request.form.get("departure_time")
-#         flight_arrival_time = request.form.get("arrival_time")
-#         flight_capacity = request.form.get("flight_capacity")
+    #check if the flight is available
+    flight = Flight.query.get_or_404(flight_id)
+    if flight.is_available == False:
+        flash('Sorry, This flight is currently unavailable and cannot be scheduled!','danger')
+        return redirect(request.referrer)
+    return render_template('schedule_flight.html',flight = flight, title = 'Schedule Flight')
 
-#         departure_time = format_datetime(flight_departure_time)
-#         arrival_time = format_datetime(flight_arrival_time)
 
-#         if is_valid_flight_time(departure_time, arrival_time):
 
-#             flight = add_flight(
-#                 flight_code,
-#                 flight_origin,
-#                 flight_destination,
-#                 flight_capacity,
-#                 flight_departure_time,
-#                 flight_arrival_time,
-#             )
 
-#             db.session.add(flight)
-#             db.session.commit()
 
-#             message = f"""flight_code: {flight_code} from {flight_origin} to {flight_destination}\n
-#             departure time: {departure_time},\n arrival time: {arrival_time},\nflight capacity: {flight_capacity} was
-#             added successfully!"""
 
-#             # logging.DEBUG(message)
-#             return render_template("success.html", message=message)
 
-#         return render_template(
-#             "error.html",
-#             message="Please ensure the arrival time is valid and departure time is at least two hours from the current time!",
-#         )
-# return render_template("schedule_flight.html")
+
+
+@flight.route("/schedule_flight/<int:flight_id>", methods=["GET", "POST"])
+def process_flight_schedule(flight_id):
+    """Process the received form"""
+
+    if request.method == "POST":
+        flight_code = request.form.get("flight_code").upper()
+        flight_origin = (request.form.get("flight_origin")).capitalize()
+        flight_destination = (request.form.get("flight_destination")).capitalize()
+        flight_departure_time = request.form.get("departure_time")
+        flight_arrival_time = request.form.get("arrival_time")
+        flight_capacity = request.form.get("flight_capacity")
+
+
+        #FORMAT FLIGHT DEPARTURE AND ARRIVAL TIME TO DB COMPATIBLE
+        departure_time = format_datetime(flight_departure_time)
+        arrival_time = format_datetime(flight_arrival_time)
+
+        if not is_valid_flight_time(departure_time, arrival_time):
+            flash('Please ensure the flight time is valid. It must be at least two hours from the current time.')
+            return redirect(request.referrer)
+        flight = Flight.query.get_or_404(flight_id)
+
+
+        flight.schedule_flight(flight_code,flight_origin,flight_destination,flight_capacity,flight_departure_time,flight_arrival_time)
+
+        message = f"""flight_code: {flight_code} from {flight_origin} to {flight_destination}\n
+        departure time: {departure_time},\n arrival time: {arrival_time},\nflight capacity: {flight_capacity} was
+        added successfully!"""
+        flash(message,'success')
+        return redirect(url_for('main.index'))
+    return render_template("schedule_flight.html")
+
+
 
 
 

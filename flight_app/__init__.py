@@ -1,6 +1,9 @@
 from flask import Flask
-import os
-from flight_app.models import db
+
+from flask_sqlalchemy import SQLAlchemy
+db = SQLAlchemy()
+
+
 
 
 def create_app():

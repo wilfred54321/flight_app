@@ -1,10 +1,8 @@
-from enum import unique
-from flask_sqlalchemy import SQLAlchemy
-from .utils import generate_booking_reference
-from datetime import timedelta, datetime
+
+from utils import generate_booking_reference,datetime,timedelta
+import flight_app import db
 
 
-db = SQLAlchemy()
 
 
 class Flight(db.Model):
@@ -38,13 +36,16 @@ class Flight(db.Model):
 
     @property
     def schedule_flight(self, origin, destination, departure_time, arrival_time):
-        return Schedule(
+        schedule = Schedule(
             flight_id=self.id,
             origin=origin,
             destination=destination,
             departure_time=departure_time,
             arrival_time=arrival_time,
         )
+        db.session.add(schedule)
+        db.session.commit()
+        return schedule
 
     # duration = db.Column(db.Integer, nullable=False)
     # departure = db.Column(db.DateTime, nullable=False, default=datetime.utcnow())
@@ -62,7 +63,7 @@ class Schedule(db.Model):
     departure_time = db.Column(db.DateTime, nullable=False)
     arrival_time = db.Column(db.DateTime, nullable=False)
     status = db.Column(
-        db.String(30), nullable=False
+    db.String(30), nullable=False
     )  # displays different status of the flight
 
     # flight_id = db.Column(db.Integer(), db.ForeignKey("flight.id"))

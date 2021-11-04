@@ -7,7 +7,8 @@ from pathlib import Path
 from sqlalchemy import desc
 import csv
 from flask import Flask, render_template, request, flash, redirect, url_for
-from flight_app.models import Flight, Passenger, db, datetime, Pilot
+from models import Flight,Pilot,Passenger,db
+
 
 
 main = Blueprint("main", __name__)
