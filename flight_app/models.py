@@ -99,7 +99,9 @@ class Schedule(db.Model):
 
 
     def duration(self):
-        self.arrival_time - self.departure_time
+        duration = self.arrival_time - self.departure_time
+        return duration
+
         
         
 

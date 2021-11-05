@@ -31,3 +31,10 @@ capture flight schedule_by username
 
 once a flight is scheduled, that duration is blocked from the calendar
 but the flight can be rescheduled for another time plus 1 hr
+
+schedule a max of 5 flights
+once a trip is completed, the flight info is moved to history
+
+see the weather information of the destination and origin
+
+automatically delay flight if the weather is in a certain range.

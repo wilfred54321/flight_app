@@ -26,65 +26,85 @@
 
     </tr>
 </div>
-<div class="index_table">
-    <table class=" text-center table table-striped table-hover table-bordered">
-
-        <thead class = "special-font small">
-            <tr>
-
-                <th>Flight Code</th>
-                <th>Model</th>
-                <th>Capacity</th>
-                <th>Category</th>
-                <th>Date of First Flight</th>
-                <th>Status</th>
-                <th>Schedule History</th>
-
-
-            </tr>
-            <thead>
-            <tbody class = "special-font small">
-                <tr>
-
-                    <td>{{flight.code}}</td>
-                    <td>{{flight.model}}</td>
-                    <td>{{flight.capacity}}</td>
-                    <td>{{flight.category}}</td>
-                    <td>{{flight.date_of_first_flight.strftime('%b %d, %Y')}}</td>
-                    <td>{{flight.status()}}</td>
-                    <td></td>
-                </tr>
 
 
 
-            </tbody>
+<div class="row m-0 mb-4 p-0">
 
-    </table>
+    <div class="col-sm-8 m-0 p-0">
+
+        <!-- <div class="index_table"> -->
+            <table class="m-0 p-0 table-sm text-center table table-striped table-hover table-bordered">
+        
+                <thead class = "special-font small">
+                    <tr>
+        
+                        <th>Flight Code</th>
+                        <th>Model</th>
+                        <th>Capacity</th>
+                        <th>Category</th>
+                        <th>Date of First Flight</th>
+                        <th>Status</th>
+                        
+        
+        
+                    </tr>
+                    <thead>
+                    <tbody class = "special-font small">
+                        <tr>
+        
+                            <td>{{flight.code}}</td>
+                            <td>{{flight.model}}</td>
+                            <td>{{flight.capacity}}</td>
+                            <td>{{flight.category}}</td>
+                            <td>{{flight.date_of_first_flight.strftime('%b %d, %Y')}}</td>
+                            <td>{{flight.status()}}</td>
+                          
+                        </tr>
+        
+        
+        
+                    </tbody>
+        
+            </table>
+        <!-- </div> -->
+
+
+
+
+    </div>
+    
+    <div class="col-sm-4">
+      <small class = "text-muted"> Flight History Here</small>
+    </div>
 </div>
 
 
-<div class="d-flex row special-font m-0 pb-2">
-    <div class="row"><i class="fas fa-calendar-alt"></i>Flight Schedule Information</div>
+
+
+
+<div class="row special-font m-0 pb-3">
+    <div class="m-0"><i class="fas fa-calendar-alt fa-2x "></i>    Flight Schedule Information</div>
 </div>
 <div class="row">
 {%if flight.schedules%}
     <div class="index_table">
-        <table class=" text-center table table-striped table-hover table-bordered">
+        <table class="table table-sm text-center table table-striped table-hover table-bordered">
             <thead class = "special-font-small">
                 <tr>
                     <th  style='width:2%;'>#</th>
-                    <th  style='width:2%;'><input class="all form-check-input" name="all" type="checkbox" id="input1" aria-label="..."> All
+                    <th  style='width:1%;'>All<input class="all form-check-input-sm" name="all" type="checkbox" id="input1" aria-label="..."> 
                     </th>
                     
-                    <th style='width:3%;'>Origin</th>
-                    <th style='width:3%;'>Destination</th>
-                    <th style='width:4%;'>Departure</th>
-                    <th style='width:4%;'>Arrival</th>
-                    <th style='width:1%;'>Duration (mins)</th>
+                    <th style='width:4%;'>Origin</th>
+                    <th style='width:4%;'>Destination</th>
+                    <th style='width:5%;'>Departure</th>
+                    <th style='width:5%;'>Arrival</th>
+                    <th style='width:5%;'>Duration</th>
                     <th style='width:2%;'>Capacity</th>
                     <th style='width:2%;'>Open Seats</th>
-                    <th style='width:2%;'>Status</th>
-                    <th style='width:20%;'>Action</th>
+                    <th style='width:3%;'>Status</th>
+                    <th style='width:10%;'>Action</th>
     
                 </tr>
     
@@ -95,7 +115,7 @@
     
                         <td>{{loop.index}}</td>
                         <td>
-                            <input class="item form-check-input" name="checkbox" type="checkbox" id="input1"
+                            <input class="item form-check-input item-sm" name="checkbox" type="checkbox" id="input1"
                                 value="{{flight.id}}" aria-label="...">
     
                         </td>
@@ -104,7 +124,7 @@
                         <td>{{flight.destination}}</td>
                         <td>{{flight.departure_time.strftime('%Y-%m-%d') }}</td>
                         <td>{{flight.arrival_time.strftime('%H: %M' ) }}</td>
-                        <td>{{flight.duration}}</td>
+                        <td>{{flight.duration()}}</td>
                         <td>{{flight.capacity}}</td>
                         <td>{{flight.open_seats}}</td>
                         <td>{{flight.status}}</td>
@@ -112,16 +132,16 @@
     
                         <td>
                             
-                            <a href="#" class="btn btn-secondary btn-sm">
-                            <i class="far fa-edit"></i></i> Delay
+                            <a href="#" class="none">
+                                <i class="fas fa-backward"></i> <small>Delay</small>
                             </a>
 
-                            <a href="#" class="btn btn-secondary btn-sm">
-                                <i class="far fa-edit"></i></i> Edit
+                            <a href="#" class="none  mx-2">
+                                <i class="far fa-edit"></i> <small>Edit</small>
                             </a>
                             <a href="#"
-                                class="btn btn-danger btn-sm">
-                                <i class="far fa-trash-alt"></i></i> Cancel
+                                class="none red">
+                                <i class="far fa-trash-alt"></i> <small>Cancel</small>
                             </a>
     
                         </td>
@@ -136,8 +156,17 @@
     </div>
 
     {%else%}
-   <div class="display-6"> No Current Flight Schedules</div>
+
+    <div class="d-flex justify-content-center border m-0">
+        <div class="row m-0">
+            <div class=" display-6 disabled-grey"> <i class = "fas fa-users fa-3x"></i><br>
+        </div>
+        <div class="row m-0">
+            <p class = 'special-font m-0'>No Current Flight Schedules</p>
+        </div>
+</div>
     {%endif%}
+
 
 
 

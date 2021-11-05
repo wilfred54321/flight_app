@@ -135,7 +135,7 @@ def process_flight_schedule(flight_id):
         arrival_time = format_datetime(flight_arrival_time)
 
         if not is_valid_flight_time(departure_time, arrival_time):
-            flash('Please ensure the flight time is valid. It must be at least two hours from the current time.')
+            flash('Please ensure the flight time is valid. It must be at least two hours from the current time.','danger')
             return redirect(request.referrer)
             # return redirect(request.referrer)
         flight = Flight.query.get_or_404(flight_id)
