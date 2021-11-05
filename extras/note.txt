@@ -13,3 +13,28 @@ create account for users/agents
 
 An agent with admin rights is able to assign pilot to a flight
 regular agent is able to assign passengers to a flight
+
+
+After 24 hours, automatically delete passengers data from the database after 5 hours of flight completion.
+
+Types of Planes:
+Jumbo Passenger Jets  - 200-300 passengers
+Mid Sized Passenger Jets
+Light Passenger Jets
+Passenger Turboprops
+Cargo Airplanes
+Private Jet
+
+
+Capture Flight schedule time
+capture flight schedule_by username
+
+once a flight is scheduled, that duration is blocked from the calendar
+but the flight can be rescheduled for another time plus 1 hr
+
+schedule a max of 5 flights
+once a trip is completed, the flight info is moved to history
+
+see the weather information of the destination and origin
+
+automatically delay flight if the weather is in a certain range.

@@ -1,0 +1,138 @@
+{%extends 'base.html'%} {%block heading%}
+
+<!-- <a class="btn btn-outline-primary" data-bs-toggle="collapse" href="#schedule_flight" role="button" aria-expanded="false"
+  aria-controls="schedule_flight">
+  <i class="far fa-calendar-alt"></i> Schedule Flight
+</a> -->
+
+{%endblock%} {%block body%}
+
+<!-- UPLOAD FLIGHT DATA -->
+<div class="row">
+  <!-- <div class="collapse" id="schedule_flight"> -->
+
+  <div class="row">
+    <p class="lead">
+      How do you want to Register New flight? You can either upload flight data
+      from a csv file or enter the flight data in the Register New Flight form
+      below
+    </p>
+    <hr />
+  </div>
+
+  <div class="card card-body mt-3 mb-4">
+    <p class="display-6"><i class="fas fa-upload"></i> Upload Flight Data</p>
+
+    <form
+      class="form-group"
+      action="{{url_for('flight.upload_flight')}}"
+      method="post"
+    >
+      <div class="row">
+        <div class="col-4">
+          <input
+            type="file"
+            class="input-group form-control"
+            name="file_name"
+          />
+        </div>
+        <div class="col">
+          <button type="submit" class="btn btn-primary">
+            <i class="fas fa-upload"></i> Upload
+          </button>
+        </div>
+        <!-- <label class="input-group-text" for="inputGroupFile02">Upload</label> -->
+      </div>
+    </form>
+  </div>
+</div>
+
+<!-- REGISTER NEW FLIGHT -->
+
+<div class="row card card-body mt-3 mb-4">
+  <div class="col-sm-8">
+    <p class="display-6">
+      <i class="far fa-calendar-alt"></i> Register New Flight
+    </p>
+    <form action="{{url_for('flight.register_new_flight')}}" method="post">
+      <div class="ml-0 mr-0 mt-3">
+        <div class="input-group mt-3 mb-3">
+          <input
+            class="input-group form-control"
+            name="flight_model"
+            placeholder="Model Name"
+          />
+
+          <span class="input-group-text"><i class="fas fa-plane"></i></span>
+
+          <!-- <input class="input-group form-control" name="flight_category" placeholder="Flight Category" /> -->
+          <select
+            class="form-select"
+            id="inputGroupSelect01"
+            name="flight_category"
+          >
+            <!-- <option selected>Choose delay duration...</option> -->
+            <option value="Jumbo Passenger Jets">Jumbo Passenger Jets</option>
+            <option value=" Mid Sized Passenger Jets">
+              Mid Sized Passenger Jets
+            </option>
+            <option value="Light Passenger Jets">Light Passenger Jets</option>
+            <option value="Passenger Turboprops">Passenger Turboprops</option>
+            <option value="Cargo Airplanes">Cargo Airplanes</option>
+            <option value=" Private Jet">Private Jet</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- FLIGHT DATETIMEPICKER -->
+      <div class="row mb-3">
+        <div class="col">
+          <label for="departure-date" class="pb-2">First Flight Date</label>
+          <input
+            type="datetime-local"
+            class="input-group form-control"
+            name="first_flight_date"
+          />
+        </div>
+
+        <!-- <div class="col">
+                    <label for="arrival-date" class="pb-2">Arrival Date</label>
+                    <input type='datetime-local' class='input-group form-control' name='arrival_time'>
+
+                </div> -->
+      </div>
+
+      <!-- FLIGHT CAPACITY -->
+      <div class="input-group mb-3">
+        <label
+          class="d-flex justify-content-center input-group-text"
+          for="inputGroupSelect01"
+          >Capacity
+        </label>
+        <select
+          class="form-select"
+          id="inputGroupSelect01"
+          name="flight_capacity"
+        >
+          <!-- <option selected>Choose delay duration...</option> -->
+          <option value="5">5 Passengers</option>
+          <option value="7">7 Passengers</option>
+          <option value="10">10 Passengers</option>
+        </select>
+        <!-- FLIGHT CODE -->
+
+        <input
+          class="input-group form-control"
+          name="flight_code"
+          placeholder="flight code e.g XXR384"
+        />
+        <span class="input-group-text"><i class="fas fa-plane"></i></span>
+      </div>
+      <button class="btn btn-primary" type="submit">
+        <i class="far fa-calendar-alt"></i> Register Flight
+      </button>
+    </form>
+  </div>
+</div>
+
+{%endblock%}
