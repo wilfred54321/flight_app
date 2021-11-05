@@ -14,9 +14,6 @@ from flight_app.models import Flight,Pilot,Passenger,db
 main = Blueprint("main", __name__)
 
 
-# logging.basicConfig(filename="logfile.log", level=logging.DEBUG)
-# HELPER FUNCTIONS
-
 
 @main.route("/")
 def index():

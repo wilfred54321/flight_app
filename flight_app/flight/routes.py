@@ -71,7 +71,7 @@ def register_new_flight():
             return render_template('register_new_flight.html')
         flight = Flight(
         code=flight_code,
-        capacity=flight_capacity,
+        # capacity=flight_capacity,
         model=flight_model,
         category=category,
         date_of_first_flight=date_of_first_flight)
@@ -80,7 +80,7 @@ def register_new_flight():
         
         message = f"Flight {flight_code} with a capacity of {flight_capacity} was added successfully!"
         flash(message, "success")
-        return render_template('main.index.html')
+        return render_template('index.html')
     return render_template("register_new_flight.html", title="Register Flight")
 
 
@@ -117,21 +117,18 @@ def schedule_flight(flight_id):
 
 
 
-
-
-
-
 @flight.route("/process_flight/<int:flight_id>", methods=["GET", "POST"])
 def process_flight_schedule(flight_id):
     """Process the received form"""
 
     if request.method == "POST":
-        # flight_code = request.form.get("flight_code").upper()
+        
         flight_origin = (request.form.get("flight_origin")).capitalize()
         flight_destination = (request.form.get("flight_destination")).capitalize()
         flight_departure_time = request.form.get("departure_time")
         flight_arrival_time = request.form.get("arrival_time")
-        # flight_capacity = request.form.get("flight_capacity")
+        flight_capacity = int(request.form.get('flight_capacity'))
+       
 
         #FORMAT FLIGHT DEPARTURE AND ARRIVAL TIME TO DB COMPATIBLE
         departure_time = format_datetime(flight_departure_time)
@@ -139,19 +136,22 @@ def process_flight_schedule(flight_id):
 
         if not is_valid_flight_time(departure_time, arrival_time):
             flash('Please ensure the flight time is valid. It must be at least two hours from the current time.')
-            return "flight time not valid"
+            return redirect(request.referrer)
             # return redirect(request.referrer)
         flight = Flight.query.get_or_404(flight_id)
 
 
-        flight.schedule_flight(flight_origin,flight_destination,flight_departure_time,flight_arrival_time)
+        flight.schedule_flight(flight_origin,flight_destination,flight_capacity,departure_time,arrival_time)
 
-        message = f"""flight_code: {code} from {flight_origin} to {flight_destination}\n
-        departure time: {departure_time},\n arrival time: {arrival_time},\nflight capacity: {flight_capacity} was
-        added successfully!"""
+        # message = f"""flight_code: {code} from {flight_origin} to {flight_destination}\n
+        # departure time: {departure_time},\n arrival time: {arrival_time},\nflight capacity: {flight_capacity} was
+        # added successfully!"""
+        message = f"Flight {flight.schedules.code} scheduled successfully!"
         flash(message,'success')
         return redirect(url_for('main.index'))
-        return render_template("schedule_flight.html")
+        # return render_template("schedule_flight.html")
+
+
 
 
 

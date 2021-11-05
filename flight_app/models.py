@@ -1,12 +1,14 @@
 
-from flight_app.utils import generate_booking_reference,datetime,timedelta
+from datetime import date
+
+from flight_app.utils import generate_booking_reference,datetime,timedelta,format_datetime
 from flight_app import db
 
-
+import flight_app
 
 
 class Flight(db.Model):
-    __tablename__ = "flights"
+   
     id = db.Column(db.Integer, primary_key=True)
     code = db.Column(db.String, unique=True, nullable=False)
     capacity = db.Column(db.Integer, nullable=False)
@@ -15,7 +17,7 @@ class Flight(db.Model):
     date_of_first_flight = db.Column(db.DateTime, nullable=False)
     is_available = db.Column(db.Boolean, default=True)
     schedules = db.relationship(
-        "Schedule", backref="flight", cascade="all,delete", lazy=True
+        "Schedule", backref="flight", cascade="all,delete", lazy='subquery'
     )
 
     def status(self):
@@ -35,13 +37,14 @@ class Flight(db.Model):
         return self.is_available
 
     
-    def schedule_flight(self, origin, destination, departure_time, arrival_time):
+    def schedule_flight(self, origin, destination,capacity,departure_time, arrival_time):
         schedule = Schedule(
-            flight_id=self.id,
+            flight_id = self.id,
             origin=origin,
             destination=destination,
+            capacity = capacity,
             departure_time=departure_time,
-            arrival_time=arrival_time,
+            arrival_time=arrival_time
         )
         db.session.add(schedule)
         db.session.commit()
@@ -55,18 +58,17 @@ class Flight(db.Model):
 
 
 class Schedule(db.Model):
-    __tablename__ = "schedules"
+   
     id = db.Column(db.Integer, primary_key=True)
     origin = db.Column(db.String, nullable=False)
     destination = db.Column(db.String, nullable=False)
-    capacity = db.Column(db.Integer, nullable=False, default = Flight.capacity)
+    capacity = db.Column(db.Integer, nullable=False)
     departure_time = db.Column(db.DateTime, nullable=False)
     arrival_time = db.Column(db.DateTime, nullable=False)
-    status = db.Column(
-    db.String(30), nullable=True
-    )  # displays different status of the flight
+    timestamp = db.Column(db.DateTime, nullable = False, default = datetime.now)
+    status = db.Column(db.String(30), nullable=False,default = 'available')
 
-    flight_id = db.Column(db.Integer(), db.ForeignKey("flight.id"))
+    flight_id = db.Column(db.Integer, db.ForeignKey("flight.id"))
 
     passengers = db.relationship(
         "Passenger", backref="schedule ", cascade="all, delete", lazy=True
@@ -96,13 +98,20 @@ class Schedule(db.Model):
         return self.arrival_time + delay_amount
 
 
+    def duration(self):
+        self.arrival_time - self.departure_time
+        
+        
+
+
+
 class Passenger(db.Model):
-    __tablename__ = "passengers"
+    
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String, nullable=False)
     lastname = db.Column(db.String, nullable=False)
     gender = db.Column(db.String, nullable=False)
-    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.utcnow)
+    timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now)
     booking_reference = db.Column(
         db.String, nullable=False, default=generate_booking_reference
     )
@@ -110,7 +119,7 @@ class Passenger(db.Model):
 
 
 class Pilot(db.Model):
-    __tablename__ = "pilots"
+   
     id = db.Column(db.Integer, primary_key=True)
     firstname = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(50), nullable=False)
