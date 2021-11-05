@@ -2,7 +2,7 @@ from flask import Blueprint
 from flask import render_template, redirect, request, flash, url_for
 
 
-from models import db, Pilot, Passenger, Flight
+from flight_app.models import db, Pilot
 
 users = Blueprint("users", __name__)
 

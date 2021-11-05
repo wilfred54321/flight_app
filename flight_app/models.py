@@ -1,6 +1,6 @@
 
-from utils import generate_booking_reference,datetime,timedelta
-import flight_app import db
+from flight_app.utils import generate_booking_reference,datetime,timedelta
+from flight_app import db
 
 
 
@@ -14,9 +14,9 @@ class Flight(db.Model):
     category = db.Column(db.String(20), nullable=False)
     date_of_first_flight = db.Column(db.DateTime, nullable=False)
     is_available = db.Column(db.Boolean, default=True)
-    # schedule = db.relationship(
-    #     "Schedule", backref="schedule", cascade="all,delete", lazy=True
-    # )
+    schedules = db.relationship(
+        "Schedule", backref="flight", cascade="all,delete", lazy=True
+    )
 
     def status(self):
         if self.is_available == False:
@@ -34,7 +34,7 @@ class Flight(db.Model):
         db.session.commit()
         return self.is_available
 
-    @property
+    
     def schedule_flight(self, origin, destination, departure_time, arrival_time):
         schedule = Schedule(
             flight_id=self.id,
@@ -59,18 +59,19 @@ class Schedule(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     origin = db.Column(db.String, nullable=False)
     destination = db.Column(db.String, nullable=False)
-    capacity = db.Column(db.Integer, nullable=False)
+    capacity = db.Column(db.Integer, nullable=False, default = Flight.capacity)
     departure_time = db.Column(db.DateTime, nullable=False)
     arrival_time = db.Column(db.DateTime, nullable=False)
     status = db.Column(
-    db.String(30), nullable=False
+    db.String(30), nullable=True
     )  # displays different status of the flight
 
-    # flight_id = db.Column(db.Integer(), db.ForeignKey("flight.id"))
+    flight_id = db.Column(db.Integer(), db.ForeignKey("flight.id"))
 
-    # passengers = db.relationship(
-    #     "Passenger", backref="flightsschedule ", cascade="all, delete", lazy=True
-    # )
+    passengers = db.relationship(
+        "Passenger", backref="schedule ", cascade="all, delete", lazy=True
+    )
+    pilots = db.relationship("Pilot",backref = "schedule", cascade = "all,delete", lazy = True)
 
     @property
     def add_passenger(self, firstname, lastname, gender, flight_id):
@@ -78,7 +79,7 @@ class Schedule(db.Model):
         #     return False
 
         passenger = Passenger(
-            firstname=firstname, lastname=lastname, gender=gender, flight_id=self.id
+            firstname=firstname, lastname=lastname, gender=gender, schedule_id=self.id
         )
         db.session.add(passenger)
         db.session.commit()
@@ -105,7 +106,7 @@ class Passenger(db.Model):
     booking_reference = db.Column(
         db.String, nullable=False, default=generate_booking_reference
     )
-    # flight_schedule = db.Column(db.Integer, db.ForeignKey("schedule.id"))
+    schedule_id = db.Column(db.Integer, db.ForeignKey("schedule.id"))
 
 
 class Pilot(db.Model):
@@ -119,6 +120,8 @@ class Pilot(db.Model):
     level = db.Column(db.Integer, nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
     is_available = db.Column(db.Boolean, nullable=False, default=True)
+    schedule_id = db.Column(db.Integer,db.ForeignKey('schedule.id'))
+
 
     def status(self):
         if self.is_available == False:

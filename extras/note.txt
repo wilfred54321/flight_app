@@ -24,3 +24,10 @@ Light Passenger Jets
 Passenger Turboprops
 Cargo Airplanes
 Private Jet
+
+
+Capture Flight schedule time
+capture flight schedule_by username
+
+once a flight is scheduled, that duration is blocked from the calendar
+but the flight can be rescheduled for another time plus 1 hr

@@ -7,7 +7,7 @@ from pathlib import Path
 from sqlalchemy import desc
 import csv
 from flask import Flask, render_template, request, flash, redirect, url_for
-from models import Flight,Pilot,Passenger,db
+from flight_app.models import Flight,Pilot,Passenger,db
 
 
 
