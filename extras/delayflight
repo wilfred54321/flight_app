@@ -1,0 +1,181 @@
+{%block heading%}
+
+{%endblock%}
+
+
+
+
+
+
+
+  <!-- DELAY FLIGHT -->
+  {%block body%}
+
+
+  
+
+<!-- SUBSCRIBE MODAL FORM -->
+ 
+<!-- <button type="button" class="btn btn-primary btn-sm" data-toggle="modal" data-target="#exampleModal"
+data-whatever="@mdo">Subscribe</button> -->
+
+
+
+
+
+
+
+<!-- <div class="modal fade" id="delay_flight" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title text-medium" id="exampleModalLabel">Delay Flight</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form action="{{url_for('flight.delay_flight')}}" method='post'>
+                    
+
+
+                        <div class="col">
+                            <div class="input-group">
+                            <label class="input-group-text" for="inputGroupSelect01">Delay
+                                by</label>
+                            <input style="text-align:center" type='number' class='form-control' name="delay_amount"
+                                placeholder="Delay Amount">
+                            </div>
+                        </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div> -->
+
+
+
+
+
+
+
+
+<p class = "display-6">This shows it is working .</p>
+<p>Schedule id is {{schedule_id}}</p>
+
+ <!--<div class="row">
+    <div class="col-sm-6">
+
+      <div class="collapse" id="delay_flight">
+        <div class="d-flex card card-body mt-3">
+          <p class="display-6"><i class="far fa-calendar-times"></i> Delay Flight</p>
+          <form action="{{url_for('main.delay_flight')}}" method="post">
+
+            <div class=" ml-0 mr-0 mt-3">
+              <div class="input-group mt-3 mb-3">
+                <select class="form-select" name="flight_origin">
+                  <option selected> From</option>
+                  {%for flight in flights%}
+                  <option value={{flight.origin}}>{{flight.origin}}</option>
+                  {%endfor%}
+                </select>
+                <span class="input-group-text"><i class="fas fa-plane"></i></span>
+                <select class="form-select" name="flight_destination">
+                  <option selected> To</option>
+                  {%for flight in flights%}
+
+                  <option value={{flight.destination}}>
+                    {{flight.destination}}
+                  </option>
+
+                  {%endfor%}
+                </select>
+              </div>
+            </div>
+            <div class="row mt-4 mb-4">
+              <div class="col">
+                <div class="">
+                   <label for="exampleFormControlInput1" class="form-label">Flight Code</label>
+                  <input type="text" class="form-control form-control" name="flight_code"
+                    placeholder="Enter Flight Code">
+                </div>
+              </div>
+              <div class="col">
+                <div class="input-group">
+                  <label class="input-group-text" for="inputGroupSelect01">Delay
+                    by</label>
+                  <input style="text-align:center" type='number' class='form-control' name="delay_amount"
+                    placeholder="Delay Amount">
+                </div>
+              </div>
+            </div>
+            <button class="btn btn-primary" type="submit"><i class="far fa-calendar-times"></i> Delay
+              Flight</button>
+          </form>
+        </div>
+      </div>
+
+
+
+    </div>
+
+  </div> -->
+
+  {%endblock%}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+<!-- <div class="modal fade" id="delay_flight" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="false">
+    <div class="modal-dialog">
+        <div class="modal-content">
+
+            <div class="modal-header">
+                <h5 class="modal-title text-medium" id="exampleModalLabel">Delay Flight</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+
+            <div class="modal-body">
+                <form action="{{url_for('flight.delay_flight')}}" method='post'>
+                    
+
+
+                        <div class="col">
+                            <div class="input-group">
+                            <label class="input-group-text" for="inputGroupSelect01">Delay
+                                by</label>
+                            <input style="text-align:center" type='number' class='form-control' name="delay_amount"
+                                placeholder="Delay Amount">
+                            </div>
+                        </div>
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary btn-sm" data-dismiss="modal">Close</button>
+                <button type="submit" class="btn btn-primary btn-sm">Submit</button>
+            </div>
+            </form>
+        </div>
+    </div>
+</div> -->

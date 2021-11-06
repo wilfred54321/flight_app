@@ -97,13 +97,13 @@
                     </th>
                     
                     <th style='width:4%;'>Origin</th>
-                    <th style='width:4%;'>Destination</th>
-                    <th style='width:5%;'>Departure</th>
-                    <th style='width:5%;'>Arrival</th>
+                    <th style='width:3%;'>Destination</th>
+                    <th style='width:7%;'>Departure</th>
+                    <th style='width:7%;'>Arrival</th>
                     <th style='width:5%;'>Duration</th>
-                    <th style='width:2%;'>Capacity</th>
+                    <th style='width:1%;'>Capacity</th>
                     <th style='width:2%;'>Open Seats</th>
-                    <th style='width:3%;'>Status</th>
+                    <th style='width:2%;'>Status</th>
                     <th style='width:10%;'>Action</th>
     
                 </tr>
@@ -122,8 +122,8 @@
     
                         <td>{{flight.origin}}</td>
                         <td>{{flight.destination}}</td>
-                        <td>{{flight.departure_time.strftime('%Y-%m-%d') }}</td>
-                        <td>{{flight.arrival_time.strftime('%H: %M' ) }}</td>
+                        <td>{{flight.departure_time.strftime('%Y-%m-%d | %H: %M') }}</td>
+                        <td>{{flight.arrival_time.strftime('%Y-%m-%d | %H: %M') }}</td>
                         <td>{{flight.duration()}}</td>
                         <td>{{flight.capacity}}</td>
                         <td>{{flight.open_seats}}</td>
@@ -132,7 +132,7 @@
     
                         <td>
                             
-                            <a href="#" class="none">
+                            <a href="{{url_for('flight.delay_flight',schedule_id = flight.id)}}" class="none">
                                 <i class="fas fa-backward orange"></i> <small>Delay</small>
                             </a>
 

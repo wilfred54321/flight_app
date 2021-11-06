@@ -92,10 +92,14 @@ class Schedule(db.Model):
     def open_seats(self):
         return self.capacity - len(self.passengers)
 
-    @property
-    def delay_flight(self, amount):
-        delay_amount = timedelta(minutes=amount)
-        return self.arrival_time + delay_amount
+    
+    def delay_flight(self,amount):
+        new_arrival_time = self.arrival_time + timedelta(minutes=amount)
+        self.arrival_time = new_arrival_time
+        db.session.commit()
+        return self.arrival_time
+        
+        
 
 
     def duration(self):

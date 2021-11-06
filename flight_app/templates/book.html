@@ -123,8 +123,8 @@ Booking
                                     <span class="input-group-text"><i class="fas fa-plane"></i></span>
                                     <select class="form-select" name="flight_destination">
                                         <option selected> To</option>
+                                        
                                         {%for flight in flights%}
-
                                         <option value={{flight.destination}}>
                                             {{flight.destination}}
                                         </option>
