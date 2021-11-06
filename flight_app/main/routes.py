@@ -23,32 +23,16 @@ def index():
     return render_template("index.html", pilots=pilots, flights=flights, title="Index")
 
 
-@main.route("/book-flight")
+
+
+
+
+
+
+@main.route("/book-flight", methods = ['GET','POST'])
 def book_flight():
     """Diplay a list of Flights"""
-
-    flights = Flight.query.all()
-    return render_template("book.html", flights=flights, title="Booking")
-
-
-@main.route("/flights/<int:flight_id>")
-def flight(flight_id):
-    try:
-        flight = Schedule.query.get_or_404(flight_id)
-    except ValueError:
-        return render_template("error.html", message="No such flight is available")
-    return render_template("flight.html", flight=flight)
-
-
-@main.route("/book", methods=["GET", "POST"])
-def book():
-    """Book a flight"""
-    if request.method != "POST":
-        flight_schedule = Flight.query.all()
-        #Make an API call to populate form with some flight origin and destinations
-        return f"{flight_schedule}"
-        # render_template("book.html", flights=flight_schedule)
-    else:
+    if request.method == 'POST':
         firstname = (request.form.get("firstname")).capitalize()
         lastname = (request.form.get("lastname")).capitalize()
         gender = request.form.get("gender")
@@ -79,7 +63,42 @@ def book():
             return render_template(
                 "error.html", message="No more seats available on this flight"
             )
+    flights_schedule = Schedule.query.all()
+    return render_template("book.html", flights=flights_schedule, title="Booking")
 
+
+@main.route("/book/<int:schedule_id>", methods = ["GET", "POST"])
+def book(schedule_id):
+    """Book a flight"""
+    if request.method != "POST":
+        schedule = Schedule.query.get(schedule_id)
+        #Make an API call to populate form with some flight origin and destinations
+        
+        return render_template("book.html", flight=schedule)
+    return redirect('main.book_flight')
+   
+
+
+
+
+
+
+
+
+
+
+
+@main.route("/flights/<int:flight_id>")
+def flight(flight_id):
+    try:
+        flight = Flight.query.get_or_404(flight_id)
+    except ValueError:
+        return render_template("error.html", message="No such flight is available")
+    return render_template("flight.html", flight=flight)
+
+
+
+#         
 
 @main.route("/manage-booking   ", methods=["GET", "POST"])
 def manage_booking():

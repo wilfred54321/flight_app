@@ -75,7 +75,7 @@ class Schedule(db.Model):
     )
     pilots = db.relationship("Pilot",backref = "schedule", cascade = "all,delete", lazy = True)
 
-    @property
+    
     def add_passenger(self, firstname, lastname, gender, flight_id):
         # if not self.open_seats:
         #     return False
@@ -88,7 +88,7 @@ class Schedule(db.Model):
         return passenger.booking_reference
         # return True
 
-    @property
+    
     def open_seats(self):
         return self.capacity - len(self.passengers)
 
@@ -117,11 +117,19 @@ class Passenger(db.Model):
     firstname = db.Column(db.String, nullable=False)
     lastname = db.Column(db.String, nullable=False)
     gender = db.Column(db.String, nullable=False)
+    email = db.Column(db.String, nullable = False)
+    is_checked_in = db.Column(db.Boolean, default = False)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now)
     booking_reference = db.Column(
         db.String, nullable=False, default=generate_booking_reference
     )
     schedule_id = db.Column(db.Integer, db.ForeignKey("schedule.id"))
+
+
+    def status(self):
+        if self.is_checked_in == False:
+            return "not checked in"
+        return "checked in"
 
 
 class Pilot(db.Model):

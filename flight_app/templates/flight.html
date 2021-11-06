@@ -117,31 +117,38 @@
                         <td>
                             <input class="item form-check-input item-sm" name="checkbox" type="checkbox" id="input1"
                                 value="{{flight.id}}" aria-label="...">
-    
+                    
                         </td>
-    
+                   
                         <td>{{flight.origin}}</td>
                         <td>{{flight.destination}}</td>
                         <td>{{flight.departure_time.strftime('%Y-%m-%d | %H: %M') }}</td>
                         <td>{{flight.arrival_time.strftime('%Y-%m-%d | %H: %M') }}</td>
                         <td>{{flight.duration()}}</td>
                         <td>{{flight.capacity}}</td>
-                        <td>{{flight.open_seats}}</td>
+                        <a href = "{{url_for('users.show_passengers',schedule_id = flight.id)}}"><td>{{flight.open_seats()}}</td> </a>
                         <td>{{flight.status}}</td>
-                        
+                                      
     
                         <td>
+                            <a class = "none mx-2" href = "{{url_for('users.show_passengers', schedule_id = flight.id)}}">
+                            <i class="fas fa-users"></i>
+                        </a>
+                        
+                        <a class = "none mx-2" href = "{{url_for('main.book', schedule_id = flight.id)}}">
+                            <i class="fas fa-user-plus"></i>
+                        </a>
                             
-                            <a href="{{url_for('flight.delay_flight',schedule_id = flight.id)}}" class="none">
-                                <i class="fas fa-backward orange"></i> <small>Delay</small>
+                            <a href="{{url_for('flight.delay_flight',schedule_id = flight.id)}}" class="none mx-2">
+                                <i class="fas fa-backward orange"></i> 
                             </a>
 
                             <a href="#" class="none  mx-2">
-                                <i class="far fa-edit"></i> <small>Edit</small>
+                                <i class="far fa-edit"></i> 
                             </a>
                             <a href="#"
-                                class="none">
-                                <i class="far fa-trash-alt red"></i> <small>Cancel</small>
+                                class="none mx-2">
+                                <i class="fas fa-ban red"></i> 
                             </a>
     
                         </td>

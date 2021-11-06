@@ -2,8 +2,7 @@ from flask import Blueprint
 from flask import render_template, redirect, request, flash, url_for
 
 
-from flight_app.models import db, Pilot
-
+from flight_app.models import db, Pilot,Passenger,Schedule
 users = Blueprint("users", __name__)
 
 
@@ -72,3 +71,10 @@ def delete_pilot(pilot_id):
     db.session.commit()
     flash(f"Pilot {pilot.firstname}, {pilot.lastname} deleted successfully!", "success")
     return redirect(request.referrer)
+
+
+@users.route('/flight/schedule/passenger/<int:schedule_id>', methods = ['GET'])
+def show_passengers(schedule_id):
+    passengers = Passenger.query.filter_by(id = schedule_id)
+    flight_schedule = Schedule.query.get(schedule_id)
+    return render_template('passengers.html',passengers = passengers,flight = flight_schedule)
