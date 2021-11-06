@@ -141,12 +141,13 @@ def process_flight_schedule(flight_id):
         flight = Flight.query.get_or_404(flight_id)
 
 
-        flight.schedule_flight(flight_origin,flight_destination,flight_capacity,departure_time,arrival_time)
+        schedule = flight.schedule_flight(flight_origin,flight_destination,flight_capacity,departure_time,arrival_time)
+
 
         # message = f"""flight_code: {code} from {flight_origin} to {flight_destination}\n
         # departure time: {departure_time},\n arrival time: {arrival_time},\nflight capacity: {flight_capacity} was
         # added successfully!"""
-        message = f"Flight {flight.schedules.code} scheduled successfully!"
+        message = f"Flight {schedule.flight.code} from {schedule.origin} to {schedule.destination} scheduled successfully!"
         flash(message,'success')
         return redirect(url_for('main.index'))
         # return render_template("schedule_flight.html")

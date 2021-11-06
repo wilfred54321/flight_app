@@ -4,25 +4,42 @@
 
 <div class="" id="all_pilots_lists">
     <div class="card card-body mt-3">
-        <p class="display-6 text-muted"><i class="fas fa-users">   </i>Passengers for {{flight.flight.code}} from {{flight.origin}} to {{flight.destination}}</p>
-        <div class=index_table>
-            <table class="table table-striped table-hover table-bordered">
+        <p class="display-6"><i class="fas fa-users"></i>       Passengers for {{schedule.flight.code}} </p>
+        <div class="row  mb-1">
+            <div class="col">
+           <p class = "special-font small"><b>Origin</b> : {{schedule.origin}} </p>
+            </div>
+            <div class="col ">
+                <p class = "special-font small"><b>Destination</b> : {{schedule.destination}}</p>
+                 </div>
+        <div class="col">
+            <p class = "special-font small "> <b>Duration</b>: {{schedule.duration()}} </p>
+        </div>
+        <div class="col">
+            <p class = "special-font small "> <b>Open Seats</b>: {{schedule.open_seats()}}</p>
+        </div>
+        <div class="col"> <p class = "special-font small "><b>Depart In</b>: {{schedule.time_to_departure()}} mins</p></div>
+       
+        <div class="col"><b>Arrival</b>: {{schedule.arrival_time.strftime('%m/%d | %H:%M')}}</div>
+        </div>
+        <div class='index_table'> 
+            <table class="small special-font small table table-sm table-striped table-hover table-bordered">
                 <thead>
                     <tr style='text-align: center;'>
-                        <th style='width:3%;' class="">#</th>
-                        <th style='width:5%;'>Reference</th>
-                        <th style='width:5%;' class="">First Name</th>
-                        <th style='width:5%;'>Last Name</th>
-                        <th style='width:5%;'>Email</th>
-                        <th style='width:3%;'>Gender</th>
-                        <th style='width:5%;'>Date Registered</th>
-                        <th style='width:5%;'>Status</th>
+                        <th style='width:1.5%;' class="">#</th>
+                        <th style='width:1.5%;'>Reference</th>
+                        <th style='width:7%;' class="">First Name</th>
+                        <th style='width:7%;'>Last Name</th>
+                        <th style='width:7%;'>Email</th>
+                        <th style='width:2%;'>Gender</th>
+                        <th style='width:12%;'>Date Registered</th>
+                        <th style='width:3%;'>Status</th>
                         <th style='width:13%;'>Action</th>
                     </tr>
 
                     <thead>
                     <tbody>
-                        {%for passenger in passengers%}
+                        {%for passenger in schedule.passengers%}
                         <tr style='text-align: center;'>
                             <td class="">{{loop.index}}</td>
                             <td>{{passenger.booking_reference}}</td>
@@ -31,12 +48,12 @@
                             <td>{{passenger.email}}</td>
                             <td>{{passenger.gender}}</td>
                             <td>{{passenger.timestamp.strftime('%b %d, %Y')}}</td>
-                            <td>
+                            <td class = "x-small">
                                 
-                                {%if passenger.status() %}
+                                {%if passenger.is_checked_in %}
                                 <span class="badge rounded-pill bg-success "> {{passenger.status()}}</span>
                                 {%else%}
-                                <span class="badge rounded-pill bg-danger"> {{passeger.status()}}</span>
+                                <span class="badge rounded-pill bg-danger"> {{passenger.status()}}</span>
                                 {%endif%}
 
                             </td>

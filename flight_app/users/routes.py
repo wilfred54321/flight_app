@@ -8,10 +8,9 @@ users = Blueprint("users", __name__)
 
 @users.route("/all-pilots", methods=["POST", "GET"])
 def all_pilots():
-    # pilots = Pilot.query.all()
-    # # return pilots
-    # return render_template("index.html", pilots=pilots, title="Index")
-    pass
+    pilots = Pilot.query.all()
+    # return f"{pilots}"
+    return render_template("index.html", pilots=pilots, title="Index")
 
 
 @users.route("/register-pilot", methods=["GET", "POST"])
@@ -23,7 +22,6 @@ def register_pilot():
         gender = request.form.get("gender")
         cat = request.form.getlist("category")
         category = [x for x in cat]
-
         level = request.form.get("pilot_level")
 
         pilot = Pilot(
@@ -75,6 +73,6 @@ def delete_pilot(pilot_id):
 
 @users.route('/flight/schedule/passenger/<int:schedule_id>', methods = ['GET'])
 def show_passengers(schedule_id):
-    passengers = Passenger.query.filter_by(id = schedule_id)
+    # passengers = Passenger.query.filter_by(id = schedule_id).all()
     flight_schedule = Schedule.query.get(schedule_id)
-    return render_template('passengers.html',passengers = passengers,flight = flight_schedule)
+    return render_template('passengers.html',schedule = flight_schedule)

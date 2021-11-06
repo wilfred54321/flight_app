@@ -7,7 +7,7 @@ Booking
 {%block heading%}
 <p>
     <a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#bookFlight" role="button"
-        aria-expanded="false" aria-controls="bookFlight">
+        aria-expanded="true" aria-controls="bookFlight">
         Book Flight
     </a>
 
@@ -30,8 +30,8 @@ Booking
             {%if flight%}
             <div>
 
-                <div class="collapse" id="bookFlight">
-                    <div class="card card-body mt-3">
+                <div class="collapse in show" id="bookFlight">
+                    <div class=" card card-body mt-3 show">
                         <p class="display-6">Book Flight</p>
                         <h5 class="text-muted">Add Passenger to Flight {{flight.flight.code}}</h5>
 
@@ -77,7 +77,7 @@ Booking
 
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="far fa-envelope"></i></span>
-                                <input type="email" class="form-control" name="lastname"
+                                <input type="email" class="form-control" name="email"
                                     placeholder="e.g name@example.com">
                             </div>
 
@@ -152,7 +152,7 @@ Booking
 
                             <div class="input-group mb-3">
                                 <span class="input-group-text"><i class="far fa-envelope"></i></span>
-                                <input type="email" class="form-control" name="lastname"
+                                <input type="email" class="form-control" name="email"
                                     placeholder="e.g name@example.com">
                             </div>
 

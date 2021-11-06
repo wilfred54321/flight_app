@@ -38,33 +38,36 @@ def book_flight():
         gender = request.form.get("gender")
         flight_origin = request.form.get("flight_origin")
         flight_destination = request.form.get("flight_destination")
+        email = request.form.get('email')
         try:
-            flight = Schedule.query.filter_by(
+            schedule = Schedule.query.filter_by(
                 origin=flight_origin, destination=flight_destination
             ).first()
         except:
             return render_template("error.html", message="Flight is invalid")
         # Make sure the flight exists
-        if flight is None:
-            return render_template(
-                "error.html",
-                message="Ooops!. It appears there is no flight scheduled for the routes you selected.",
-            )
+        if schedule is None:
+            message="Ooops!. It appears there is no flight scheduled for the routes you selected."
+            flash(message,'danger')
+            return redirect(request.referrer)
         # Add Passenger if there are open seats and the flight is not null
-        if flight.open_seats():
-            booking_reference = flight.add_passenger(
-                firstname, lastname, gender, flight.id
-            )
-            return render_template(
-                "success.html",
-                message=f"You have successfully booked your flight. Your reference id is {booking_reference}",
-            )
-        else:
-            return render_template(
-                "error.html", message="No more seats available on this flight"
-            )
+        if schedule.open_seats():
+            booking_reference = schedule.add_passenger(
+                firstname, lastname, gender,email
+            )             
+            message=f"You have successfully booked your flight. Your reference id is {booking_reference}"
+            flash(message,'success')
+            return redirect(url_for('main.index'))
+            
+        
+        message="No more seats available on this flight"
+        flash(message,'info')
+        return redirect(request.referrer)
+    
+    
     flights_schedule = Schedule.query.all()
     return render_template("book.html", flights=flights_schedule, title="Booking")
+    
 
 
 @main.route("/book/<int:schedule_id>", methods = ["GET", "POST"])
@@ -72,9 +75,12 @@ def book(schedule_id):
     """Book a flight"""
     if request.method != "POST":
         schedule = Schedule.query.get(schedule_id)
+        if schedule.open_seats():
         #Make an API call to populate form with some flight origin and destinations
-        
-        return render_template("book.html", flight=schedule)
+            return render_template("book.html", flight=schedule)
+        message = "No more available seats"
+        flash(message,'info')
+        return redirect(request.referrer)
     return redirect('main.book_flight')
    
 
@@ -95,6 +101,9 @@ def flight(flight_id):
     except ValueError:
         return render_template("error.html", message="No such flight is available")
     return render_template("flight.html", flight=flight)
+
+
+
 
 
 

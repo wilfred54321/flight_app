@@ -38,3 +38,8 @@ once a trip is completed, the flight info is moved to history
 see the weather information of the destination and origin
 
 automatically delay flight if the weather is in a certain range.
+
+
+check the status of a flight. if a flight is fully booked , change the status
+
+change depart in to arrive in immediately a flight departs
