@@ -13,6 +13,18 @@ body {
   width: auto;
 }
 
+.small{
+  font-size: small;
+}
+.medium{
+  font-size: medium;
+}
+.large{
+  font-size: large;
+}
+.x-large{
+  font-size: x-large;
+}
 .special-font {
   font-family: Salesforce Sans, -apple-system, BlinkMacSystemFont, avenir next,
     avenir, helvetica, helvetica neue, ubuntu, roboto, noto, segoe ui, arial,
