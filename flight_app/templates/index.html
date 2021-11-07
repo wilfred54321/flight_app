@@ -201,21 +201,21 @@
 
                 <td class = "">
                   {%if pilot.is_available%}
-                  <a class = " none " href="{{url_for('users.change_status', pilot_id = pilot.id, action ='disable')}}"
+                  <a class = " none small " href="{{url_for('users.change_status', pilot_id = pilot.id, action ='disable')}}"
                     class="btn btn-none"><i class="fas fa-power-off red"></i>  Disable
                   </a>
                   {%else%}
-                  <a class = "none " href="{{url_for('users.change_status', pilot_id = pilot.id, action = 'enable')}}"
+                  <a class = " small none " href="{{url_for('users.change_status', pilot_id = pilot.id, action = 'enable')}}"
                   class="btn btn-none btn-sm "><i class="fas fa-power-off green "></i>  Enable
                   </a>
                   {%endif%}
 
 
-                  <a href="#" class="btn btn-none btn-sm">
+                  <a href="#" class=" small btn btn-none btn-sm">
                     <i class="far fa-edit"></i></i> Edit
                   </a>
                   <a href="{{url_for('users.delete_pilot', pilot_id = pilot.id)}}"
-                    class="btn btn-none btn-sm">
+                    class=" small btn btn-none btn-sm">
                     <i class="far fa-trash-alt"></i></i> Delete
                   </a>
                 </td>
