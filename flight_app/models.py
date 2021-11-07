@@ -71,31 +71,48 @@ class Schedule(db.Model):
     flight_id = db.Column(db.Integer, db.ForeignKey("flight.id"))
 
     passengers = db.relationship(
-        "Passenger", backref="schedule ", cascade="all, delete", lazy=True
+        "Passenger", backref="schedule ", cascade="all, delete", lazy='subquery'
     )
-    pilots = db.relationship("Pilot",backref = "schedule", cascade = "all,delete", lazy = True)
+    
 
-    @property
-    def add_passenger(self, firstname, lastname, gender, flight_id):
+    
+    def add_passenger(self, firstname, lastname, gender,email):
         # if not self.open_seats:
         #     return False
-
         passenger = Passenger(
-            firstname=firstname, lastname=lastname, gender=gender, schedule_id=self.id
+            firstname=firstname, lastname=lastname, gender=gender,email = email,schedule_id = self.id
         )
         db.session.add(passenger)
         db.session.commit()
         return passenger.booking_reference
         # return True
 
-    @property
+    # def add_pilot(self,firstname,lastname,email,gender,category,level):
+    #     pilot = Pilot(firstname = firstname,lastname = lastname, email = email,gender = gender,category = category,level=level,schedule_id = self.id)
+    #     db.session.add(pilot)
+    #     db.session.commit()
+
     def open_seats(self):
         return self.capacity - len(self.passengers)
+    
+    def delay_flight(self,amount):
+        new_arrival_time = self.arrival_time + timedelta(minutes=amount)
+        self.arrival_time = new_arrival_time
+        db.session.commit()
+        return self.arrival_time
 
-    @property
-    def delay_flight(self, amount):
-        delay_amount = timedelta(minutes=amount)
-        return self.arrival_time + delay_amount
+    def time_to_departure(self):
+        ttd = self.departure_time - datetime.now()
+        return round(((ttd.total_seconds())/60),2)
+
+    def expected_arrival_time(self):
+        eta = self.arrival_time - datetime.now()
+        return round(((eta.total_seconds())/60),2)
+
+        
+       
+        
+        
 
 
     def duration(self):
@@ -113,11 +130,23 @@ class Passenger(db.Model):
     firstname = db.Column(db.String, nullable=False)
     lastname = db.Column(db.String, nullable=False)
     gender = db.Column(db.String, nullable=False)
+    email = db.Column(db.String, nullable = False)
+    is_checked_in = db.Column(db.Boolean, default = False)
     timestamp = db.Column(db.DateTime, nullable=False, default=datetime.now)
     booking_reference = db.Column(
         db.String, nullable=False, default=generate_booking_reference
     )
     schedule_id = db.Column(db.Integer, db.ForeignKey("schedule.id"))
+
+
+    def status(self):
+        if self.is_checked_in == False:
+            return "not checked in"
+        return "checked in"
+
+scheduled_pilots = db.Table('scheduled_pilots',
+db.Column('pilot_id',db.Integer,db.ForeignKey('pilot.id')),
+db.Column('schedule_id',db.Integer,db.ForeignKey('schedule.id')))
 
 
 class Pilot(db.Model):
@@ -126,12 +155,14 @@ class Pilot(db.Model):
     firstname = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), nullable=False)
-    gender = db.Column(db.String(20), nullable=False)
-    category = db.Column(db.String(30), nullable=False)
+    gender = db.Column(db.String(50), nullable=False)
+    category = db.Column(db.String(30), nullable=False, default = "regular")
     level = db.Column(db.Integer, nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
     is_available = db.Column(db.Boolean, nullable=False, default=True)
-    schedule_id = db.Column(db.Integer,db.ForeignKey('schedule.id'))
+    schedules = db.relationship('Schedule',secondary = 'scheduled_pilots',backref =db.backref('schedules',lazy = 'dynamic'))
+    
+    
 
 
     def status(self):

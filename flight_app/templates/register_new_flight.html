@@ -48,6 +48,98 @@
 </div>
 
 <!-- REGISTER NEW FLIGHT -->
+{%if flight%}
+<div class="row card card-body mt-3 mb-4">
+  <div class="col-sm-8">
+    <p class="display-6">
+      <i class="far fa-calendar-alt"></i> Edit Registered Flight
+    </p>
+    <form action="{{url_for('flight.edit_flight',flight_id = flight.id)}}" method="post">
+      <div class="ml-0 mr-0 mt-3">
+        <div class="input-group mt-3 mb-3">
+          <input
+            class="input-group form-control"
+            name="flight_model"
+            placeholder="Model Name"
+            value = "{{flight.model}}"
+          />
+
+          <span class="input-group-text"><i class="fas fa-plane"></i></span>
+
+          <!-- <input class="input-group form-control" name="flight_category" placeholder="Flight Category" /> -->
+          <select
+            class="form-select"
+            id="inputGroupSelect01"
+            name="flight_category"
+          >
+            <!-- <option selected>Choose delay duration...</option> -->
+            <option value="{{flight.category}}">Jumbo Passenger Jets</option>
+            <option value=" Mid Sized Passenger Jets">
+              Mid Sized Passenger Jets
+            </option>
+            <option value="Light Passenger Jets">Light Passenger Jets</option>
+            <option value="Passenger Turboprops">Passenger Turboprops</option>
+            <option value="Cargo Airplanes">Cargo Airplanes</option>
+            <option value=" Private Jet">Private Jet</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- FLIGHT DATETIMEPICKER -->
+      <div class="row mb-3">
+        <div class="col">
+          <label for="departure-date" class="pb-2">First Flight Date</label>
+          <input
+            type="datetime-local"
+            class="input-group form-control"
+            name="first_flight_date"
+            value = "{{flight.date_of_first_flight}}"
+          />
+        </div>
+
+        <!-- <div class="col">
+                    <label for="arrival-date" class="pb-2">Arrival Date</label>
+                    <input type='datetime-local' class='input-group form-control' name='arrival_time'>
+
+                </div> -->
+      </div>
+
+      <!-- FLIGHT CAPACITY -->
+      <div class="input-group mb-3">
+        <label
+          class="d-flex justify-content-center input-group-text"
+          for="inputGroupSelect01"
+          >Capacity
+        </label>
+        <select
+          class="form-select"
+          id="inputGroupSelect01"
+          name="flight_capacity"
+          value = {{flight.capacity}}
+        >
+          <!-- <option selected>Choose delay duration...</option> -->
+          <option value="5">5 Passengers</option>
+          <option value="7">7 Passengers</option>
+          <option value="10">10 Passengers</option>
+        </select>
+        <!-- FLIGHT CODE -->
+
+        <input
+          class="input-group form-control"
+          name="flight_code"
+          placeholder="flight code e.g XXR384"
+          value = "{{flight.code}}"
+        />
+        <span class="input-group-text"><i class="fas fa-plane"></i></span>
+      </div>
+      <button class="btn btn-primary" type="submit">
+        <i class="far fa-calendar-alt"></i> Edit Flight
+      </button>
+    </form>
+  </div>
+</div>
+
+{%else%}
 
 <div class="row card card-body mt-3 mb-4">
   <div class="col-sm-8">
@@ -134,5 +226,12 @@
     </form>
   </div>
 </div>
+
+
+
+{%endif%}
+
+
+
 
 {%endblock%}

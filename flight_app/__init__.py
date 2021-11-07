@@ -18,9 +18,11 @@ def create_app():
     from .main.routes import main
     from .users.routes import users
     from .flight.routes import flight
+    from.schedule.routes import schedule
 
     app.register_blueprint(main)
     app.register_blueprint(users)
     app.register_blueprint(flight)
+    app.register_blueprint(schedule)
 
     return app

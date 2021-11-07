@@ -38,3 +38,18 @@ once a trip is completed, the flight info is moved to history
 see the weather information of the destination and origin
 
 automatically delay flight if the weather is in a certain range.
+
+
+check the status of a flight. if a flight is fully booked , change the status
+
+change depart in to arrive in immediately a flight departs
+
+Fix deleting multiple schedule items to not return empty list
+
+when a pilot logs in to the application, the pilot should be able to see the trips assigned to him
+once the time is passed and the trip is completed , the status changes to completed and it is logged as a completed trip
+The pilot is then able to dismiss the notifcation,
+
+
+Thanks man. this is so much appreciated .
+ All the best with this application.

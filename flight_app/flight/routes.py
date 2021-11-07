@@ -3,9 +3,9 @@ import csv
 
 
 
-from flight_app.models import db,Flight
+from flight_app.models import db,Flight,Schedule
 
-from flight_app.utils import format_datetime,is_invalid_date_of_first_flight, is_valid_flight_time
+from flight_app.utils import format_datetime,is_invalid_date_of_first_flight, is_valid_flight_time,timedelta
 
 flight = Blueprint("flight", __name__)
 
@@ -71,7 +71,7 @@ def register_new_flight():
             return render_template('register_new_flight.html')
         flight = Flight(
         code=flight_code,
-        # capacity=flight_capacity,
+        capacity=flight_capacity,
         model=flight_model,
         category=category,
         date_of_first_flight=date_of_first_flight)
@@ -141,19 +141,126 @@ def process_flight_schedule(flight_id):
         flight = Flight.query.get_or_404(flight_id)
 
 
-        flight.schedule_flight(flight_origin,flight_destination,flight_capacity,departure_time,arrival_time)
+        schedule = flight.schedule_flight(flight_origin,flight_destination,flight_capacity,departure_time,arrival_time)
+
 
         # message = f"""flight_code: {code} from {flight_origin} to {flight_destination}\n
         # departure time: {departure_time},\n arrival time: {arrival_time},\nflight capacity: {flight_capacity} was
         # added successfully!"""
-        message = f"Flight {flight.schedules.code} scheduled successfully!"
+        message = f"Flight {schedule.flight.code} from {schedule.origin} to {schedule.destination} scheduled successfully!"
         flash(message,'success')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.flight',flight_id = flight_id))
         # return render_template("schedule_flight.html")
 
 
 
 
 
+@flight.route("/flight/delay/<int:schedule_id>", methods=["GET", "POST"])
+def delay_flight(schedule_id):
+
+    if request.method =="POST":
+        #retrieve the delay amount from the form
+        delay_amount = int(request.form.get('delay_amount'))
+        #query the database with the schedule amount to get the schedule object
+        
+       
+        schedule = Schedule.query.get_or_404(schedule_id)
+        schedule.delay_flight(delay_amount)
+        message = f"""Flight from {schedule.origin} to {schedule.destination} 
+        has been delay for {delay_amount} mins. The new arrival time is {schedule.arrival_time}"""
+        flash(message,'success')
+        return redirect(url_for('main.index'))
+    return render_template('delay_flight.html',schedule_id = schedule_id)
 
 
+
+        # get the flight origin,destination and code
+        # flight_origin = request.form.get("flight_origin")
+        # flight_destination = request.form.get("flight_destination")
+        # flight_code = request.form.get("flight_code").upper()
+        # delay_amount = int(request.form.get("delay_amount"))
+        # # return f"<h1>{(flight_code)}</h1>"
+        # # Query the database for the given flight
+        # flight = Flight.query.filter_by(
+        #     origin=flight_origin,
+        #     destination=flight_destination,
+        #     code=flight_code,
+        # ).first()
+        # if not flight:
+        #     message = "No such flight exist. Please, ensure you enter the correct flight origin,destination and flight code!"
+        #     return render_template("error.html", message=message)
+        # else:
+        #     # delay light by delay amount
+        #     new_arrival_time = flight.delay_flight(delay_amount)
+        #     flight.arrival_time = new_arrival_time
+        #     db.session.commit()
+        #     message = "Flight {} from {} to {} has been delayed by {}minutes. New Arrival Time is {}".format(
+        #         flight.code,
+        #         flight.origin,
+        #         flight.destination,
+        #         delay_amount,
+        #         flight.arrival_time,
+        #     )
+        #     return render_template("success.html", message=message)
+            # return f"<h1>Original arival time:{flight.arrival_time},\n New Arrival Time: {flight.delay_flight(delay_amount)}\n Flight Duration: {((flight.arrival_time - flight.departure_time).total_seconds())//60}</h1>"
+
+    # else:
+    #     return render_template("book-flight.html")
+
+@flight.route("/flight/<int:flight_id>/delete", methods=["GET"])
+def delete_flight(flight_id):
+
+    flight = Flight.query.get_or_404(flight_id)
+    if flight:
+        #check if flight is disabled before deleting
+        if flight.is_available == True:
+            flash('sorry, you must first disable flight before you can delete','danger')
+            return redirect(request.referrer)
+        db.session.delete(flight)
+        db.session.commit()
+        message = f"Flight {flight.code} deleted successfully!"
+        flash(message, "success")
+        return redirect(request.referrer)
+    flash('Error: Flight does not exist','danger')
+    return render_template('index.html')
+
+
+@flight.route("/flight/<int:flight_id>/edit", methods=["GET", "POST"])
+def edit_flight(flight_id):
+    if request.form == 'POST':
+
+        #GET THE FORM REQUESTS
+        flight_code = request.form.get("flight_code").upper()
+        flight_capacity = request.form.get("flight_capacity")
+        flight_model = request.form.get("flight_model")
+        category = request.form.get("flight_category")
+        date_of_first_flight = format_datetime(request.form.get("first_flight_date"))
+
+
+        # #QUERY THE DB AND REASSIGN THE VALUES IN THE DATABASE
+        # flight = Flight.query.get_or_404(flight_id)
+
+        # if not flight:
+        #     flash('sorry, flight is invalid')
+        #     return redirect(request.referrer)
+        # else
+        #     code = flight_code,
+        #     c
+        
+        # fligh
+        # #COMMIT THE CHANGES
+
+        #EDIT FUNCTION
+        print("Request is a post request.")
+        flight = Flight.query.get_or_404(flight_id)
+        return f"This will process the edit function for flight {flight.code}"
+    flight = Flight.query.get_or_404(flight_id)
+    return render_template('register_new_flight.html',flight = flight)
+
+
+    
+@flight.route("/test", methods = ['GET','POST'])
+def flight_test():
+    input = request.form.getlist('checkbox')
+    return f"<h1>{input}</h1>"
