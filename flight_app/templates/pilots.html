@@ -11,6 +11,8 @@
                 <thead>
                     <tr style='text-align: center;'>
                         <th style='width:3%;' class="">#</th>
+                       <th  style='width:1%;'>All<input class="all form-check-input-sm" name="all" type="checkbox" id="input1" value = {{flight.scedules}} aria-label="..."> 
+                    </th>
                         <th style='width:5%;' class="">First Name</th>
                         <th style='width:5%;'>Last Name</th>
                         <th style='width:5%;'>Email</th>
@@ -27,6 +29,11 @@
                         {%for pilot in pilots%}
                         <tr style='text-align: center;'>
                            <a href = "#"> <td class="">{{loop.index}}</td>
+                           <td>
+                           
+                            <input class="item form-check-input item-sm" name="checkbox" type="checkbox" id="input1"
+                                value="{{flight.id}}" aria-label="...">
+</td>
 
                             <td>{{pilot.firstname}}</td>
                             <td>{{pilot.lastname}}</td>

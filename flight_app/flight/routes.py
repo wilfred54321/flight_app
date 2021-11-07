@@ -149,7 +149,7 @@ def process_flight_schedule(flight_id):
         # added successfully!"""
         message = f"Flight {schedule.flight.code} from {schedule.origin} to {schedule.destination} scheduled successfully!"
         flash(message,'success')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.flight',flight_id = flight_id))
         # return render_template("schedule_flight.html")
 
 

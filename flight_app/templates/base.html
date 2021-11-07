@@ -90,5 +90,11 @@
     </div>
     {%endfor%} {%endif%} {%endwith%} {%block heading%} {%endblock%} 
     {%block body%} {%endblock%}
+
+    <script>
+      $(':checkbox.all').change(function () {
+          $(':checkbox.item').prop('checked', this.checked);
+      });
+  </script>
   </body>
 </html>

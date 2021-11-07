@@ -217,6 +217,11 @@ Booking
                 <p> Lastname: {{passenger.lastname}}</p>
                 <p>Booking Reference: {{passenger.booking_reference}}</p>
 
+              
+            <a href="{{url_for('users.passenger_check_in',passenger_id = passenger.id)}}" class="btn btn-success btn-sm">
+                    <i class="far fa-edit"></i></i> Check In
+                  </a>
+
                 {%else%}
                 {%endif%}
             </div>

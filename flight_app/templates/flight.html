@@ -23,7 +23,7 @@
         <button type ="submit"  form = "form1" formaction = "{{url_for('schedule.checkbox_cancel_schedule')}}" class="btn btn-none btn-sm">
             <i class="fas fa-ban red"></i></i> Cancel
         </button>
-        <button type ="submit"  form = "form1" formtarget ='input' formaction = "{{url_for('schedule.checkbox_cancel_schedule')}}"class="btn btn-none btn-sm">
+        <button type ="submit"  form = "form1" formtarget ='input' formaction = "#" class="btn btn-none btn-sm">
             <i class="far fa-edit"></i></i> Edit
         </button>
 
@@ -150,7 +150,7 @@
                             <i class="fas fa-user-plus"></i>
                         </a>
 
-                        <a class = "none mx-1" href = "{{url_for('schedule.assign_pilot', schedule_id = flight.id)}}">
+                        <a class = "none mx-1" href = "{{url_for('schedule.assign_schedule', schedule_id = flight.id)}}">
                             <i class ="fas fa-user-astronaut"></i>
                         </a>
                             
@@ -256,10 +256,6 @@
 
     </table>
 </div> -->
-<script>
-    $(':checkbox.all').change(function () {
-        $(':checkbox.item').prop('checked', this.checked);
-    });
-</script>
+
 
 {%endblock%}
