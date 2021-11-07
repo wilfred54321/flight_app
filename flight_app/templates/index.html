@@ -124,17 +124,17 @@
       <p class="display-6"><i class="fas fa-users"></i> Show All Pilots</p>
       <div class=index_table>
         {%if pilots%}
-        <table class="table table-striped table-hover table-bordered">
+        <table class="table table-sm table-striped table-hover table-bordered">
           <thead>
             <tr style='text-align: center;'>
-              <th style='width:3%;' class="">#</th>
+              <th style='width:1.5%;' class="">#</th>
               <th style='width:8%;' class="">First Name</th>
-              <th style='width:8%;'>Last Name</th>
+              <th style='width:5%;'>Last Name</th>
               <th style='width:5%;'>Email</th>
               <th style='width:3%;'>Gender</th>
               <th style='width:5%;'>Category</th>
               <th style='width:2%;'>Level</th>
-              <th style='width:5%;'>Date Registered</th>
+              <th style='width:7%;'>Date Registered</th>
               <th style='width:3%;'>Status</th>
               <th style='width:15%;'>Action</th>
             </tr>
@@ -145,12 +145,12 @@
               <tr style='text-align: center;'>
                 <td class="">{{loop.index}}</td>
 
-                <td>{{pilot.firstname}}</td>
+            <a href = "#">   <td>{{pilot.firstname}}</td>
                 <td>{{pilot.lastname}}</td>
                 <td>{{pilot.email}}</td>
                 <td>{{pilot.gender}}</td>
                 <td>{{pilot.category}}</td>
-                <td>{{pilot.level}}</td>
+                <td>{{pilot.level}}</td> </a> 
                 <td>{{pilot.date_created.strftime('%b %d, %Y')}}</td>
 
                 <td>

@@ -260,4 +260,7 @@ def edit_flight(flight_id):
 
 
     
-   
+@flight.route("/test", methods = ['GET','POST'])
+def flight_test():
+    input = request.form.getlist('checkbox')
+    return f"<h1>{input}</h1>"

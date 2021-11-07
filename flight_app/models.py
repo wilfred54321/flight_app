@@ -73,7 +73,7 @@ class Schedule(db.Model):
     passengers = db.relationship(
         "Passenger", backref="schedule ", cascade="all, delete", lazy='subquery'
     )
-    pilots = db.relationship("Pilot",backref = "schedule", cascade = "all,delete", lazy = True)
+    
 
     
     def add_passenger(self, firstname, lastname, gender,email):
@@ -87,10 +87,10 @@ class Schedule(db.Model):
         return passenger.booking_reference
         # return True
 
-    def add_pilot(self,firstname,lastname,email,gender,category,level,):
-        pilot = Pilot(firstname = firstname,lastname = lastname, email = email,gender = gender,category = category,level=level,schedule_id = self.id)
-        db.session.add(pilot)
-        db.session.commit()
+    # def add_pilot(self,firstname,lastname,email,gender,category,level):
+    #     pilot = Pilot(firstname = firstname,lastname = lastname, email = email,gender = gender,category = category,level=level,schedule_id = self.id)
+    #     db.session.add(pilot)
+    #     db.session.commit()
 
     def open_seats(self):
         return self.capacity - len(self.passengers)
@@ -144,6 +144,10 @@ class Passenger(db.Model):
             return "not checked in"
         return "checked in"
 
+scheduled_pilots = db.Table('scheduled_pilots',
+db.Column('pilot_id',db.Integer,db.ForeignKey('pilot.id')),
+db.Column('schedule_id',db.Integer,db.ForeignKey('schedule.id')))
+
 
 class Pilot(db.Model):
    
@@ -151,20 +155,14 @@ class Pilot(db.Model):
     firstname = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), nullable=False)
-    gender = db.Column(db.String(20), nullable=False)
-    category = db.Column(db.String(30), nullable=False)
+    gender = db.Column(db.String(50), nullable=False)
+    category = db.Column(db.String(30), nullable=False, default = "regular")
     level = db.Column(db.Integer, nullable=False)
     date_created = db.Column(db.DateTime, nullable=False, default=datetime.now())
     is_available = db.Column(db.Boolean, nullable=False, default=True)
-
-
+    schedules = db.relationship('Schedule',secondary = 'scheduled_pilots',backref =db.backref('schedules',lazy = 'dynamic'))
     
-
-
-# class SchedulePilot(db.Model):
-#     id = db.Column(db.Integer, primary_key = True)
-#     pilot_id = db.Column(db.Integer,db.ForeignKey('pilot.id'))
-#     schedule_id = db.Column(db.Integer,db.ForeignKey('schedule.id'))
+    
 
 
     def status(self):

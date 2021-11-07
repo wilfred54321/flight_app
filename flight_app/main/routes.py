@@ -98,6 +98,7 @@ def book(schedule_id):
 def flight(flight_id):
     try:
         flight = Flight.query.get_or_404(flight_id)
+        
     except ValueError:
         return render_template("error.html", message="No such flight is available")
     return render_template("flight.html", flight=flight)

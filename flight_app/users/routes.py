@@ -20,22 +20,23 @@ def register_pilot():
         lastname = request.form.get("lastname").capitalize()
         email = request.form.get("email").lower()
         gender = request.form.get("gender")
-        cat = request.form.getlist("category")
-        category = [x for x in cat]
+        # cat = request.form.getlist("category")
+        # category = [x for x in cat]
         level = request.form.get("pilot_level")
 
         pilot = Pilot(
             firstname=firstname,
             lastname=lastname,
             email=email,
-            gender=gender,
-            category=category,
+            gender=gender, 
             level=level,
         )
         db.session.add(pilot)
         db.session.commit()
 
         flash(f"Pilot {firstname}, {lastname} was registered successfully!", "success")
+        # print(type(gender))
+        # flash(f'{gender}','danger')
         return redirect(url_for("main.index"))
 
     return render_template("index.html", title="Index")
@@ -76,3 +77,9 @@ def show_passengers(schedule_id):
     # passengers = Passenger.query.filter_by(id = schedule_id).all()
     flight_schedule = Schedule.query.get(schedule_id)
     return render_template('passengers.html',schedule = flight_schedule)
+
+
+@users.route("/show-all-pilots",methods = ['POST','GET'])
+def show_all_pilots():
+    pilots = Pilot.query.all()
+    return render_template('pilots.html', pilots = pilots)
