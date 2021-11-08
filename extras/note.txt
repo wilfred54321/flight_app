@@ -53,3 +53,6 @@ The pilot is then able to dismiss the notifcation,
 
 Thanks man. this is so much appreciated .
  All the best with this application.
+
+
+ When a flight is delay, a notification is sent to all the passengers associated to that flight.

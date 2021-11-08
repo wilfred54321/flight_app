@@ -170,7 +170,7 @@ def delay_flight(schedule_id):
         message = f"""Flight from {schedule.origin} to {schedule.destination} 
         has been delay for {delay_amount} mins. The new arrival time is {schedule.arrival_time}"""
         flash(message,'success')
-        return redirect(url_for('main.index'))
+        return redirect(url_for('main.flight',flight_id = schedule.flight.id))
     return render_template('delay_flight.html',schedule_id = schedule_id)
 
 
