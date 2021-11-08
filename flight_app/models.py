@@ -109,7 +109,11 @@ class Schedule(db.Model):
         eta = self.arrival_time - datetime.now()
         return round(((eta.total_seconds())/60),2)
 
-        
+    def arrived(self):
+        if self.expected_arrival_time == 0:
+            self.status = 'arrived'
+        db.session.commit()
+
        
         
         

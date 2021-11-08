@@ -30,7 +30,7 @@ Booking
             {%if flight%}
             <div>
 
-                <div class="collapse in show" id="bookFlight">
+                <div class="" id="bookFlight">
                     <div class=" card card-body mt-3 show">
                         <p class="display-6">Book Flight</p>
                         <h5 class="text-muted">Add Passenger to Flight {{flight.flight.code}}</h5>
@@ -107,7 +107,7 @@ Booking
             {%else%}
             <div>
 
-                <div class="collapse" id="bookFlight">
+                <div class="" id="bookFlight">
                     <div class="card card-body mt-3">
                         <p class="display-6">Book a Flight</p>
                         <form action="{{url_for('main.book_flight')}}" method="post">

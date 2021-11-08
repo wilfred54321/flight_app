@@ -56,3 +56,8 @@ Thanks man. this is so much appreciated .
 
 
  When a flight is delay, a notification is sent to all the passengers associated to that flight.
+ include a field to the flight table to show the number of schedules in each flight
+
+ allow agents the ability to view schedule history
+ send a mail to passengers once they are created with their flight information
+ save a passenger to a file on created. only transfer to the database once checked in.
