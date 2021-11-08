@@ -1,7 +1,7 @@
 
 from datetime import date
 
-from flight_app.utils import generate_booking_reference,datetime,timedelta,format_datetime
+from flight_app.utils import generate_booking_reference,datetime, generate_pilot_id, generate_schedule_reference,timedelta,format_datetime
 from flight_app import db
 
 import flight_app
@@ -67,6 +67,7 @@ class Schedule(db.Model):
     arrival_time = db.Column(db.DateTime, nullable=False)
     timestamp = db.Column(db.DateTime, nullable = False, default = datetime.now)
     status = db.Column(db.String(30), nullable=False,default = 'available')
+    reference = db.Column(db.Integer, unique = True , nullable = False, default = generate_schedule_reference)
 
     flight_id = db.Column(db.Integer, db.ForeignKey("flight.id"))
 
@@ -156,6 +157,7 @@ db.Column('schedule_id',db.Integer,db.ForeignKey('schedule.id')))
 class Pilot(db.Model):
    
     id = db.Column(db.Integer, primary_key=True)
+    pilot_id = db.Column(db.Integer, unique = True,default = generate_pilot_id)
     firstname = db.Column(db.String(50), nullable=False)
     lastname = db.Column(db.String(50), nullable=False)
     email = db.Column(db.String(50), nullable=False)

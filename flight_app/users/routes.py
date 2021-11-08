@@ -25,30 +25,42 @@ def all_passengers():
 @users.route("/register-pilot", methods=["GET", "POST"])
 def register_pilot():
     if request.method == "POST":
-        firstname = request.form.get("firstname").capitalize()
-        lastname = request.form.get("lastname").capitalize()
-        email = request.form.get("email").lower()
-        gender = request.form.get("gender")
-        # cat = request.form.getlist("category")
-        # category = [x for x in cat]
-        level = request.form.get("pilot_level")
+        try:
 
-        pilot = Pilot(
+            firstname = request.form.get("firstname").capitalize()
+            lastname = request.form.get("lastname").capitalize()
+            email = request.form.get("email").lower()
+            gender = request.form.get("gender")
+            category = request.form.get("category")
+            level = request.form.get("pilot_level")
+
+            #Query the database to be sure the email does not exist
+
+            pilot = Pilot.query.filter_by(email = email).first()
+            if pilot:
+                flash('Sorry, a pilot with this email address already exist. Please choose another email address!','danger')
+                return redirect(request.referrer)
+
+            pilot = Pilot(
             firstname=firstname,
             lastname=lastname,
             email=email,
             gender=gender, 
+            category = category,
             level=level,
-        )
-        db.session.add(pilot)
-        db.session.commit()
-
-        flash(f"Pilot {firstname}, {lastname} was registered successfully!", "success")
+            is_available = False
+            )
+            db.session.add(pilot)
+            db.session.commit()
+            flash(f"Pilot {firstname}, {lastname} with ID {pilot.pilot_id} was registered successfully!", "success")
         # print(type(gender))
         # flash(f'{gender}','danger')
-        return redirect(url_for("main.index"))
-
-    return render_template("create_pilot.html", title="Index")
+            return redirect(url_for("main.index"))
+        except: 
+            flash('There was an error submitting your form. Please ensure that the form is filled correctly!','danger')
+            return redirect(request.referrer)
+        
+    return render_template("create_pilot.html", title="Add Pilot")
 
 
 @users.route("/schedule_pilot", methods=["GET", "POST"])

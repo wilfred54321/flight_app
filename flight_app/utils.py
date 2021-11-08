@@ -1,4 +1,5 @@
 import string
+
 import random
 from datetime import datetime, timedelta
 
@@ -8,6 +9,18 @@ def generate_booking_reference():
     selection = random.choices(ref_data_set, k=5)
     booking_reference = "".join(map(str, selection))
     return booking_reference
+
+def generate_pilot_id():
+    ref_data_set = string.digits
+    selection = random.choices(ref_data_set,k=5)
+    pilot_id = "".join(map(str,selection))
+    return int(pilot_id) 
+
+def generate_schedule_reference():
+    ref_data_set = string.digits
+    selection = random.choices(ref_data_set,k=8)
+    schedule_reference = "".join(map(str,selection))
+    return int(schedule_reference)
 
 
 def is_valid_flight_time(departure_time, arrival_time):

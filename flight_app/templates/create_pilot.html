@@ -1,87 +1,94 @@
 {%extends 'base.html'%}
 
 {% block body%}
+<div class="row">
 
-<div clas="col-8">
+  <p class="display-6 text-muted"><i class="fas fa-user-plus"></i> Add Pilot</p>
+</div>
 
-        <p class="display-6"><i class="fas fa-user-plus"></i> Add Pilot</p>
+<div class="container border p-2">
+  <form action="{{url_for('users.register_pilot')}}" method="post">
 
-        <div class = "container border my-4" >
-        <form action="{{url_for('users.register_pilot')}}" method="post">
-
-          <div class="mb-3">
-            <div class="row mt-4 ">
-
-              <div class="col form-floating">
-                <input type="text" class="form-control" id="floating" name="firstname" placeholder="John" value="John">
-                <label for="floatingInputValue">First Name</label>
-              </div>
-
-              <div class="col form-floating">
-                <input type="text" class="form-control" id="floating" name="lastname" placeholder="Doe" value="Doe">
-                <label for="floatingInputValue">Last Name</label>
-              </div>
-
-              <div class="col form-floating">
-                <input type="email" class="form-control" name="email" id="floating" placeholder="name@example.com"
-                  value="test@example.com">
-                <label for="floatingInputValue">Email</label>
-                <!-- <span class="input-group-text "><i class="fas fa-plane"></i></span> -->
-              </div>
+      <div class="row p-2">
+            <div class="col form-floating">
+              <input type="text" class="form-control" id="floating" name="firstname" placeholder="John" value="John">
+              <label for="floatingInputValue">First Name</label>
             </div>
 
-
-          </div>
-          <div class="row">
-            <div class="col-6">
-              <div class="row">
-                <div class="col">
-                  <input type="radio" id="male" name="gender" value="Male">
-                  <label for="male">Male</label>
-                </div>
-                <div class="col">
-                  <input type="radio" id="she" name="gender" value="Female">
-                  <label for="female">Female</label><br>
-                </div>
-                <div class="col">
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" name="category" type="checkbox" id="inlineCheckbox1" value="local">
-                    <label class="form-check-label" for="pilotType">Local</label>
-                  </div>
-                </div>
-                <div class="col">
-                  <div class="form-check form-check-inline">
-                    <input class="form-check-input" name="category" type="checkbox" id="inlineCheckbox1"
-                      value="International">
-                    <label class="form-check-label" for="pilotType">International</label>
-                  </div>
-                </div>
-                <br>
-              </div>
+            <div class="col form-floating">
+              <input type="text" class="form-control" id="floating" name="lastname" placeholder="Doe" value="Doe">
+              <label for="floatingInputValue">Last Name</label>
             </div>
-
-
-            <div class="col">
-              <div class="input-group mb-3">
-                <label class=" d-flex justify-content-center input-group-text" for="inputGroupSelect01">Level</label>
-                </label>
-                <select class="form-select" id="inputGroupSelect01" name="pilot_level">
-                  <!-- <option selected>Choose delay duration...</option> -->
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                </select>
-              </div>
-                <button class="d-flex btn btn-primary mb-4" type="submit"><i class="fas fa-user-plus"></i> Add Pilot</button>
 
       </div>
-    </div>
+
+
+      <div class="row p-2">
+
+        <div class="col form-floating">
+          <input type="email" class="form-control" name="email" id="floating" placeholder="name@example.com"
+            value="test@example.com">
+          <label for="floatingInputValue">Email</label>
+          <!-- <span class="input-group-text "><i class="fas fa-plane"></i></span> -->
+        </div>
+
+
+        <div class="col">
+          <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect01">Category</label>
+            </label>
+            <select class="form-select" id="inputGroupSelect01" name="category">
+        <!-- <option selected>Choose delay duration...</option> -->
+            <option value="local">Local</option>
+            <option value="international">International</option>
+            <option value="both">Both</option>
+          </select>
+          </div>
+          
+        </div>
+    
+
+      </div>
+
+
+
+      <div class="row p-2">
+        <div class="col">
+          <input type="radio" id="male" name="gender" value="Male">
+          <label for="male">Male</label>
+
+          <input type="radio" id="she" name="gender" value="Female">
+          <label for="female">Female</label><br>
+        </div>
+        
+
+
+        <div class="col">
+          <div class="input-group mb-3">
+            <label class="input-group-text" for="inputGroupSelect01">Level</label>
+            </label>
+            <select class="form-select" id="inputGroupSelect01" name="pilot_level">
+              <!-- <option selected>Choose delay duration...</option> -->
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </div>
+        </div>
+      </div>
+      
+
+
+      <div class="row">
+        
+            <div class="col"> 
+          <button class="btn btn-primary mb-4" type="submit"><i class="fas fa-user-plus"></i> Add Pilot</button>
+        </div> 
+      </div>
 
     </form>
-  </div>
+
 </div>
-</div>
-</div>
-</div>
+
             
 {%endblock%}
