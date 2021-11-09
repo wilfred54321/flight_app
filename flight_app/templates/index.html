@@ -96,21 +96,21 @@
 
                 {%if flight.is_available%}
                 <a href="{{url_for('flight.change_status', flight_id = flight.id, action ='disable')}}"
-                  class="btn btn-outline-danger btn-sm">
-                  <i class="fas fa-plane-slash"></i>Disable
+                  class="none  mx-2">
+                  <i class="fas fa-power-off red">  </i>   Disable
                 </a>
                 {%else%}
                 <a href="{{url_for('flight.change_status', flight_id = flight.id, action = 'enable')}}"
-                  class="btn btn-outline-success btn-sm">
-                  <i class="fas fa-plane-slash"></i>Enable
+                  class="none  mx-2">
+                  <i class="fas fa-power-off green"></i>   Enable
                 </a>
                 {%endif%}
                
-                <a href="{{url_for('flight.edit_flight', flight_id = flight.id)}}" class="btn btn-secondary btn-sm">
-                  <i class="far fa-edit"></i></i> Edit
+                <a class="none mx-2" href="{{url_for('flight.edit_flight', flight_id = flight.id)}}" >
+                  <i class="far fa-edit"></i></i>   Edit
                 </a>
-                <a href="{{url_for('flight.delete_flight',flight_id = flight.id)}}" class="btn btn-danger btn-sm ">
-                  <i class="far fa-trash-alt"></i></i> Delete
+                <a class="none  mx-2" href="{{url_for('flight.delete_flight',flight_id = flight.id)}}">
+                  <i class="far fa-trash-alt"></i></i>   Delete
                 </a>
               </td>
             </tr>
@@ -162,7 +162,7 @@
 
       {%if pilots%}
 
-      <div class="table">
+      <div class="table mt-3">
        <tr>
 
           <a href="{{url_for('users.register_pilot')}}" class="btn btn-success btn-sm">
@@ -172,10 +172,19 @@
           <button type ="submit"  form = "form1" formaction = "{{url_for('schedule.assign_pilot')}}" class="btn btn-none btn-sm">
               <i class="fas fa-user-astronaut"></i></i> Schedule Pilot
           </button>
-          <button type ="submit"  form = "form1" formtarget ='input' formaction = "#"class="btn btn-none btn-sm">
-              <i class="fas fa-ban red"></i></i> Disable
-          </button>  
+          
+          <button type ="submit"  form = "form1" formtarget ='input' formaction = "{{url_for('users.change_status_multiple', action = 'enable')}}" class="btn btn-none btn-sm">
+            <i class="fas fa-power-off green"></i></i> Enable
+        </button>
+
+
+        <button type ="submit"  form = "form1" formtarget ='input' formaction = "{{url_for('users.change_status_multiple', action = 'disable')}}" class="btn btn-none btn-sm">
+          <i class="fas fa-power-off red"></i></i> Disable
+      </button>
   
+          <button type ="submit"  form = "form1" formtarget ='input' formaction = "{{url_for('users.checkbox_delete_pilots')}}"class="btn btn-none btn-sm">
+            <i class="fas fa-trash red"></i></i> Delete
+        </button>
       </tr>
       </div>
       <div class=index_table>
@@ -239,11 +248,11 @@
                 <!-- ACTION TABLE -->
                 <td class = "">
                   {%if pilot.is_available%}
-                  <a class = " none small " href="{{url_for('users.change_status', pilot_id = pilot.id, action ='disable')}}"
+                  <a class = " none" href="{{url_for('users.change_status', pilot_id = pilot.id, action ='disable')}}"
                     class="btn btn-none"><i class="fas fa-power-off red"></i>  Disable
                   </a>
                   {%else%}
-                  <a class = " small none " href="{{url_for('users.change_status', pilot_id = pilot.id, action = 'enable')}}"
+                  <a class = " none " href="{{url_for('users.change_status', pilot_id = pilot.id, action = 'enable')}}"
                   class="btn btn-none btn-sm "><i class="fas fa-power-off green "></i>  Enable
                   </a>
                   {%endif%}

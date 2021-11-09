@@ -2,15 +2,16 @@ from flask import Blueprint
 from flask import render_template, redirect, request, flash, url_for
 
 
-from flight_app.models import db, Pilot,Passenger,Schedule,scheduled_pilots
+from flight_app.models import db, Pilot,Flight,Passenger,Schedule,scheduled_pilots
 users = Blueprint("users", __name__)
 
 
 @users.route("/all-pilots", methods=["POST", "GET"])
 def all_pilots():
     pilots = Pilot.query.all()
+    flights = Flight.query.all()
     # return f"{pilots}"
-    return render_template("index.html", pilots=pilots, title="Index")
+    return render_template("index.html",flights = flights, pilots=pilots, title="Index")
 
 @users.route("/all-passenger",methods = ['POST','GET'])
 def all_passengers():
@@ -80,6 +81,39 @@ def change_status(pilot_id, action):
     return redirect(request.referrer)
 
 
+
+@users.route("/pilot/change-status-multiple/<string:action>", methods = ['GET','POST'])
+def change_status_multiple(action):
+    disabled_users = []
+    enabled_users = []
+    input = request.form.getlist('checkbox')
+    if input == None or input == [] and action == 'enable':
+        message =  "You havent selected what to enable."
+        flash(message,'danger')
+        return redirect(request.referrer)
+    elif input ==None or input == [] and action == 'disable':
+        message =  "You havent selected what to disable."
+        flash(message,'danger')
+        return redirect(request.referrer)
+    else:
+        checked_items = [int(x) for x in input]
+        
+        for pilot_id in checked_items:
+            pilot = Pilot.query.get(pilot_id)
+            if action == 'disable' and pilot.status() == 'available':
+                pilot.disable()
+                disabled_users.append(pilot.pilot_id)
+            elif action == 'enable' and pilot.status() =='unavailable':
+                pilot.enable()
+                enabled_users.append(pilot.pilot_id)
+        changed_pilots_list = enabled_users if enabled_users != [] else disabled_users
+        changed_pilots = " ,".join(str(pilot) for pilot in changed_pilots_list )
+        message = f"Pilot(s) with ID(s)  {changed_pilots}  {action}d successfully!"
+        flash(message,'success')
+        return redirect(request.referrer)
+
+
+
 @users.route("/delete-pilot/<int:pilot_id>)", methods=["GET"])
 def delete_pilot(pilot_id):
     pilot = Pilot.query.get_or_404(pilot_id)
@@ -92,6 +126,34 @@ def delete_pilot(pilot_id):
     flash(f"Pilot {pilot.firstname}, {pilot.lastname} deleted successfully!", "success")
     return redirect(request.referrer)
 
+
+@users.route("/pilot/delete-pilot", methods = ['GET','POST'])
+def checkbox_delete_pilots():
+    if request.method == 'POST':
+
+        deleted_pilots_list = []
+        input = request.form.getlist('checkbox')
+        if input == None or input == []:
+            flash('You have not selected what you wish to delete. Please select an item','info')
+            return redirect(request.referrer)
+        checked_items = [int(x) for x in input]
+        for pilot_id in checked_items:
+            pilot = Pilot.query.get_or_404(pilot_id)
+            if pilot.status() == 'available':
+                message = 'Cannot deleted an enabled pilot. please first disable before you delete'
+                flash(message,'danger')
+                return redirect(request.referrer)
+            
+            db.session.delete(pilot)
+            deleted_pilots_list.append(pilot.pilot_id)
+            deleted_pilots = ",".join(str(item) for item in deleted_pilots_list)
+        db.session.commit()
+        message = f"Pilots with ids {deleted_pilots} were successfully deleted from the database!"
+        flash(message,'success')
+        return redirect(request.referrer)    
+        
+
+            
 
 @users.route('/flight/schedule/passenger/<int:schedule_id>', methods = ['GET'])
 def show_passengers(schedule_id):

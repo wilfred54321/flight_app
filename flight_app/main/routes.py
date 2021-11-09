@@ -20,9 +20,8 @@ def index():
     """Display a list of Flights and Pilots"""
     pilots = Pilot.query.order_by(desc(Pilot.firstname)).all()
     flights = Flight.query.all()
-    if flights or pilots == None:
+    if flights == None and pilots == None:
         return render_template('index.html', title = 'Index')
-        
     return render_template("index.html", pilots=pilots, flights=flights, title="Index")
 
 

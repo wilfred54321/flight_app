@@ -74,7 +74,8 @@ def assign_pilot():
             schedule.schedules.append(pilot)
             db.session.commit()
             session.clear()
-            flash(f"Pilot {pilot.firstname}, {pilot.lastname} has been assigned to Flight '<b>{schedule.flight.code}</b>' scheduled for {schedule.origin} to {schedule.destination}",'success')
+            #Email Pilot notifying him of his schedule!
+            flash(f"Pilot {pilot.firstname}, {pilot.lastname} has been assigned to Flight {schedule.flight.code} scheduled for {schedule.origin} to {schedule.destination}",'success')
             return redirect(url_for('users.show_passengers',schedule_id = schedule_id))
         
         flash(f"Could not assign pilot {pilot.firstname}, {pilot.lastname} to flight {schedule.flight.code}. Please ensure the Pilot is available.",'danger')
