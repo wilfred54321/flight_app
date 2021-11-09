@@ -1,1 +1,1 @@
-web: gunicorn run:flight_app
+web: gunicorn run:app
