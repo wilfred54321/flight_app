@@ -1,5 +1,5 @@
 from flask import Blueprint
-from flight_app.models import db,Schedule,Pilot
+from flight_app.models import db,Schedule,Pilot,scheduled_pilots
 from flask import redirect,flash,request,session,url_for
 
 
@@ -63,23 +63,64 @@ def assign_schedule(schedule_id):
 @schedule.route("/flight/schedule/assign-pilot", methods = ['POST','GET'])
 def assign_pilot():
     if request.method == 'POST':
-        pilot_id = request.form.get('checkbox')
-        schedule_id = session.get('schedule_id')
-
-         #Query the schedule and session tables
+        try:
+            pilot_id = request.form.get('checkbox')
+            schedule_id = session.get('schedule_id')
+           
+        except:
+            flash('Input error', 'danger')
+            return redirect(request.referrer)
+       
+        #Query the schedule and session tables
         schedule = Schedule.query.get(schedule_id)
         pilot = Pilot.query.get(pilot_id)
-        
-        if pilot.is_available == True:
-            schedule.schedules.append(pilot)
-            db.session.commit()
-            session.clear()
-            #Email Pilot notifying him of his schedule!
-            flash(f"Pilot {pilot.firstname}, {pilot.lastname} has been assigned to Flight {schedule.flight.code} scheduled for {schedule.origin} to {schedule.destination}",'success')
-            return redirect(url_for('users.show_passengers',schedule_id = schedule_id))
-        
+        try:   
+            if pilot.is_available == True:
+                schedule.schedules.append(pilot)
+                db.session.commit()
+                session.clear()
+                #Email Pilot notifying him of his schedule!
+                flash(f"Pilot {pilot.firstname}, {pilot.lastname} has been assigned to Flight {schedule.flight.code} scheduled for {schedule.origin} to {schedule.destination}",'success')
+                return redirect(url_for('users.show_passengers',schedule_id = schedule_id))
+        except:
+            flash('Error occured. Please ensure your inputs are valid','danger')
+            return redirect(request.referrer)
+            
         flash(f"Could not assign pilot {pilot.firstname}, {pilot.lastname} to flight {schedule.flight.code}. Please ensure the Pilot is available.",'danger')
         return redirect(url_for('users.all_pilots'))
+
+@schedule.route("/flight/schedule/unassign-pilot/<int:pilot_id>/<int:schedule_id>", methods = ['POST','GET'])
+def unassign_pilot(pilot_id,schedule_id):
+    #query the association table
+    schedule = Schedule.query.get(schedule_id)
+    pilot = Pilot.query.get(pilot_id)
+    schedule.schedules.remove(pilot)
+    db.session.commit()
+    message = f"Pilot {pilot.pilot_id} has been removed from the flight {schedule.flight.code} , schedule reference of {schedule.reference}"
+    flash(message,'success')
+    return redirect(request.referrer)
+    
+        
+
+    # association_scheduled_id = Pilot.query.join(scheduled_pilots).join(Schedule).filter((scheduled_pilots.c.pilot_id==Pilot.id)&(scheduled_pilots.c.schedule_id==Schedule.id)).first()
+
+    # # scheduled_pilot = scheduled_pilots.query.filter((scheduled_pilots.c.pilot_id==pilot_id)&(scheduled_pilots.c.schedule_id==schedule_id)).first()
+    # return f"{scheduled_pilot.id}"
+    # scheduled_pilots.delete(scheduled_pilot.id)
+    # db.session.commit()
+    # db.session.delete(scheduled_pilot)
+    # db.session.commit()
+
+    
+
+        #     # pilot_id = request.args.get('pilot_id')
+    #     # schedule_id = request.args.get('schedule_id')
+    #     flash(f'schedule id -s {schedule_id} and pilot id is {pilot_id}','info')
+    #     return redirect(request.referrer)
+    # return redirect(request.referrer)
+        #       except:
+        #     flash('Cannot assign pilot. Please ensure you selection is right.')
+        # else:
 
 #   return f"Schedule_id is : {schedule_id}, Pilot_id is : {pilot_id}"
 #     schedule = Schedule.query.get(schedule_id)

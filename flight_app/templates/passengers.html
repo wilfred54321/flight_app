@@ -16,6 +16,7 @@
                                                         <thead>
 
                                                             <tr>
+                                                                <th>#</th>
                                                                 <th>ID</th>
                                                                 <th>Name</th>
                                                                 <th>Email</th>
@@ -27,12 +28,12 @@
                                                         <tbody>
                                                             {%for pilot in pilots%}
                                                             <tr>
-                                                               
                                                             <td>{{loop.index}}</td>
+                                                            <td>{{pilot.pilot_id}}</td> 
                                                             <td>{{pilot.firstname}} {{pilot.lastname}}</td>
                                                             <td>{{pilot.email}}</td>
                                                             <td>
-                                                                <a href="#"
+                                                                <a href="{{url_for('schedule.unassign_pilot',pilot_id = pilot.id,schedule_id = schedule.id)}}"
                                                                     class="btn btn-none btn-sm">
                                                                     <i class="far fa-trash-alt red"></i>
                                                                 </a>
