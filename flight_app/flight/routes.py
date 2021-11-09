@@ -239,24 +239,28 @@ def edit_flight(flight_id):
 
 
         # #QUERY THE DB AND REASSIGN THE VALUES IN THE DATABASE
-        # flight = Flight.query.get_or_404(flight_id)
-
-        # if not flight:
-        #     flash('sorry, flight is invalid')
-        #     return redirect(request.referrer)
-        # else
-        #     code = flight_code,
-        #     c
-        
-        # fligh
-        # #COMMIT THE CHANGES
-
-        #EDIT FUNCTION
-        print("Request is a post request.")
         flight = Flight.query.get_or_404(flight_id)
-        return f"This will process the edit function for flight {flight.code}"
+
+        if not flight:
+            flash('sorry, flight is invalid')
+            return redirect(request.referrer)
+        else:
+
+           flight.code = flight_code,
+           flight.model = flight_model,
+           flight.category = category
+
+           db.session.commit()
+           return redirect('Flight Information successfully updated','success')
     flight = Flight.query.get_or_404(flight_id)
     return render_template('register_new_flight.html',flight = flight)
+       
+   
+    #     print("Request is a post request.")
+    #     flight = Flight.query.get_or_404(flight_id)
+    #     return f"This will process the edit function for flight {flight.code}"
+    # flight = Flight.query.get_or_404(flight_id)
+    # return render_template('register_new_flight.html',flight = flight)
 
 
     
