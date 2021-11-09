@@ -77,8 +77,10 @@ def assign_pilot():
         try:   
             if pilot.is_available == True:
                 schedule.schedules.append(pilot)
+                pilot.is_available = False
                 db.session.commit()
                 session.clear()
+
                 #Email Pilot notifying him of his schedule!
                 flash(f"Pilot {pilot.firstname}, {pilot.lastname} has been assigned to Flight {schedule.flight.code} scheduled for {schedule.origin} to {schedule.destination}",'success')
                 return redirect(url_for('users.show_passengers',schedule_id = schedule_id))
@@ -95,6 +97,7 @@ def unassign_pilot(pilot_id,schedule_id):
     schedule = Schedule.query.get(schedule_id)
     pilot = Pilot.query.get(pilot_id)
     schedule.schedules.remove(pilot)
+    pilot.is_available = True
     db.session.commit()
     message = f"Pilot {pilot.pilot_id} has been removed from the flight {schedule.flight.code} , schedule reference of {schedule.reference}"
     flash(message,'success')
