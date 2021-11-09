@@ -100,7 +100,7 @@
                     <th  style='width:2%;'>#</th>
                     <th  style='width:1%;'>All<input class="all form-check-input-sm" name="all" type="checkbox" id="input1" value = {{flight.scedules}} aria-label="..."> 
                     </th>
-                    
+                    <th style='width:4%;'>Reference</th>
                     <th style='width:4%;'>Origin</th>
                     <th style='width:3%;'>Destination</th>
                     <th style='width:7%;'>Departure</th>
@@ -130,7 +130,7 @@
                                
                            
                         </td>
-                   
+                        <td>{{flight.reference}}</td>
                         <td>{{flight.origin}}</td>
                         <td>{{flight.destination}}</td>
                         <td>{{flight.departure_time.strftime('%Y-%m-%d | %H: %M') }}</td>
