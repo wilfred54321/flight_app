@@ -20,7 +20,7 @@ def all_pilots():
 @users.route("/all-passenger",methods = ['POST','GET'])
 def all_passengers():
 
-    passengers = Passenger.query.all()
+    passengers = Passenger.query.order_by(Passenger.timestamp.desc())
     return render_template('all_passengers.html', passengers = passengers)
     
 
