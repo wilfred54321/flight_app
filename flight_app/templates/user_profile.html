@@ -1,0 +1,8 @@
+{%extends 'base.html'%}
+
+{%block body%}
+
+<p class = 'display-6'>This page will contain the profile of {{current_user.firstname}}</p>
+
+<a href = "{{url_for('users.logout')}}" class = "special-font"> Log out</a>
+{%endblock%}

@@ -1,8 +1,9 @@
 
 from datetime import date
 
-from flight_app.utils import generate_booking_reference,datetime, generate_pilot_id, generate_schedule_reference,timedelta,format_datetime
-from flight_app import db
+from flight_app.utils import generate_booking_reference,datetime, generate_default_password, generate_pilot_id, generate_schedule_reference,timedelta,format_datetime
+from flight_app import db,login_manager
+from flask_login import UserMixin
 
 import flight_app
 
@@ -142,6 +143,7 @@ class Passenger(db.Model):
         db.String, nullable=False, default=generate_booking_reference
     )
     schedule_id = db.Column(db.Integer, db.ForeignKey("schedule.id"))
+   
 
 
     def status(self):
@@ -185,3 +187,30 @@ class Pilot(db.Model):
         self.is_available = False
         db.session.commit()
         return self.is_available
+
+
+class User(db.Model, UserMixin):
+    id = db.Column(db.Integer, primary_key = True)
+    username = db.Column(db.String, nullable = False,)
+    firstname = db.Column(db.String, nullable = False)
+    lastname = db.Column(db.String, nullable = False)
+    email = db.Column(db.String(50), unique = True, nullable = False)
+    date_created = db.Column(db.DateTime, default = datetime.utcnow)
+    is_admin = db.Column(db.Boolean, nullable = False, default = False)
+    is_available = db.Column(db.Boolean, nullable = False, default = False)
+    user_level = db.Column(db.String, nullable = False, default = 'standard')
+    password = db.Column(db.String(100), nullable = False, default = generate_default_password)
+    
+    def status(self):
+        if self.is_available == False:
+            return "unavailable"
+        return "available"
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(int(user_id))
+
+
+
+

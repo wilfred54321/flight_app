@@ -22,7 +22,13 @@ def generate_schedule_reference():
     schedule_reference = "".join(map(str,selection))
     return int(schedule_reference)
 
+def generate_default_password():
+    ref_data_set = string.digits +string.ascii_letters + ''.join(map(str,string.punctuation[0:6]))
+    selection = random.choices(ref_data_set,k=7)
+    default_password = "".join(map(str,selection))
+    return str(default_password)
 
+    
 def is_valid_flight_time(departure_time, arrival_time):
     if (
         departure_time >= datetime.now() + timedelta(hours=2)

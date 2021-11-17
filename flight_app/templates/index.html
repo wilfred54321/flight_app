@@ -14,17 +14,34 @@
 
 <a class="none special-font small" data-bs-toggle="collapse"  href="#all_pilots_list" role="button" aria-expanded="false"
   aria-controls="all_pilots_list">
-  <i class="fas fa-users"></i> Show All Pilots &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+  <i class="fas fa-users"></i> All Pilots &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+</a>
+
+<a class="none special-font small" href="{{url_for('users.all_users')}}" role="button">
+  <i class="fas fa-users"></i> Show All Users &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+</a>
+
+<a class="none special-font small" href="{{url_for('users.all_passengers')}}" role="button">
+  <i class="fas fa-users"></i> All Passengers &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+</a>
+
+<a class="none special-font small" href="{{url_for('users.register_user')}}" role="button">
+  <i class="fas fa-user-plus"></i> Register Agent &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+</a>
+
+<a class="none special-font small" href="{{url_for('users.set_password')}}" role="button">
+  <i class="fas fa-wrench"></i> Set Password &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+</a>
+
+<a class="none special-font small" href="{{url_for('users.login')}}" role="button">
+  <i class="fas fa-sign-in-alt"></i> Login &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 </a>
 
 <a class="none special-font small" href="{{url_for('flight.register_new_flight')}}" role="button">
   <i class="fas fa-plane"></i> Register Flight &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 </a>
 
-<a class="none special-font small" data-bs-toggle="collapse" href="#delay_flight" role="button" aria-expanded="false"
-  aria-controls="delay_flight">
-  <i class="far fa-calendar-times"></i> Delay Flight &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
-</a>
+
 
 <!-- <a class="none special-font small" data-bs-toggle="collapse" href="#register_pilot" role="button" aria-expanded="false"
   aria-controls="register_pilot">

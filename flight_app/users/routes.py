@@ -1,8 +1,12 @@
 from flask import Blueprint
 from flask import render_template, redirect, request, flash, url_for
+from flask_login.utils import login_required, logout_user
+from flight_app.users.forms import LoginForm, RegistrationForm,SetPasswordForm
+from flask_login import login_user
+from flight_app import bcrypt
 
 
-from flight_app.models import db, Pilot,Flight,Passenger,Schedule,scheduled_pilots
+from flight_app.models import db, Pilot,Flight,Passenger,Schedule,scheduled_pilots,User
 users = Blueprint("users", __name__)
 
 
@@ -16,11 +20,9 @@ def all_pilots():
 @users.route("/all-passenger",methods = ['POST','GET'])
 def all_passengers():
 
-    passengers_name = []
     passengers = Passenger.query.all()
-    for passenger in passengers:
-        passengers_name.append(passenger.firstname)
-    return f"{passengers_name}"
+    return render_template('all_passengers.html', passengers = passengers)
+    
 
 
 @users.route("/register-pilot", methods=["GET", "POST"])
@@ -189,5 +191,88 @@ def passenger_check_in(passenger_id):
     db.session.commit()
     flash('You are now checked in','success')
     return redirect(url_for('main.manage_booking'))
+
+
+
+
+@users.route('/register-user', methods = ['POST','GET'])
+def register_user():
+    form = RegistrationForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        user = User(username = (form.username.data).capitalize(), firstname = (form.firstname.data).capitalize(), lastname = (form.lastname.data).capitalize(), email = form.email.data)
+        db.session.add(user)
+        db.session.commit()
+        #send an email containing the user reference and default password.
+        flash(f'User {user.firstname}, {user.lastname} with  default password of {user.password} was created successfully!','success')
+        return redirect('/all-users')
+    return render_template('register_user.html', form = form)
+
+
+@users.route("/users/set-password", methods = ['POST','GET'])
+def set_password():
+    form = SetPasswordForm()
+    if request.method == 'POST' and form.validate_on_submit():
+       
+        #retrieve user with default password
+        user = User.query.filter_by(password = form.default_password.data).first()
+        
+        if user:
+            hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
+            user.password = hashed_password
+            user.is_available = True
+            db.session.commit()
+            flash('Your password has been saved','success')
+            login_user(user)
+            return redirect("/user")
+        flash('You password could not be set, please ensure your default password is correct','danger')
+        return redirect('/')
+    return render_template('set_password.html',form = form)
+
+
+
+@users.route('/login', methods = ['POST','GET'])
+def login():
+    form = LoginForm()
+    if request.method == 'POST' and form.validate_on_submit():
+        username = (form.username.data).capitalize()
+        password = form.password.data
+        user = User.query.filter_by(username = username).first()
+        if user.is_available == True:
+            if user and bcrypt.check_password_hash(user.password, password):
+                login_user(user)
+                flash('You have logged in successfully!','success')
+                return redirect(url_for('users.user_profile'))
+
+            flash('Login unsuccessful, Please ensure your username and password is correct','danger')
+            return redirect(request.referrer)
+        flash('User is not available. please change your password or contact admin','danger')
+        return redirect(request.referrer)
+    return render_template('user_login.html', form = form)
+    
+
+
+
+
+@users.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    message = 'User logged out successfully'
+    flash(message,'info')
+    return redirect('/')
+
+@users.route("/user")
+def user_profile():
+    return render_template('user_profile.html')
+
+   
+
+
+@users.route('/all-users')
+def all_users():
+    users = User.query.order_by(User.date_created.desc())
+    return render_template('users.html',users = users)
+
+
     
     
