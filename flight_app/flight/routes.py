@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, request, redirect, url_for, flash
 import csv
 
+from flask_login.utils import login_required
+
 
 
 from flight_app.models import db,Flight,Schedule
@@ -47,8 +49,10 @@ def upload_flight():
 
 import os
 
+@login_required
 
 @flight.route("/register-new-flight", methods=["GET", "POST"])
+
 def register_new_flight():
     if request.method == "POST":
         flight_code = request.form.get("flight_code").upper()
@@ -80,7 +84,7 @@ def register_new_flight():
         
         message = f"Flight {flight_code} with a capacity of {flight_capacity} was added successfully!"
         flash(message, "success")
-        return render_template('index.html')
+        return redirect(url_for('main.index'))
     return render_template("register_new_flight.html", title="Register Flight")
 
 

@@ -48,3 +48,6 @@ def format_datetime(form_input):
     datetime_data = form_input.split("T")
     str_datetime_data = "".join(map(str, datetime_data))
     return datetime.strptime(str_datetime_data, "%Y-%m-%d%H:%M")
+
+
+
