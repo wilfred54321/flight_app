@@ -1,0 +1,2 @@
+FLASK_APP=flight_app
+FLASK_ENV=development

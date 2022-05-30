@@ -1,0 +1,60 @@
+  {%extends 'base.html'%}
+  {%block body%}
+  </div>
+        {%if passengers%}
+        <div class='index_table'> 
+            <table class="small special-font small table table-sm table-striped table-hover table-bordered">
+                <thead>
+                    <tr style='text-align: center;'>
+                        <th style='width:1.5%;' class="">#</th>
+                        <th style='width:1.5%;'>Reference</th>
+                       
+                        <th style='width:6%;' class="">First Name</th>
+                        <th style='width:7%;'>Last Name</th>
+                        <th style='width:7%;'>Email</th>
+                        <th style='width:2%;'>Gender</th>
+                        <th style='width:10%;'>Date Registered</th>
+                        <th style='width:3%;'>Status</th>
+                        <th style='width:4%;'>Schedule ID</th>
+                        <th style='width:13%;'>Action</th>
+                    </tr>
+
+                    <thead>
+                    <tbody>
+                        {%for passenger in passengers%}
+                        <tr style='text-align: center;'>
+                            <td class="">{{loop.index}}</td>
+                            <td>{{passenger.booking_reference}}</td>
+                            <td>{{passenger.firstname}}</td>
+                            <td>{{passenger.lastname}}</td>
+                            <td>{{passenger.email}}</td>
+                            <td>{{passenger.gender}}</td>
+                            <td>{{passenger.timestamp.strftime('%b %d, %Y | %H:%M')}}</td>
+                            <td class = "x-small">
+                                
+                                {%if passenger.is_checked_in %}
+                                <span class="badge rounded-pill bg-success "> {{passenger.status()}}</span>
+                                {%else%}
+                                <span class="badge rounded-pill bg-danger"> {{passenger.status()}}</span>
+                                {%endif%}
+
+                            </td>
+                           <td>{{passenger.schedule_id}}</td>
+                            <td>
+                                <a href="#" class="btn btn-secondary btn-sm">
+                                    <i class="far fa-edit"></i></i> Edit
+                                </a>
+                                <a href="#" class="btn btn-danger btn-sm">
+                                    <i class="far fa-trash-alt"></i></i> Delete
+                                </a>
+                            </td>
+                        </tr>
+                        {%endfor%}
+                    </tbody>
+            </table>
+            {%else%}
+            <p class = "special-font orange">No Passengers exists for this flight</p>
+            {%endif%}
+        </div>
+    </div>
+    {%endblock%}

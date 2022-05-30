@@ -1,0 +1,466 @@
+{% extends "base.html" %}
+
+
+{%block title%}
+
+{%endblock%}
+
+
+{%block heading%}
+<a class="none special-font small" data-bs-toggle="collapse" href="#all_flights_list" role="button"
+  aria-expanded="false" aria-controls="all_flights_list">
+  <i class="fas fa-plane"></i> Show All Flights &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+</a>
+
+<a class="none special-font small" data-bs-toggle="collapse"  href="#all_pilots_list" role="button" aria-expanded="false"
+  aria-controls="all_pilots_list">
+  <i class="fas fa-users"></i> All Pilots &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+</a>
+
+<a class="none special-font small" href="{{url_for('users.all_users')}}" role="button">
+  <i class="fas fa-users"></i> Show All Users &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+</a>
+
+<a class="none special-font small" href="{{url_for('users.all_passengers')}}" role="button">
+  <i class="fas fa-users"></i> All Passengers &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+</a>
+
+<a class="none special-font small" href="{{url_for('users.register_user')}}" role="button">
+  <i class="fas fa-user-plus"></i> Register Agent &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+</a>
+
+<a class="none special-font small" href="{{url_for('users.set_password')}}" role="button">
+  <i class="fas fa-wrench"></i> Set Password &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+</a>
+
+<a class="none special-font small" href="{{url_for('users.login')}}" role="button">
+  <i class="fas fa-sign-in-alt"></i> Login &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+</a>
+
+<a class="none special-font small" href="{{url_for('flight.register_new_flight')}}" role="button">
+  <i class="fas fa-plane"></i> Register Flight &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+</a>
+
+
+
+<!-- <a class="none special-font small" data-bs-toggle="collapse" href="#register_pilot" role="button" aria-expanded="false"
+  aria-controls="register_pilot">
+  <i class="fas fa-user-plus"></i> Register Pilot &nbsp&nbsp
+</a> -->
+<a class="none special-font small"  href="{{url_for('users.register_pilot')}}" role="button">
+ 
+  <i class="fas fa-user-plus"></i> Register Pilot &nbsp&nbsp
+</a>
+
+
+{%endblock%}
+
+
+{%block body%}
+
+<div>
+
+  <!-- SHOW ALL FLIGHT -->
+  <div class="" id="all_flights_list">
+    <div class="card card-body mt-3">
+      <p class="display-6 text-muted"> <i class="fas fa-plane"></i> Show All Flights</p>
+      {%if flights%}
+
+      <div class="table mt-1">
+        <tr>
+ 
+           <a href="{{url_for('flight.register_new_flight')}}" class="btn btn-success btn-sm">
+               <i class="fas fa-plane"></i> Register Flight
+           </a>
+        </tr>
+
+      </div>
+
+      <div class=index_table>
+        <table class=" table table-sm table-striped table-hover table-bordered">
+          <thead class = "small special-font small ">
+            <tr style="text-align: center;">
+              <th style='width:2%;' class="">#</th>
+              <th style='width:3%;' class="">Code</th>
+              <th style='width:5%;'>Model</th>
+              <th style='width:2%;'>Capacity</th>
+              <th style='width:10%;'>Category</th>           
+              <th style='width:7%;'>Date of First Flight</th>
+              <th style='width:5%;'>Status</th>
+              <th style='width:15%;'>Action</th>
+            </tr>
+
+          </thead>
+          <tbody class = "small special-font small">
+            {%for flight in flights%}
+            <tr style='text-align: center;'>
+              <td>{{loop.index}}</td>
+              <td class=""><a class = "none"
+                  href="{{url_for('main.flight',flight_id=flight.id)}}">{{flight.code}}</a></td>
+
+              <td>{{flight.model}}</td>
+              <td>{{flight.capacity}}</td>
+              <td>{{flight.category}}</td>
+             
+              <td>{{flight.date_of_first_flight.strftime('%b %d, %Y')}}</td>
+              
+              <td>
+                {%if flight.is_available%}
+                <a href="#" class = " small none">
+                  <i class="fas fa-check-circle green"></i>
+                </a>
+
+                {%else%}
+               
+
+                <a href="#" class = " small none">
+                  <i class="fas fa-ban red"></i></i>
+                </a>
+                
+                {%endif%}
+              </td>
+              
+              <td>
+
+                {%if flight.is_available%}
+                <a href="{{url_for('flight.change_status', flight_id = flight.id, action ='disable')}}"
+                  class="none  mx-2">
+                  <i class="fas fa-power-off red">  </i>   Disable
+                </a>
+                {%else%}
+                <a href="{{url_for('flight.change_status', flight_id = flight.id, action = 'enable')}}"
+                  class="none  mx-2">
+                  <i class="fas fa-power-off green"></i>   Enable
+                </a>
+                {%endif%}
+               
+                <a class="none mx-2" href="{{url_for('flight.edit_flight', flight_id = flight.id)}}" >
+                  <i class="far fa-edit"></i></i>   Edit
+                </a>
+                <a class="none  mx-2" href="{{url_for('flight.delete_flight',flight_id = flight.id)}}">
+                  <i class="far fa-trash-alt"></i></i>   Delete
+                </a>
+              </td>
+            </tr>
+            {%endfor%}
+          </tbody>
+        </table>
+        {%else%}
+        <div class="row">
+          
+          <div class="col d-flex justify-content-center">
+            <i class = "fas fa-plane  fa-5x disabled-grey"></i>
+          </div>
+          
+        </div>
+
+        <div class="row mt-4">
+          
+          <div class="col d-flex justify-content-center">
+            <p class = "special-font large orange1"> No Flight currently exist. Please add  flights below!</p>
+          </div>
+          
+        </div>
+      <div class="row">
+        <div class="col d-flex justify-content-center">
+          <a  href="{{url_for('flight.register_new_flight')}}" class="btn btn-success ">
+            <i class="fas fa-user-astronaut"></i>&nbsp Add Flight
+        </a>
+        </div>
+      </div>
+        {%endif%}
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+
+  <!-- SHOW ALL PILOTS -->
+  <div class="" id="all_pilots_list">
+    <div class="card card-body mt-3">
+      <p class="display-6 text-muted"><i class="fas fa-user-astronaut"></i> Show All Pilots</p>
+
+
+      {%if pilots%}
+
+      <div class="table mt-1">
+       <tr>
+
+          <a href="{{url_for('users.register_pilot')}}" class="btn btn-success btn-sm">
+              <i class="fas fa-user-astronaut"></i> Add Pilot
+          </a>
+  
+          <button type ="submit"  form = "form1" formaction = "{{url_for('schedule.assign_pilot')}}" class="btn btn-none btn-sm">
+              <i class="fas fa-user-astronaut"></i></i> Schedule Pilot
+          </button>
+          
+          <button type ="submit"  form = "form1" formtarget ='input' formaction = "{{url_for('users.change_status_multiple', action = 'enable')}}" class="btn btn-none btn-sm">
+            <i class="fas fa-power-off green"></i></i> Enable
+        </button>
+
+
+        <button type ="submit"  form = "form1" formtarget ='input' formaction = "{{url_for('users.change_status_multiple', action = 'disable')}}" class="btn btn-none btn-sm">
+          <i class="fas fa-power-off red"></i></i> Disable
+      </button>
+  
+          <button type ="submit"  form = "form1" formtarget ='input' formaction = "{{url_for('users.checkbox_delete_pilots')}}"class="btn btn-none btn-sm">
+            <i class="fas fa-trash red"></i></i> Delete
+        </button>
+      </tr>
+      </div>
+      <div class=index_table>
+        
+       
+    
+        
+        <table class="special-font small table table-sm table-striped table-hover table-bordered">
+          <thead>
+            <tr style='text-align: center;'>
+              <th  style='width:1%;'>All<input class="all form-check-input-sm" name="all" type="checkbox" id="input1"  aria-label="..."> 
+              </th>
+              <th style='width:3%;' class="">#</th>
+              <th style='width:3%;' class="">ID</th>
+              <th style='width:5%;' class="">First Name</th>
+              <th style='width:5%;'>Last Name</th>
+              <th style='width:5%;'>Email</th>
+              <th style='width:3%;'>Gender</th>
+              <th style='width:5%;'>Category</th>
+              <th style='width:2%;'>Level</th>
+              <th style='width:7%;'>Date Added</th>
+              <th style='width:3%;'>Status</th>
+              <th style='width:15%;'>Action</th>
+            </tr>
+
+            <thead>
+              <form method = 'post' id = 'form1' class = "form-group" >
+            <tbody>
+              {%for pilot in pilots%}
+              <tr style='text-align: center;'>
+                <td>
+                <input class="item form-check-input item-sm" name="checkbox" type="checkbox" id="input1"
+                                value="{{pilot.id}}" aria-label="...">
+</td>
+                <td class="">{{loop.index}}</td>
+                <td>{{pilot.pilot_id}}</td>
+                <td>{{pilot.firstname}}</td>
+                <td>{{pilot.lastname}}</td>
+                <td>{{pilot.email}}</td>
+                <td>{{pilot.gender}}</td>
+                <td>{{pilot.category}}</td>
+                <td>{{pilot.level}}</td> </a> 
+                <td>{{pilot.date_created.strftime('%b %d, %Y')}}</td>
+
+
+                <!-- STATUS ICON -->
+                <td>
+                  {%if pilot.is_available%}
+                  <a href="{{url_for('users.change_status', pilot_id = pilot.id, action ='disable')}}">
+                    <span class="x-small badge rounded-pill bg-success ">{{pilot.status()}}</span>
+                  </a>
+
+                  {%else%}
+
+                  <a href="{{url_for('users.change_status', pilot_id = pilot.id, action = 'enable')}}">
+                    <span class="x-small badge rounded-pill bg-danger"> {{pilot.status()}}</span>
+                  </a>
+                  {%endif%}
+                </td>
+
+                <!-- ACTION TABLE -->
+                <td class = "">
+                  {%if pilot.is_available%}
+                  <a class = " none" href="{{url_for('users.change_status', pilot_id = pilot.id, action ='disable')}}"
+                    class="btn btn-none"><i class="fas fa-power-off red"></i>  Disable
+                  </a>
+                  {%else%}
+                  <a class = " none " href="{{url_for('users.change_status', pilot_id = pilot.id, action = 'enable')}}"
+                  class="btn btn-none btn-sm "><i class="fas fa-power-off green "></i>  Enable
+                  </a>
+                  {%endif%}
+                
+
+
+                  <a href="#" class=" small btn btn-none btn-sm">
+                    <i class="far fa-edit"></i></i> Edit
+                  </a>
+                  <a href="{{url_for('users.delete_pilot', pilot_id = pilot.id)}}"
+                    class=" small btn btn-none btn-sm">
+                    <i class="far fa-trash-alt"></i></i> Delete
+                  </a>
+                </td>
+              </tr>
+              {%endfor%}
+            </tbody>
+            </form>
+        </table>
+        {%else%}
+
+        <div class="row">
+          
+          <div class="col d-flex justify-content-center">
+            <i class = "fas fa-user-astronaut  fa-5x disabled-grey"></i>
+          </div>
+          
+        </div>
+
+        <div class="row mt-4">
+          
+          <div class="col d-flex justify-content-center">
+            <p class = "special-font large orange1"> No Pilots currently exist. Please add pilots below!</p>
+          </div>
+          
+        </div>
+      <div class="row">
+        <div class="col d-flex justify-content-center">
+          <a href="{{url_for('users.register_pilot')}}" class="btn btn-success ">
+            <i class="fas fa-user-astronaut"></i>&nbsp Add Pilot
+        </a>
+        </div>
+      </div>
+        
+        {%endif%}
+      </div>
+    </div>
+  </div>
+
+
+
+
+  <!-- REGISTER PILOT -->
+  <div clas="col-8">
+
+    <div class="collapse" id="register_pilot">
+      <div class="card card-body mt-3">
+        <p class="display-6"><i class="fas fa-user-plus"></i> Add Pilot</p>
+        <form action="{{url_for('users.register_pilot')}}" method="post">
+
+          <div class="mb-3">
+            <div class="row">
+
+              <div class="col form-floating">
+                <input type="text" class="form-control" id="floating" name="firstname" placeholder="John" value="John">
+                <label for="floatingInputValue">First Name</label>
+              </div>
+
+              <div class="col form-floating">
+                <input type="text" class="form-control" id="floating" name="lastname" placeholder="Doe" value="Doe">
+                <label for="floatingInputValue">Last Name</label>
+              </div>
+
+              <div class="col form-floating">
+                <input type="email" class="form-control" name="email" id="floating" placeholder="name@example.com"
+                  value="test@example.com">
+                <label for="floatingInputValue">Email</label>
+                <!-- <span class="input-group-text "><i class="fas fa-plane"></i></span> -->
+              </div>
+            </div>
+
+
+          </div>
+          <div class="row">
+            <div class="col-6">
+              <div class="row">
+                <div class="col">
+                  <input type="radio" id="male" name="gender" value="Male">
+                  <label for="male">Male</label>
+                </div>
+                <div class="col">
+                  <input type="radio" id="she" name="gender" value="Female">
+                  <label for="female">Female</label><br>
+                </div>
+                <div class="col">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" name="category" type="checkbox" id="inlineCheckbox1" value="local">
+                    <label class="form-check-label" for="pilotType">Local</label>
+                  </div>
+                </div>
+                <div class="col">
+                  <div class="form-check form-check-inline">
+                    <input class="form-check-input" name="category" type="checkbox" id="inlineCheckbox1"
+                      value="International">
+                    <label class="form-check-label" for="pilotType">International</label>
+                  </div>
+                </div>
+                <br>
+              </div>
+            </div>
+
+
+            <div class="col">
+              <div class="input-group mb-3">
+                <label class=" d-flex justify-content-center input-group-text" for="inputGroupSelect01">Level</label>
+                </label>
+                <select class="form-select" id="inputGroupSelect01" name="pilot_level">
+                  <!-- <option selected>Choose delay duration...</option> -->
+                  <option value="1">1</option>
+                  <option value="2">2</option>
+                  <option value="3">3</option>
+                </select>
+              </div>
+            </div>
+          </div>
+          <!-- <div class="mb-3">
+             
+            </div>
+
+
+            <div class="input-group mb-3">
+              <label class=" d-flex justify-content-center input-group-text" for="inputGroupSelect01">Type</label>
+              </label> -->
+
+
+
+
+
+
+
+
+          <!-- FLIGHT CODE -->
+
+
+
+          <button class=" btn btn-primary" type="submit"><i class="fas fa-user-plus"></i> Add Pilot</button>
+
+      </div>
+    </div>
+
+    </form>
+  </div>
+</div>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+
+</div>
+
+
+</div>
+
+
+<script>
+  $(function () {
+    $('#datetimepicker1').datetimepicker();
+
+  });
+
+
+  $(function () {
+    $('#datetimepicker2').datetimepicker();
+
+  });
+
+</script>
+
+{%endblock%}

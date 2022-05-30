@@ -1,0 +1,267 @@
+{%extends 'base.html'%}
+
+{%block title%}
+
+{%endblock%}
+
+
+{%block heading%}
+<p class=" d-flex justify-content-center display-6"> Flight {{flight.code}}</p>
+{%endblock%}
+
+
+{%block body%}
+
+<div class="table table-bordered">
+
+    <tr>
+
+        <a href="{{url_for('flight.schedule_flight',flight_id = flight.id)}}" class="btn btn-success btn-sm">
+            <i class="fas fa-calendar-alt"></i> Schedule Flight
+        </a>
+
+        <button type ="submit"  form = "form1" formaction = "{{url_for('schedule.checkbox_cancel_schedule')}}" class="btn btn-none btn-sm">
+            <i class="fas fa-ban red"></i></i> Cancel
+        </button>
+        <button type ="submit"  form = "form1" formtarget ='input' formaction = "#" class="btn btn-none btn-sm">
+            <i class="far fa-edit"></i></i> Edit
+        </button>
+
+        
+
+    </tr>
+</div>
+
+
+
+<div class="row m-0 mb-4 p-0">
+
+    <div class="col-sm-8 m-0 p-0">
+
+        <!-- <div class="index_table"> -->
+            <table class="m-0 p-0 table-sm text-center table table-striped table-hover table-bordered">
+        
+                <thead class = "special-font small">
+                    <tr>
+        
+                        <th>Flight Code</th>
+                        <th>Model</th>
+                        <th>Capacity</th>
+                        <th>Category</th>
+                        <th>Date of First Flight</th>
+                        <th>Status</th>
+                        
+        
+        
+                    </tr>
+                    <thead>
+                    <tbody class = "special-font small">
+                        <tr>
+        
+                            <td>{{flight.code}}</td>
+                            <td>{{flight.model}}</td>
+                            <td>{{flight.capacity}}</td>
+                            <td>{{flight.category}}</td>
+                            <td>{{flight.date_of_first_flight.strftime('%b %d, %Y')}}</td>
+                            <td>{{flight.status()}}</td>
+                          
+                        </tr>
+        
+        
+        
+                    </tbody>
+        
+            </table>
+        <!-- </div> -->
+
+
+
+
+    </div>
+    
+    <div class="col-sm-4">
+      <small class = "text-muted"> Flight History Here</small>
+    </div>
+</div>
+
+
+
+
+
+<div class="row x-large special-font m-0 pb-3">
+    <div class="m-0"><i class="fas fa-calendar-alt fa-2x "></i>    Flight Schedule Information</div>
+</div>
+<div class="row">
+{%if flight.schedules%}
+    <div class="index_table">
+        <table class="table small table-sm text-center table table-striped table-hover table-bordered">
+            <thead class = "special-font-small">
+                <tr>
+                    <th  style='width:2%;'>#</th>
+                    <th  style='width:1%;'>All<input class="all form-check-input-sm" name="all" type="checkbox" id="input1" value = {{flight.scedules}} aria-label="..."> 
+                    </th>
+                    <th style='width:4%;'>Reference</th>
+                    <th style='width:4%;'>Origin</th>
+                    <th style='width:3%;'>Destination</th>
+                    <th style='width:7%;'>Departure</th>
+                    <th style='width:7%;'>Arrival</th>
+                    <th style='width:5%;'>Duration</th>
+                    <th style='width:1%;'>Capacity</th>
+                    <th style='width:2%;'>Open Seats</th>
+                    <th style='width:2%;'>Status</th>
+                    <th style='width:10%;'>Action</th>
+    
+                </tr>
+    
+            </thead>
+            <form method = 'post' id = 'form1' class = "form-group" >
+                <tbody class = "special-font small">
+                    {%for flight in flight.schedules%}
+                    <tr>
+    
+                        <td>{{loop.index}}</td>
+                        <td>
+                           
+                            <input class="item form-check-input item-sm" name="checkbox" type="checkbox" id="input1"
+                                value="{{flight.id}}" aria-label="...">
+                                <!-- <button type ="submit" class="btn btn-secondary btn-sm">
+                                    <i class="far fa-edit"></i></i> Edit
+                                </button> -->
+                               
+                           
+                        </td>
+                        <td>{{flight.reference}}</td>
+                        <td>{{flight.origin}}</td>
+                        <td>{{flight.destination}}</td>
+                        <td>{{flight.departure_time.strftime('%Y-%m-%d | %H: %M') }}</td>
+                        <td>{{flight.arrival_time.strftime('%Y-%m-%d | %H: %M') }}</td>
+                        <td>{{flight.duration()}}</td>
+                        <td>{{flight.capacity}}</td>
+                        <a href = "{{url_for('users.show_passengers',schedule_id = flight.id)}}"><td>{{flight.open_seats()}}</td> </a>
+                        <td>{{flight.status}}</td>
+                                      
+    
+                        <td>
+                            <a class = "none mx-1" href = "{{url_for('users.show_passengers', schedule_id = flight.id)}}">
+                            <i class="fas fa-users"></i>
+                        </a>
+                        
+                        <a class = "none mx-1" href = "{{url_for('main.book', schedule_id = flight.id)}}">
+                            <i class="fas fa-user-plus"></i>
+                        </a>
+
+                        <a class = "none mx-1" href = "{{url_for('schedule.assign_schedule', schedule_id = flight.id)}}">
+                            <i class ="fas fa-user-astronaut"></i>
+                        </a>
+                            
+                            <a href="{{url_for('flight.delay_flight',schedule_id = flight.id)}}" class="none mx-2">
+                                <i class="fas fa-backward orange"></i> 
+                            </a>
+
+                            <a href="#" class="none  mx-2">
+                                <i class="far fa-edit"></i> 
+                            </a>
+                            <a href="{{url_for('schedule.cancel_schedule',schedule_id = flight.id)}}"
+                                class="none mx-2">
+                                <i class="fas fa-ban red"></i> 
+                            </a>
+    
+                        </td>
+    
+    
+                    </tr>
+                   
+    {%endfor%}
+
+                </tbody>
+            </form>
+        </table>
+ 
+    </div>
+
+    {%else%}
+<div class="container ">
+
+    <div class="row ">
+        <div class="col d-flex justify-content-center">
+            <div class=" display-6 disabled-grey"> <i class = "fas fa-users fa-3x"></i></div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col d-flex justify-content-center">
+            <p class = 'special-font orange1'>No Current Flight Schedules.</p>
+        </div>
+        
+    </div>
+</div>
+   
+    {%endif%}
+
+
+
+
+<!-- </div>
+
+<h2>Passengers</h2>
+
+<div class="index_table">
+    <table class=" text-center table table-striped table-hover table-bordered">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th><input class="all form-check-input" name="all" type="checkbox" id="input1" aria-label="..."> All
+                </th>
+
+                <th>Booking Reference</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Gender</th>
+                <th>Booking Date</th>
+                <th>Booking Time</th>
+                <th>Action</th>
+
+            </tr>
+
+            <thead>
+            <tbody>
+                {%for passenger in flight.passengers%}
+                <tr>
+
+                    <td>{{loop.index}}</td>
+                    <td>
+                        <input class="item form-check-input" name="checkbox" type="checkbox" id="input1"
+                            value="{{passenger.id}}" aria-label="...">
+
+                    </td>
+
+                    <td>{{passenger.booking_reference}}</td>
+                    <td>{{passenger.firstname}}</td>
+                    <td>{{passenger.lastname}}</td>
+                    <td>{{passenger.gender}}</td>
+                    <td>{{passenger.timestamp.strftime('%Y-%m-%d') }}</td>
+                    <td>{{passenger.timestamp.strftime('%H: %M' ) }}</td>
+
+                    <th>
+                        <a href="#" class="btn btn-secondary btn-sm">
+                            <i class="far fa-edit"></i></i> Edit
+                        </a>
+                        <a href="{{url_for('main.delete_passenger', flight_id = flight.id, passenger_id = passenger.id)}}"
+                            class="btn btn-danger btn-sm">
+                            <i class="far fa-trash-alt"></i></i> Delete
+                        </a>
+
+                    </th>
+
+
+                </tr>
+                {%else%}
+                No Passengers
+                {%endfor%}
+
+            </tbody>
+
+    </table>
+</div> -->
+
+
+{%endblock%}

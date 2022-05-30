@@ -7,4 +7,3 @@
 # app.config["SQLALCHEMY_DATABASE_URI"] = os.getenv("FLIGHTAPP_DB_URL")
 # app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 # db.init_app(app)
-

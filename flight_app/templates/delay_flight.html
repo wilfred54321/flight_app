@@ -1,0 +1,31 @@
+
+{%extends 'base.html'%}
+
+{%block body%}
+<div class = " ml-4 display-6">
+<i class="far fa-calendar-times"></i>     Delay Flight
+</div>
+<div class="container m-4">
+  <div class="row">
+    <div class="col"></div>
+    <div class="col-6">
+      <form class= "form-group" action = "{{url_for('flight.delay_flight', schedule_id = schedule_id)}}" method = 'post'>
+      <div class="input-group">
+          
+          <select class="form-select" name = "delay_amount" id="inputGroupSelect04" aria-label="Example select with button addon">
+            <option selected value = "10">10 mins</option>
+            <option value="10">20 mins</option>
+            <option value="30">30 mins</option>
+            <option value="60">60 mins</option>
+          </select>
+          <button class="btn btn-primary" type="submit">Delay</button>
+        </div>
+      </form>
+    </div>
+    <div class="col"></div>
+  </div>
+
+</div>
+
+
+{%endblock%}

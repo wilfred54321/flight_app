@@ -1,0 +1,233 @@
+{%extends 'base.html'%}
+
+{%block title%}
+Booking
+{%endblock%}
+
+{%block heading%}
+<p>
+    <a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#bookFlight" role="button"
+        aria-expanded="true" aria-controls="bookFlight">
+        Book Flight
+    </a>
+
+    <a class="btn btn-outline-primary btn-sm" data-bs-toggle="collapse" href="#manageBooking" role="button"
+        aria-expanded="false" aria-controls="manageBooking">
+        Manage My Booking
+    </a>
+</p>
+
+
+{%endblock%}
+
+
+{%block body%}
+
+<div class="container special-font">
+    <div class="row">
+        <div class="col">
+            <!-- BOOK A FLIGHT -->
+            {%if flight%}
+            <div>
+
+                <div class="" id="bookFlight">
+                    <div class=" card card-body mt-3 show">
+                        <p class="display-6">Book Flight</p>
+                        <h5 class="text-muted">Add Passenger to Flight {{flight.flight.code}}</h5>
+
+
+                        <form action="{{url_for('main.book_flight')}}" method="post">
+
+                            <div class=" ml-0 mr-0 mt-3">
+                                <div class="input-group mt-3 mb-3">
+                                    <select class="form-select" name="flight_origin">
+                                        <option selected value={{flight.origin}}>{{flight.origin}}</option>
+
+                                    </select>
+                                    <span class="input-group-text"><i class="fas fa-plane"></i></span>
+                                    <select class="form-select" name="flight_destination">
+
+
+
+                                        <option selected value={{flight.destination}}>
+                                            {{flight.destination}}
+                                        </option>
+
+
+                                    </select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="far fa-user"></i></span>
+                                        <input type="text" class="form-control" name="firstname"
+                                            placeholder="First Name e.g John">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="far fa-user"></i></span>
+                                        <input type="text" class="form-control" name="lastname"
+                                            placeholder="Last Name e.g Doe">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                <input type="email" class="form-control" name="email"
+                                    placeholder="e.g name@example.com">
+                            </div>
+
+
+                            <div class="row">
+
+                                <div class="col-3">
+                                    <input type="radio" id="male" name="gender" value="Male">
+                                    <label for="male">Male</label>
+                                </div>
+
+                                <div class="col-3">
+                                    <input type="radio" id="she" name="gender" value="Female">
+                                    <label for="female">Female</label><br>
+                                </div>
+
+                            </div>
+
+                            <button class="btn btn-primary mt-3" type="submit"><i class="far fa-calendar-plus"></i> Book
+                                Flight</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+
+            {%else%}
+            <div>
+
+                <div class="" id="bookFlight">
+                    <div class="card card-body mt-3">
+                        <p class="display-6">Book a Flight</p>
+                        <form action="{{url_for('main.book_flight')}}" method="post">
+
+                            <div class=" ml-0 mr-0 mt-3">
+                                <div class="input-group mt-3 mb-3">
+                                    <select class="form-select" name="flight_origin">
+                                        <option selected> From</option>
+                                        {%for flight in flights%}
+                                        <option value={{flight.origin}}>{{flight.origin}}</option>
+                                        {%endfor%}
+                                    </select>
+                                    <span class="input-group-text"><i class="fas fa-plane"></i></span>
+                                    <select class="form-select" name="flight_destination">
+                                        <option selected> To</option>
+                                        
+                                        {%for flight in flights%}
+                                        <option value={{flight.destination}}>
+                                            {{flight.destination}}
+                                        </option>
+
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="far fa-user"></i></span>
+                                        <input type="text" class="form-control" name="firstname"
+                                            placeholder="First Name e.g John">
+                                    </div>
+                                </div>
+                                <div class="col">
+                                    <div class="input-group mb-3">
+                                        <span class="input-group-text"><i class="far fa-user"></i></span>
+                                        <input type="text" class="form-control" name="lastname"
+                                            placeholder="Last Name e.g Doe">
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="input-group mb-3">
+                                <span class="input-group-text"><i class="far fa-envelope"></i></span>
+                                <input type="email" class="form-control" name="email"
+                                    placeholder="e.g name@example.com">
+                            </div>
+
+
+                            <div class="row">
+
+                                <div class="col-3">
+                                    <input type="radio" id="male" name="gender" value="Male">
+                                    <label for="male">Male</label>
+                                </div>
+
+                                <div class="col-3">
+                                    <input type="radio" id="she" name="gender" value="Female">
+                                    <label for="female">Female</label><br>
+                                </div>
+
+                            </div>
+
+                            <button class="btn btn-primary mt-3" type="submit"><i class="far fa-calendar-plus"></i>  Book
+                                Flight</button>
+
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {%endif%}
+
+        </div>
+        <div class="col">
+            <!-- MANAGE BOOKING -->
+
+            <div class="collapse" id="manageBooking">
+                <div class="card card-body mt-3">
+                    <p class="display-6">Manage Booking</p>
+                    <form action="{{url_for('main.manage_booking')}}" method="post">
+
+
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label pt-2">Last Name</label>
+                            <input type="text" class="form-control form-control" name="lastname"
+                                placeholder="enter your last name">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="exampleFormControlInput1" class="form-label  pt-2">Booking Reference</label>
+                            <input type="text" class="form-control form-control" name="booking_reference"
+                                placeholder="enter your booking reference">
+                        </div>
+
+
+                        <button class="btn btn-primary" type="submit">Manage Boooking</button>
+                    </form>
+                </div>
+
+            </div>
+
+
+            <div class="">
+                {%if passenger%}
+                <p> Lastname: {{passenger.lastname}}</p>
+                <p>Booking Reference: {{passenger.booking_reference}}</p>
+
+              
+            <a href="{{url_for('users.passenger_check_in',passenger_id = passenger.id)}}" class="btn btn-success btn-sm">
+                    <i class="far fa-edit"></i></i> Check In
+                  </a>
+
+                {%else%}
+                {%endif%}
+            </div>
+        </div>
+    </div>
+
+
+
+    {%endblock%}
