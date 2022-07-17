@@ -50,7 +50,6 @@ def upload_flight():
 import os
 
 @login_required
-
 @flight.route("/register-new-flight", methods=["GET", "POST"])
 
 def register_new_flight():
@@ -88,7 +87,6 @@ def register_new_flight():
     return render_template("register_new_flight.html", title="Register Flight")
 
 
-
 @flight.route("/flight/status/<int:flight_id>/<string:action>", methods=["GET", "POST"])
 def change_status(flight_id, action):
     flight = Flight.query.get(flight_id)
@@ -118,9 +116,6 @@ def schedule_flight(flight_id):
     return render_template('schedule_flight.html',flight = flight, title = 'Schedule Flight')
 
 
-
-
-
 @flight.route("/process_flight/<int:flight_id>", methods=["GET", "POST"])
 def process_flight_schedule(flight_id):
     """Process the received form"""
@@ -132,9 +127,8 @@ def process_flight_schedule(flight_id):
         flight_departure_time = request.form.get("departure_time")
         flight_arrival_time = request.form.get("arrival_time")
         flight_capacity = int(request.form.get('flight_capacity'))
-       
 
-        #FORMAT FLIGHT DEPARTURE AND ARRIVAL TIME TO DB COMPATIBLE
+        # FORMAT FLIGHT DEPARTURE AND ARRIVAL TIME TO DB COMPATIBLE
         departure_time = format_datetime(flight_departure_time)
         arrival_time = format_datetime(flight_arrival_time)
 
@@ -155,9 +149,6 @@ def process_flight_schedule(flight_id):
         flash(message,'success')
         return redirect(url_for('main.flight',flight_id = flight_id))
         # return render_template("schedule_flight.html")
-
-
-
 
 
 @flight.route("/flight/delay/<int:schedule_id>", methods=["GET", "POST"])
@@ -234,15 +225,14 @@ def delete_flight(flight_id):
 def edit_flight(flight_id):
     if request.form == 'POST':
 
-        #GET THE FORM REQUESTS
+        # GET THE FORM REQUESTS
         flight_code = request.form.get("flight_code").upper()
         flight_capacity = request.form.get("flight_capacity")
         flight_model = request.form.get("flight_model")
         category = request.form.get("flight_category")
         date_of_first_flight = format_datetime(request.form.get("first_flight_date"))
 
-
-        # #QUERY THE DB AND REASSIGN THE VALUES IN THE DATABASE
+        # QUERY THE DB AND REASSIGN THE VALUES IN THE DATABASE
         flight = Flight.query.get_or_404(flight_id)
 
         if not flight:
@@ -250,24 +240,22 @@ def edit_flight(flight_id):
             return redirect(request.referrer)
         else:
 
-           flight.code = flight_code,
-           flight.model = flight_model,
+           flight.code = flight_code
+           flight.model = flight_model
            flight.category = category
 
            db.session.commit()
-           return redirect('Flight Information successfully updated','success')
+           return redirect('Flight Information successfully updated', 'success')
     flight = Flight.query.get_or_404(flight_id)
-    return render_template('register_new_flight.html',flight = flight)
-       
-   
-    #     print("Request is a post request.")
+    return render_template('register_new_flight.html', flight=flight)
+
+    # print("Request is a post request.")
     #     flight = Flight.query.get_or_404(flight_id)
     #     return f"This will process the edit function for flight {flight.code}"
     # flight = Flight.query.get_or_404(flight_id)
     # return render_template('register_new_flight.html',flight = flight)
 
 
-    
 @flight.route("/test", methods = ['GET','POST'])
 def flight_test():
     input = request.form.getlist('checkbox')

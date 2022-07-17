@@ -1,37 +1,31 @@
 from flask import Blueprint
 
-
 from logging import DEBUG
 import os
 from pathlib import Path
 from sqlalchemy import desc
 import csv
 from flask import Flask, render_template, request, flash, redirect, url_for
-from flight_app.models import Flight,Pilot,Passenger,db,Schedule
-
-
-
+from flight_app.models import Flight, Pilot, Passenger, db, Schedule
+from flask_login import current_user
+from flight_app.users.models import admin_required
 main = Blueprint("main", __name__)
-
 
 
 @main.route("/")
 def index():
     """Display a list of Flights and Pilots"""
-    pilots = Pilot.query.order_by(desc(Pilot.firstname)).all()
+    if current_user.is_authenticated:
+        pilots = Pilot.query.order_by(desc(Pilot.firstname)).all()
+    else:
+        pilots = None
     flights = Flight.query.all()
-    if flights == None and pilots == None:
-        return render_template('index.html', title = 'Index')
+    if flights is None or pilots is None:
+        return render_template('index.html', title='Index',pilots = pilots,flights=flights)
     return render_template("index.html", pilots=pilots, flights=flights, title="Index")
 
 
-
-
-
-
-
-
-@main.route("/book-flight", methods = ['GET','POST'])
+@main.route("/book-flight", methods=['GET', 'POST'])
 def book_flight():
     """Diplay a list of Flights"""
     if request.method == 'POST':
@@ -49,68 +43,51 @@ def book_flight():
             return render_template("error.html", message="Flight is invalid")
         # Make sure the flight exists
         if schedule is None:
-            message="Ooops!. It appears there is no flight scheduled for the routes you selected."
-            flash(message,'danger')
+            message = "Ooops!. It appears there is no flight scheduled for the routes you selected."
+            flash(message, 'danger')
             return redirect(request.referrer)
         # Add Passenger if there are open seats and the flight is not null
         if schedule.open_seats():
             booking_reference = schedule.add_passenger(
-                firstname, lastname, gender,email
-            )             
-            message=f"You have successfully booked your flight. Your reference id is {booking_reference}"
-            flash(message,'success')
+                firstname, lastname, gender, email
+            )
+            message = f"You have successfully booked your flight. Your reference id is {booking_reference}"
+            flash(message, 'success')
             return redirect(url_for('main.index'))
-            
-        
-        message="No more seats available on this flight"
-        flash(message,'info')
+
+        message = "No more seats available on this flight"
+        flash(message, 'info')
         return redirect(request.referrer)
-    
-    
+
     flights_schedule = Schedule.query.all()
     return render_template("book.html", flights=flights_schedule, title="Booking")
-    
 
 
-@main.route("/book/<int:schedule_id>", methods = ["GET", "POST"])
+@main.route("/book/<int:schedule_id>", methods=["GET", "POST"])
 def book(schedule_id):
     """Book a flight"""
     if request.method != "POST":
         schedule = Schedule.query.get(schedule_id)
         if schedule.open_seats():
-        #Make an API call to populate form with some flight origin and destinations
+            # Make an API call to populate form with some flight origin and destinations
             return render_template("book.html", flight=schedule)
         message = "No more available seats"
-        flash(message,'info')
+        flash(message, 'info')
         return redirect(request.referrer)
     return redirect('main.book_flight')
-   
-
-
-
-
-
-
-
-
-
 
 
 @main.route("/flights/<int:flight_id>")
 def flight(flight_id):
     try:
         flight = Flight.query.get_or_404(flight_id)
-        
+
     except ValueError:
         return render_template("error.html", message="No such flight is available")
     return render_template("flight.html", flight=flight)
 
 
-
-
-
-
-#         
+#
 
 @main.route("/manage-booking   ", methods=["GET", "POST"])
 def manage_booking():
@@ -129,12 +106,6 @@ def manage_booking():
             message = f"No passenger exists with lastname: {lastname} and booking reference: {booking_reference}"
             flash(message, "danger")
     return render_template("book.html")
-
-
-
-
-
-
 
 
 @main.route("/passenger/<int:flight_id>/<int:passenger_id>", methods=["GET"])

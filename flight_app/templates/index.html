@@ -32,10 +32,17 @@
 <a class="none special-font small" href="{{url_for('users.set_password')}}" role="button">
   <i class="fas fa-wrench"></i> Set Password &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 </a>
-
+{% if not current_user.is_authenticated %}
 <a class="none special-font small" href="{{url_for('users.login')}}" role="button">
   <i class="fas fa-sign-in-alt"></i> Login &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
 </a>
+{%else%}
+<a class="none special-font small" href="{{url_for('users.logout')}}" role="button">
+  <i class="fas fa-sign-out-alt"></i> Logout &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+</a>
+{%endif%}
+
+
 
 <a class="none special-font small" href="{{url_for('flight.register_new_flight')}}" role="button">
   <i class="fas fa-plane"></i> Register Flight &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp

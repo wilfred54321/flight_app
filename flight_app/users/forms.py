@@ -3,7 +3,7 @@ from flask_wtf.file import FileField,FileAllowed
 from wtforms import StringField,PasswordField,SubmitField,EmailField,PasswordField
 from wtforms import validators
 from wtforms.validators import DataRequired,Email,Length,ValidationError,EqualTo
-from flight_app.models import User
+from flight_app.users.models import User
 
 
 class RegistrationForm(FlaskForm):
@@ -42,7 +42,7 @@ class LoginForm(FlaskForm):
 
 
 class SetPasswordForm(FlaskForm):
-    default_password = StringField('Default Password', validators= [DataRequired(), Length(min = 7, max = 7)])
+    default_password = StringField('Default Password', validators= [DataRequired(), Length(min = 7, max = 25)])
     password = PasswordField('New Password', validators = [DataRequired(),Length(min=8)])
     confirm_password = PasswordField('Confirm Password' ,validators = [DataRequired(), EqualTo('password')])
     submit = SubmitField('Set Password')

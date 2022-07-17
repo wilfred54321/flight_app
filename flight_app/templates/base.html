@@ -58,9 +58,12 @@
       style="background-color: #e0e0e0"
     >
       <div class="container-fluid">
-        <a class="navbar-brand bm-0 h1" href="{{url_for('main.book_flight')}}"
+        <a class="navbar-brand bm-0 h1" href="{{url_for('main.index')}}"
           >Flight_App</a
         >
+        {% if current_user.is_authenticated %}
+        <p>Loggged in as: {{current_user.username}}</p>
+        {%endif%}
 
         <form class="d-flex">
           <input

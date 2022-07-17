@@ -1,8 +1,14 @@
 {%extends 'base.html'%}
 
 {%block body%}
-
+{%if current_user.is_authenticated%}
 <p class = 'display-6'>This page will contain the profile of {{current_user.firstname}}</p>
 
+<a class="none special-font small" href="{{url_for('users.all_users')}}" role="button">
+  <i class="fas fa-users"></i> Show All Users &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp
+</a>
+
 <a href = "{{url_for('users.logout')}}" class = "special-font"> Log out</a>
+
+{%endif%}
 {%endblock%}

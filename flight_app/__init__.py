@@ -1,9 +1,11 @@
 from flask import Flask
+import logging
 
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_bcrypt import Bcrypt
 
+logging.basicConfig(level=logging.DEBUG)
 login_manager = LoginManager()
 db = SQLAlchemy()
 bcrypt = Bcrypt()
